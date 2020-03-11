@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
-namespace LabManagement.DAO
+namespace LabManagement.DAO.Entity
 {
-    public class LabContext : DbContext
+    public class DeclearSheet
     {
     }
 }
