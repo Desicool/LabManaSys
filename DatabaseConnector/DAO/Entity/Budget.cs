@@ -4,23 +4,24 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+
 namespace DatabaseConnector.DAO.Entity
 {
-    public class Chemical
+    public class Budget
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        [Required,MaxLength(64)]
-        public string Name { get; set; }
-        //所在实验室
+        public long Id { get; set; }
+        [Required]
+        // 预算周期，如xx年第x季度等
+        public string Period { get; set; }
+        [Required]
+        //总预算
+        public double Total { get; set; }
+        [Required]
+        //已用预算
+        public double Used { get; set; } = 0.0;
         [Required]
         public int LabId { get; set; }
         public string LabName { get; set; }
-        [Required]
-        public int Amount { get; set; }
-        public ChemicalState State { get; set; } = ChemicalState.None;
-        
     }
-    public enum ChemicalState { None = 0, Lab, InUse, Obsoleted }
 }

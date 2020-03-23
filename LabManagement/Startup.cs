@@ -1,11 +1,15 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using DatabaseConnector.DAO;
+using DatabaseConnector.DAO.Entity;
 
 namespace LabManagement
 {
@@ -21,7 +25,13 @@ namespace LabManagement
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(config=>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                 .RequireAuthenticatedUser()
+                 .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            });
             services.AddCors(options =>
             {
                 options.AddPolicy("123", builder =>
@@ -29,6 +39,11 @@ namespace LabManagement
                     builder.AllowAnyOrigin();
                 });
             });
+            services.AddDbContext<LabContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString"))
+            );
+            services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<LabContext>();
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -53,8 +68,10 @@ namespace LabManagement
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
