@@ -11,7 +11,6 @@ using System.Text;
 using LabManagement.Utils;
 using System.Threading;
 using System.Security.Principal;
-
 namespace LabManagement.Authorization
 {
     public class AuthorizeAttribute : Attribute,IAuthorizationFilter
@@ -30,18 +29,23 @@ namespace LabManagement.Authorization
             else
             {
                 //call the cache to check the certification
-                if (UserRoleCache.TryGetUserRole(header, out UserRole result))
+                if (UserRoleCache.TryGetUserRole(header, out UserRoleResult result))
                 {
                     if (string.IsNullOrEmpty(Role))
                     {
                         return;
                     }
-                    var list = Role.Split(',');
-                    if (!list.Contains(result.Role.RoleName))
+                    var list = Role.Split(',').ToHashSet();
+                    foreach(var role in result.Roles)
                     {
-                        context.Result = new UnauthorizedResult();
-                        return;
+                        if (list.Contains(role.RoleName))
+                        {
+                            // matches, let go.
+                            return;
+                        }
                     }
+                    context.Result = new UnauthorizedObjectResult("Insufficient permissions");
+                    return;
                 }
                 else
                 {
