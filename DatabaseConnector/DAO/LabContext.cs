@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DatabaseConnector.DAO
 {
-    public class LabContext : IdentityDbContext<User,Role,string>
+    public class LabContext : DbContext
     {
         public LabContext(DbContextOptions<LabContext> options)
             : base(options)
@@ -21,6 +21,9 @@ namespace DatabaseConnector.DAO
         public DbSet<DeclarationForm> DeclarationForms { get; set; }
         public DbSet<ClaimForm> ClaimForms { get; set; }
         public DbSet<FinancialForm> FinancialForms { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<UserRole> UserRoleRelation { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

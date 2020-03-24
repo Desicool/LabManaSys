@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 namespace DatabaseConnector.DAO.Entity
 {
+    [Table("Chemical")]
     public class Chemical
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int ChemicalId { get; set; }
         [Required,MaxLength(64)]
         public string Name { get; set; }
         //所在实验室

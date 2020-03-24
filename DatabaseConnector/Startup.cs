@@ -33,8 +33,6 @@ namespace DatabaseConnector
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString"));
             });
-            services.AddIdentity<User, Role>()
-                .AddEntityFrameworkStores<LabContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

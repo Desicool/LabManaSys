@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace DatabaseConnector.DAO.Entity
 {
+    [Table("Budget")]
     public class Budget
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long Id { get; set; }
+        public long BudgetId { get; set; }
         [Required]
         // 预算周期，如xx年第x季度等
         public string Period { get; set; }

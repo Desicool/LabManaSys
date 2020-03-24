@@ -42,8 +42,6 @@ namespace LabManagement
             services.AddDbContext<LabContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString"))
             );
-            services.AddIdentity<User, Role>()
-                .AddEntityFrameworkStores<LabContext>();
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {

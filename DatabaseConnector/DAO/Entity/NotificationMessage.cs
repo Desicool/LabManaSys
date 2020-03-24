@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace DatabaseConnector.DAO.Entity
 {
+    [Table("NotificationMessage")]
     public class NotificationMessage
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long Id { get; set; }
+        public long NotificationMessageId { get; set; }
         public long ClaimFormAck { get; set; }
         public long DeclarationFormAck { get; set; }
         public long FinancialFormAck { get; set; }

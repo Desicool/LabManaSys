@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace DatabaseConnector.DAO.Entity
 {
+    [Table("WorkFlow")]
     public class WorkFlow
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
