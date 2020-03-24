@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LabManagement.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -9,6 +10,7 @@ namespace LabManagement.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class QueryController : ControllerBase
     {
         private readonly ILogger<QueryController> _logger;
@@ -21,7 +23,7 @@ namespace LabManagement.Controllers
         [HttpGet]
         public IActionResult QueryLabChemicals(int labId)
         {
-            return Ok();
+            return Ok("Test OK!!");
         }
     }
 }

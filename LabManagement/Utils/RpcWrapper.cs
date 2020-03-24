@@ -14,9 +14,14 @@ namespace LabManagement.Utils
         /// </summary>
         /// <param name="url">must start with '/'</param>
         /// <returns></returns>
-        public static string CallServiceWithResult(string url)
+        public static HttpResponseMessage CallServiceWithResult(string url,params string[] querys)
         {
-            var res = client.GetStringAsync(new Uri($"https://localhost:10001{url}"));
+            string uri = $"https://localhost:10001{url}?";
+            foreach(var query in querys)
+            {
+                uri += query + '&';
+            }            
+            var res = client.GetAsync(new Uri(uri));
             return res.Result;
         }
     }
