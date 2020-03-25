@@ -19,8 +19,11 @@ namespace LabManagement.Utils
             result = null;
             var res = exist ? _cache[certification] : null;
             if (exist) result = res.Data;
-            if (res.ExpireTime < DateTime.Now)
+            else return false;
+            if (res.ExpireTime > DateTime.Now)
+            {
                 return true;
+            }
             else
             {
                 // Todo: move this part to EndPointJob or just leave this to redis.

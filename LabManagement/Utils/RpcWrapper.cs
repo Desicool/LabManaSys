@@ -14,15 +14,23 @@ namespace LabManagement.Utils
         /// </summary>
         /// <param name="url">must start with '/'</param>
         /// <returns></returns>
-        public static HttpResponseMessage CallServiceWithResult(string url,params string[] querys)
+        /// <exception cref="Exception">http call fail</exception>
+        public static string CallServiceWithResult(string url,params string[] querys)
         {
             string uri = $"https://localhost:10001{url}?";
             foreach(var query in querys)
             {
                 uri += query + '&';
             }            
-            var res = client.GetAsync(new Uri(uri));
-            return res.Result;
+            var res = client.GetAsync(new Uri(uri)).Result;
+            if(res.IsSuccessStatusCode)
+            {
+                return res.Content.ReadAsStringAsync().Result;
+            }
+            else
+            {
+                throw new Exception("https call failed");
+            }
         }
     }
 }

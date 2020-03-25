@@ -16,22 +16,28 @@ namespace LabManagement.Controllers
     public class AccountController : ControllerBase
     {
         [HttpPost("login")]
-        public IActionResult Login([FromForm] string username,[FromForm] string password)
+        public IActionResult Login([FromForm] string username, [FromForm] string password)
         {
-            var response = RpcWrapper.CallServiceWithResult(
-                "/api/userrole", $"username={username}");
-            if(response.StatusCode == HttpStatusCode.OK)
+            try
             {
-                var responseBody = response.Content.ReadAsStringAsync().Result;
-                var result = JsonSerializer.Deserialize<UserRoleResult>(responseBody);
+                var response = RpcWrapper.CallServiceWithResult(
+                    "/api/userrole", $"username={username}");
+                var result = JsonSerializer.Deserialize<UserRoleResult>(response);
                 if (password == result.User.UserPassword)
                 {
                     string certification = Guid.NewGuid().ToString();
-                    UserRoleCache.AddUserRoleToCache(certification, result);
-                    return Ok(certification);
+                    //UserRoleCache.AddUserRoleToCache(certification, result);
+                    //return Ok(certification);
+                    // For easy debug
+                    UserRoleCache.AddUserRoleToCache("123", result);
+                    return Ok("123");
                 }
+                return Ok("Wrong username or password.");
             }
-            return Ok("failed");
+            catch (Exception)
+            {
+                return Ok("Server internal failed.");
+            }
         }
         [HttpPost("logout")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -40,7 +46,10 @@ namespace LabManagement.Controllers
         public IActionResult Logout([FromBody] LogoutParam param)
         {
             var certification = HttpContext.Request.Headers["certification"];
-            UserRoleCache.TryGetUserRole(certification, out var userRole);
+            if(!UserRoleCache.TryGetUserRole(certification, out var userRole))
+            {
+                return Ok();
+            }
             var user = userRole.User;
             // 二次校验，防止利用奇怪的方法把别人踢下线
             if (user.UserName == param.UserName && user.UserPassword == param.Password)
