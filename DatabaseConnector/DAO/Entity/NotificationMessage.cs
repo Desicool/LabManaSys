@@ -13,13 +13,16 @@ namespace DatabaseConnector.DAO.Entity
         [JsonPropertyName("id")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long NotificationMessageId { get; set; }
-        [JsonPropertyName("cfAck")]
-        public long ClaimFormAck { get; set; }
-        [JsonPropertyName("dfack")]
-        public long DeclarationFormAck { get; set; }
-        [JsonPropertyName("ffack")]
-        public long FinancialFormAck { get; set; }
-        [JsonPropertyName("userId")]
-        public string UserId { get; set; }
+        [JsonPropertyName("formType")]
+        public FormType FormType { get; set; }
+        [JsonPropertyName("fid")]
+        public long FormId { get; set; }
+        [JsonPropertyName("rid")]
+        public int RoleId { get; set; } 
+        [JsonPropertyName("issolved")]
+        public bool IsSolved { get; set; }
+        [JsonIgnore]
+        public Role Role { get; set; }
     }
+    public enum FormType { ClaimForm, DeclarationForm, FinancialForm }
 }

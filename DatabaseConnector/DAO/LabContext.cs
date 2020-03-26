@@ -35,8 +35,10 @@ namespace DatabaseConnector.DAO
             });
             modelBuilder.Entity<Budget>()
                 .HasIndex(b => b.LabId);
-            modelBuilder.Entity<NotificationMessage>()
-                .HasIndex(u => u.UserId);
+            modelBuilder.Entity<NotificationMessage>(options=>
+            {
+                options.HasIndex(u => u.RoleId);
+            });
             modelBuilder.Entity<ClaimForm>(options=>
             {
                 options.HasIndex(c => c.LabId);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using DatabaseConnector.DAO;
 using DatabaseConnector.DAO.Entity;
@@ -8,6 +9,7 @@ using DatabaseConnector.DAO.FormData;
 using DatabaseConnector.DAO.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace DatabaseConnector.Controllers
 {
@@ -16,9 +18,11 @@ namespace DatabaseConnector.Controllers
     public class EntityController : ControllerBase
     {
         private readonly LabContext _context;
-        public EntityController(LabContext context)
+        private readonly ILogger<EntityController> _logger;
+        public EntityController(LabContext context, ILogger<EntityController> logger)
         {
             _context = context;
+            _logger = logger;
         }
         [HttpGet("chemicals")]
         public List<Chemical> GetChemicals(int labId)
@@ -38,10 +42,42 @@ namespace DatabaseConnector.Controllers
                 Chemicals = param.Chemicals
             };
             _context.WorkFlows.Add(workflow);
-            // not pretty sure if workflow has an id now.
+            // create form_workflow_relationship
             form.WorkFlowId = workflow.Id;
             _context.DeclarationForms.Add(form);
+            // send message to role 
             _context.SaveChanges();
+            return Ok();
+        }
+
+
+        [HttpPost("msg")]
+        public IActionResult PostMessage()
+        {
+            var entity = new NotificationMessage
+            {
+                FormId = 1,
+                FormType = FormType.DeclarationForm,
+                IsSolved = false,
+                RoleId = 1
+            };
+            _context.NotificationMessages.Add(entity);
+            _context.SaveChanges();
+            /*_context.NotificationMessages.ToList().ForEach(m =>
+            {
+                _logger.LogDebug(JsonSerializer.Serialize(m));
+            });*/
+            _context.Roles.ToList().ForEach(r =>
+            {
+                _logger.LogDebug(r.RoleName);
+            });
+            _logger.LogDebug("begin delete");
+            _context.NotificationMessages.Remove(entity);
+            _context.SaveChanges();
+            _context.Roles.ToList().ForEach(r =>
+            {
+                _logger.LogDebug(r.RoleName);
+            });
             return Ok();
         }
     }

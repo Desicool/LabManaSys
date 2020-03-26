@@ -22,8 +22,6 @@ namespace DatabaseConnector.DAO.FormData
         //申请人，外联userid
         [JsonPropertyName("applicant")]
         public string Applicant { get; set; }
-        [JsonPropertyName("cid")]
-        public int ChemicalId { get; set; }
         //预计归还时间
         [JsonPropertyName("rtime")]
         public DateTime ReturnTime { get; set; }
