@@ -4,14 +4,16 @@ using DatabaseConnector.DAO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DatabaseConnector.Migrations
 {
     [DbContext(typeof(LabContext))]
-    partial class LabContextModelSnapshot : ModelSnapshot
+    [Migration("20200325105824_LabDb_1_1")]
+    partial class LabDb_1_1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -231,9 +233,14 @@ namespace DatabaseConnector.Migrations
                     b.Property<DateTime>("ReturnTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<long>("WorkFlowId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("LabId");
+
+                    b.HasIndex("WorkFlowId");
 
                     b.ToTable("ChaimForm");
                 });

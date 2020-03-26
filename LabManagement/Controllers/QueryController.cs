@@ -39,7 +39,7 @@ namespace LabManagement.Controllers
             int labId = userRole.User.LabId;
             try
             {
-                var response = RpcWrapper.CallServiceWithResult("/api/entity/chemicals", $"labId={labId}");
+                var response = RpcWrapper.CallServiceByGet("/api/entity/chemicals", $"labId={labId}");
                 var res = JsonSerializer.Deserialize<List<Chemical>>(response);
                 return Ok(res);
             }

@@ -28,7 +28,7 @@ namespace LabManagement.Authorization
             }
             else
             {
-                //call the cache to check the certification
+                //call the cache to check the certification, which means the user is logined
                 if (UserRoleCache.TryGetUserRole(header, out UserRoleResult result))
                 {
                     if (string.IsNullOrEmpty(Role))

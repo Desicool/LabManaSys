@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using DatabaseConnector.DAO;
 using DatabaseConnector.DAO.Entity;
+using LabManagement.Utils;
 
 namespace LabManagement
 {
@@ -49,6 +50,7 @@ namespace LabManagement
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                RpcWrapper.Port = 44398;
             }
             else
             {

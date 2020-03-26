@@ -5,8 +5,18 @@ using System.Threading.Tasks;
 
 namespace DatabaseConnector.Utils
 {
-    public class StateUtil
+    public static class StateUtil
     {
-        public IDictionary<string, IReadOnlyList<string>> State { get; set; }
+        // Key值为当前状态
+        public static IDictionary<string, Pair> StateRoute { get; set; }
+        public class Pair
+        {
+            //需要通知的角色名称
+            public string RoleName { get; set; }
+            // 下一个状态，默认0项为失败跳转，1项为成功跳转
+            public List<string> Next { get; set; }
+        }
+
     }
+
 }

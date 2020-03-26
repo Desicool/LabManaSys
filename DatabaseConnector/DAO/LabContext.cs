@@ -20,6 +20,7 @@ namespace DatabaseConnector.DAO
         public DbSet<WorkFlow> WorkFlows { get; set; }
         public DbSet<DeclarationForm> DeclarationForms { get; set; }
         public DbSet<ClaimForm> ClaimForms { get; set; }
+        public DbSet<ClaimFormChemical> ClaimFormChemicalMap { get; set; }
         public DbSet<FinancialForm> FinancialForms { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
@@ -27,18 +28,32 @@ namespace DatabaseConnector.DAO
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Chemical>()
-                .HasIndex(c => c.LabId);
+            modelBuilder.Entity<Chemical>(options =>
+            {
+                options.HasIndex(c => c.LabId);
+                options.HasIndex(c => c.WorkFlowId);
+            });
             modelBuilder.Entity<Budget>()
                 .HasIndex(b => b.LabId);
             modelBuilder.Entity<NotificationMessage>()
                 .HasIndex(u => u.UserId);
-            modelBuilder.Entity<ClaimForm>()
-                .HasIndex(c => c.LabId);
-            modelBuilder.Entity<DeclarationForm>()
-                .HasIndex(d => d.LabId);
-            modelBuilder.Entity<FinancialForm>()
-                .HasIndex(d => d.LabId);
+            modelBuilder.Entity<ClaimForm>(options=>
+            {
+                options.HasIndex(c => c.LabId);
+            });
+            modelBuilder.Entity<DeclarationForm>(options =>
+            {
+                options.HasIndex(c => c.LabId);
+                options.HasIndex(c => c.WorkFlowId);
+            });
+            modelBuilder.Entity<FinancialForm>(options =>
+            {
+                options.HasIndex(c => c.LabId);
+                options.HasIndex(c => c.WorkFlowId);
+            });
+            modelBuilder.Entity<WorkFlow>()
+                .HasMany(w => w.Chemicals)
+                .WithOne();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {

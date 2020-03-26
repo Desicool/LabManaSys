@@ -8,6 +8,7 @@ using DatabaseConnector.DAO.Entity;
 using LabManagement.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace LabManagement.Controllers
 {
@@ -15,28 +16,44 @@ namespace LabManagement.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
+        private readonly ILogger<AccountController> _logger;
+        public AccountController(ILogger<AccountController> logger)
+        {
+            _logger = logger;
+        }
         [HttpPost("login")]
         public IActionResult Login([FromForm] string username, [FromForm] string password)
         {
+            _logger.LogInformation("Username: {username} try login.", username);
             try
             {
-                var response = RpcWrapper.CallServiceWithResult(
+                var response = RpcWrapper.CallServiceByGet(
                     "/api/userrole", $"username={username}");
                 var result = JsonSerializer.Deserialize<UserRoleResult>(response);
                 if (password == result.User.UserPassword)
                 {
                     string certification = Guid.NewGuid().ToString();
+                    var ret = new LoginReturn
+                    {
+                        Success = true,
+                        User = result.User,
+                        Certification = certification
+                    };
                     //UserRoleCache.AddUserRoleToCache(certification, result);
                     //return Ok(certification);
                     // For easy debug
+                    ret.Certification = "123";
                     UserRoleCache.AddUserRoleToCache("123", result);
-                    return Ok("123");
+                    return Ok(ret);
                 }
-                return Ok("Wrong username or password.");
+                return Ok(new LoginReturn { Success = false });
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return Ok("Server internal failed.");
+                // not sure if this should be write here
+                _logger.LogError(e.Message);
+                _logger.LogError("Call database_connector failed.");
+                throw e;
             }
         }
         [HttpPost("logout")]

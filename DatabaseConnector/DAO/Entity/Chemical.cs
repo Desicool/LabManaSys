@@ -13,19 +13,33 @@ namespace DatabaseConnector.DAO.Entity
     {
         [JsonPropertyName("id")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ChemicalId { get; set; }
+        public long ChemicalId { get; set; }
         [JsonPropertyName("name")]
-        [Required,MaxLength(64)]
+        [Required, MaxLength(64)]
         public string Name { get; set; }
         //所在实验室
         [JsonPropertyName("labId")]
         [Required]
         public int LabId { get; set; }
+        [JsonPropertyName("wfId")]
+        public long WorkFlowId { get; set; }
         [JsonPropertyName("labName")]
         public string LabName { get; set; }
         [JsonPropertyName("amount")]
         [Required]
         public int Amount { get; set; }
+        // 生产厂家
+        [JsonPropertyName("fname")]
+        public string FactoryName { get; set; }
+        // 生产日期
+        [JsonPropertyName("pname")]
+        public DateTime ProductionTime { get; set; }
+        // 单价
+        [JsonPropertyName("unitprice")]
+        public double UnitPrice { get; set; }
+        // 计量单位
+        [JsonPropertyName("unitmeasurement")]
+        public string UnitMeasurement { get; set; }
         [JsonPropertyName("state")]
         public ChemicalState State { get; set; } = ChemicalState.None;
         

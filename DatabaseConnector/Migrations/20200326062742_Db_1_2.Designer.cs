@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatabaseConnector.Migrations
 {
     [DbContext(typeof(LabContext))]
-    [Migration("20200324060441_LabDb_1_0")]
-    partial class LabDb_1_0
+    [Migration("20200326062742_Db_1_2")]
+    partial class Db_1_2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,13 +53,16 @@ namespace DatabaseConnector.Migrations
 
             modelBuilder.Entity("DatabaseConnector.DAO.Entity.Chemical", b =>
                 {
-                    b.Property<int>("ChemicalId")
+                    b.Property<long>("ChemicalId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("Amount")
                         .HasColumnType("int");
+
+                    b.Property<string>("FactoryName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("LabId")
                         .HasColumnType("int");
@@ -72,12 +75,26 @@ namespace DatabaseConnector.Migrations
                         .HasColumnType("nvarchar(64)")
                         .HasMaxLength(64);
 
+                    b.Property<DateTime>("ProductionTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("State")
                         .HasColumnType("int");
+
+                    b.Property<string>("UnitMeasurement")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("UnitPrice")
+                        .HasColumnType("float");
+
+                    b.Property<long>("WorkFlowId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("ChemicalId");
 
                     b.HasIndex("LabId");
+
+                    b.HasIndex("WorkFlowId");
 
                     b.ToTable("Chemical");
                 });
@@ -180,10 +197,6 @@ namespace DatabaseConnector.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
@@ -220,14 +233,33 @@ namespace DatabaseConnector.Migrations
                     b.Property<DateTime>("ReturnTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("WorkFlowId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
                     b.HasIndex("LabId");
 
-                    b.ToTable("ClaimForms");
+                    b.ToTable("ChaimForm");
+                });
+
+            modelBuilder.Entity("DatabaseConnector.DAO.FormData.ClaimFormChemical", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("ChemicalId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ClaimFormId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChemicalId");
+
+                    b.HasIndex("ClaimFormId");
+
+                    b.ToTable("ClaimFormChemical");
                 });
 
             modelBuilder.Entity("DatabaseConnector.DAO.FormData.DeclarationForm", b =>
@@ -237,29 +269,14 @@ namespace DatabaseConnector.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
-
                     b.Property<string>("Applicant")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FactoryName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("LabId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ProductionTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Reason")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UnitMeasurement")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("UnitPrice")
-                        .HasColumnType("float");
 
                     b.Property<long>("WorkFlowId")
                         .HasColumnType("bigint");
@@ -268,7 +285,9 @@ namespace DatabaseConnector.Migrations
 
                     b.HasIndex("LabId");
 
-                    b.ToTable("DeclarationForms");
+                    b.HasIndex("WorkFlowId");
+
+                    b.ToTable("DeclarationForm");
                 });
 
             modelBuilder.Entity("DatabaseConnector.DAO.FormData.FinancialForm", b =>
@@ -297,7 +316,18 @@ namespace DatabaseConnector.Migrations
 
                     b.HasIndex("LabId");
 
-                    b.ToTable("FinancialForms");
+                    b.HasIndex("WorkFlowId");
+
+                    b.ToTable("FinancialForm");
+                });
+
+            modelBuilder.Entity("DatabaseConnector.DAO.Entity.Chemical", b =>
+                {
+                    b.HasOne("DatabaseConnector.DAO.Entity.WorkFlow", null)
+                        .WithMany("Chemicals")
+                        .HasForeignKey("WorkFlowId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DatabaseConnector.DAO.Entity.UserRole", b =>
@@ -311,6 +341,21 @@ namespace DatabaseConnector.Migrations
                     b.HasOne("DatabaseConnector.DAO.Entity.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DatabaseConnector.DAO.FormData.ClaimFormChemical", b =>
+                {
+                    b.HasOne("DatabaseConnector.DAO.Entity.Chemical", "Chemical")
+                        .WithMany()
+                        .HasForeignKey("ChemicalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DatabaseConnector.DAO.FormData.ClaimForm", "ClaimForm")
+                        .WithMany()
+                        .HasForeignKey("ClaimFormId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
