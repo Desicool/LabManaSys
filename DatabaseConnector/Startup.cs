@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DatabaseConnector.DAO;
 using DatabaseConnector.DAO.Entity;
+using DatabaseConnector.Utils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -37,6 +38,7 @@ namespace DatabaseConnector
             {
                 options.AddConsole();
             });
+            services.AddSingleton<StateUtil>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

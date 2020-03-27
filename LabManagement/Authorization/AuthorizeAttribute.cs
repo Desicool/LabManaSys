@@ -31,6 +31,8 @@ namespace LabManagement.Authorization
                 //call the cache to check the certification, which means the user is logined
                 if (UserRoleCache.TryGetUserRole(header, out UserRoleResult result))
                 {
+                    // everytime user make some move, update the expire time.
+                    UserRoleCache.UpdateUserRole(header);
                     if (string.IsNullOrEmpty(Role))
                     {
                         return;

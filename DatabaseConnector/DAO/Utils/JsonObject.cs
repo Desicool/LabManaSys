@@ -15,4 +15,17 @@ namespace DatabaseConnector.DAO.Utils
         [JsonPropertyName("chemicals")]
         public List<Chemical> Chemicals { get; set; }
     }
+    public class PostFinancialFormParam
+    {
+        [JsonPropertyName("form")]
+        public List<FinancialForm> Form { get; set; }
+    }
+    public class ApproveDeclarationParam
+    {
+        [JsonPropertyName("uid")]
+        public int UserId { get; set; }
+        [JsonPropertyName("wfid")]
+        public int DeclarationFormId { get; set; }
+    }
+
 }

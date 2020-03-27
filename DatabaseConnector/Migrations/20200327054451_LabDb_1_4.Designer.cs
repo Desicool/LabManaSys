@@ -4,14 +4,16 @@ using DatabaseConnector.DAO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DatabaseConnector.Migrations
 {
     [DbContext(typeof(LabContext))]
-    partial class LabContextModelSnapshot : ModelSnapshot
+    [Migration("20200327054451_LabDb_1_4")]
+    partial class LabDb_1_4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -191,6 +193,10 @@ namespace DatabaseConnector.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Applicant")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
@@ -212,6 +218,9 @@ namespace DatabaseConnector.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Applicant")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Approver")
                         .HasColumnType("nvarchar(max)");
 
@@ -223,9 +232,6 @@ namespace DatabaseConnector.Migrations
 
                     b.Property<DateTime>("ReturnTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -263,14 +269,14 @@ namespace DatabaseConnector.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Applicant")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("LabId")
                         .HasColumnType("int");
 
                     b.Property<string>("Reason")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
 
                     b.Property<long>("WorkFlowId")
                         .HasColumnType("bigint");
@@ -291,6 +297,9 @@ namespace DatabaseConnector.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Applicant")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("LabId")
                         .HasColumnType("int");
 
@@ -298,9 +307,6 @@ namespace DatabaseConnector.Migrations
                         .HasColumnType("float");
 
                     b.Property<string>("Receiver")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("WorkFlowId")

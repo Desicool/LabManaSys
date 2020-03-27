@@ -15,10 +15,9 @@ namespace DatabaseConnector.DAO.Entity
         [JsonPropertyName("id")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
-        //申请人
-        [JsonPropertyName("applicant")]
-        [Required]
-        public string Applicant { get; set; }
+        // 申请账号的id
+        [JsonPropertyName("uid")]
+        public int UserId { get; set; }
         [JsonPropertyName("chemicals")]
         public List<Chemical> Chemicals { get; set; }
         [JsonPropertyName("startTime")]

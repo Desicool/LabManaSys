@@ -19,9 +19,9 @@ namespace DatabaseConnector.DAO.FormData
         [JsonPropertyName("lid")]
         [Required]
         public int LabId { get; set; }
-        //申请人，外联userid
-        [JsonPropertyName("applicant")]
-        public string Applicant { get; set; }
+        //申请人
+        [JsonPropertyName("uid")]
+        public int UserId { get; set; }
         //预计归还时间
         [JsonPropertyName("rtime")]
         public DateTime ReturnTime { get; set; }

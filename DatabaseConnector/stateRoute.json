@@ -1,0 +1,30 @@
+{
+  "stateRoute": {
+    "default": {
+      "roleName": "",
+      "next": []
+    },
+    "declearing": {
+      "roleName": "LabTeacher",
+      "next": [ "default", "security" ]
+    },
+    "financial": {
+      "roleName": "FinanceTeacher",
+      "next": [ "declearing", "" ]
+    },
+    "security": {
+      "roleName": "Security",
+      "next": [ "declearing" ]
+    },
+    "inPurchasing": {
+      "roleName": "",
+      // should not fail
+      "next": [ "inPurchasing", "inStore" ]
+    },
+    "inStore": {
+      // this is the last state./
+      "roleName": "",
+      "next": []
+    }
+  }
+}

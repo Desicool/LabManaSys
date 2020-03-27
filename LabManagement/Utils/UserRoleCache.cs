@@ -35,6 +35,10 @@ namespace LabManagement.Utils
         {
             _cache.Add(certification, new UserRoleWithTimestamp(userRole));
         }
+        public static void UpdateUserRole(string certification)
+        {
+            _cache[certification].ExpireTime = DateTime.Now.AddHours(1);
+        }
         public static void RemoveUserRoleFromCache(string certification)
         {
             _cache.Remove(certification);

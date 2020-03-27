@@ -7,8 +7,10 @@ using DatabaseConnector.DAO;
 using DatabaseConnector.DAO.Entity;
 using DatabaseConnector.DAO.FormData;
 using DatabaseConnector.DAO.Utils;
+using DatabaseConnector.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace DatabaseConnector.Controllers
@@ -29,55 +31,21 @@ namespace DatabaseConnector.Controllers
         {
             return _context.Chemicals.Where(c => c.LabId == labId).ToList();
         }
-        [HttpPost("declarationform")]
-        public IActionResult PostDeclarationForm([FromBody] PostDeclarationFormParam param)
+        [HttpGet("workflows")]
+        public List<WorkFlow> GetWorkFlowsByUserId([FromQuery] int id, [FromQuery] string type)
         {
-            var form = param.Form;
-            // first create a workflow
-            var workflow = new WorkFlow
-            {
-                Applicant = form.Applicant,
-                StartTime = DateTime.Now,
-                State = "declearing",
-                Chemicals = param.Chemicals
-            };
-            _context.WorkFlows.Add(workflow);
-            // create form_workflow_relationship
-            form.WorkFlowId = workflow.Id;
-            _context.DeclarationForms.Add(form);
-            // send message to role 
-            _context.SaveChanges();
-            return Ok();
+            type = type.ToLower();
+            if(type == "userid")
+                return _context.WorkFlows.Where(w=>w.UserId == id).ToList();
+            if (type == "labid")
+                return _context.WorkFlows
+                    .Where(u => _context.Users.Any(x => x.LabId == id))
+                    .ToList();
+            throw new ArgumentOutOfRangeException();
         }
-
-
-        [HttpPost("msg")]
-        public IActionResult PostMessage()
+        [HttpPost("financialform")]
+        public IActionResult PostFinancialForm([FromBody] PostFinancialFormParam param)
         {
-            var entity = new NotificationMessage
-            {
-                FormId = 1,
-                FormType = FormType.DeclarationForm,
-                IsSolved = false,
-                RoleId = 1
-            };
-            _context.NotificationMessages.Add(entity);
-            _context.SaveChanges();
-            /*_context.NotificationMessages.ToList().ForEach(m =>
-            {
-                _logger.LogDebug(JsonSerializer.Serialize(m));
-            });*/
-            _context.Roles.ToList().ForEach(r =>
-            {
-                _logger.LogDebug(r.RoleName);
-            });
-            _logger.LogDebug("begin delete");
-            _context.NotificationMessages.Remove(entity);
-            _context.SaveChanges();
-            _context.Roles.ToList().ForEach(r =>
-            {
-                _logger.LogDebug(r.RoleName);
-            });
             return Ok();
         }
     }

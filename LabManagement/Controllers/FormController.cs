@@ -28,15 +28,27 @@ namespace LabManagement.Controllers
         [ProducesDefaultResponseType]
         public IActionResult Declear([FromBody] PostDeclarationFormParam param)
         {
-            var certification = HttpContext.Request.Headers["certification"];
-            var success = UserRoleCache.TryGetUserRole(certification, out _);
-            if (!success)
-            {
-                return NotFound("try again");
-            }
             try
             {
-                RpcWrapper.CallServiceByPost("/api/entity/declarationform",
+                RpcWrapper.CallServiceByPost("/api/declaration/apply",
+                    JsonSerializer.Serialize(param));
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return NotFound(e.Message);
+            }
+        }
+        [Authorize(Role ="FinanceTeacher")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public IActionResult Financial([FromBody] PostFinancialFormParam param)
+        {
+            try
+            {
+                RpcWrapper.CallServiceByPost("/api/entity/financialform",
                     JsonSerializer.Serialize(param));
                 return Ok();
             }
