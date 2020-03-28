@@ -29,8 +29,8 @@ namespace DatabaseConnector.DAO.FormData
         [JsonPropertyName("rrtime")]
         public DateTime RealReturnTime { get; set; }
         //审核人
-        [JsonPropertyName("approver")]
-        public string Approver { get; set; }
+        [JsonPropertyName("aid")]
+        public int? ApproverId { get; set; }
     }
     [Table("ClaimFormChemical")]
     public class ClaimFormChemical

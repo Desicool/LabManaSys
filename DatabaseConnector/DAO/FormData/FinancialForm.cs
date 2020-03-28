@@ -20,14 +20,15 @@ namespace DatabaseConnector.DAO.FormData
         [Required]
         [JsonPropertyName("lid")]
         public int LabId { get; set; }
-
         //申请人
         [JsonPropertyName("uid")]
-        public string UserId { get; set; }
+        public int UserId { get; set; }
         [JsonPropertyName("price")]
         public double Price { get; set; }
         //收款方
         [JsonPropertyName("receiver")]
         public string Receiver { get; set; }
+        [JsonPropertyName("aid")]
+        public int? ApproverId { get; set; }
     }
 }

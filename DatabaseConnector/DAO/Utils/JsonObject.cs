@@ -20,8 +20,9 @@ namespace DatabaseConnector.DAO.Utils
         [JsonPropertyName("form")]
         public List<FinancialForm> Form { get; set; }
     }
-    public class ApproveDeclarationParam
+    public class SolveDeclarationParam
     {
+        // 操作者
         [JsonPropertyName("uid")]
         public int UserId { get; set; }
         [JsonPropertyName("wfid")]

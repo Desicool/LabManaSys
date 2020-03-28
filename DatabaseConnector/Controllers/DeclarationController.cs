@@ -25,6 +25,16 @@ namespace DatabaseConnector.Controllers
             _logger = logger;
             util = state;
         }
+        [HttpGet("lab")]
+        public IActionResult GetDeclarationForms([FromQuery] long workflowid)
+        {
+            return Ok(_context.DeclarationForms.Where(u => u.WorkFlowId == workflowid).ToList());
+        }
+        [HttpGet("person")]
+        public IActionResult GetDeclarationForm([FromQuery] int userid)
+        {
+            return Ok(_context.DeclarationForms.Where(u => u.UserId == userid).ToList());
+        }
         [HttpPost("apply")]
         public IActionResult PostDeclarationForm([FromBody] PostDeclarationFormParam param)
         {
@@ -57,8 +67,49 @@ namespace DatabaseConnector.Controllers
             return Ok();
         }
         [HttpPost("approve")]
-        public IActionResult ApproveDeclaration([FromBody] ApproveDeclarationParam param)
+        public IActionResult ApproveDeclaration([FromBody] SolveDeclarationParam param)
         {
+            // change state
+            var form = _context.DeclarationForms.Where(u => u.Id == param.DeclarationFormId).Single();
+            form.ApproverId = param.UserId;
+            var workflow = _context.WorkFlows.Where(u => u.Id == form.WorkFlowId).Single();
+            var data = util.StateRoute[workflow.State];
+            workflow.State = data.Next[1];
+            data = util.StateRoute[workflow.State];
+            // send msg
+            var roleid = _context.Roles.Where(r => r.RoleName == data.RoleName).Select(r=>r.RoleId).Single();
+            var msg = new NotificationMessage
+            {
+                FormId = form.Id,
+                FormType = FormType.DeclarationForm,
+                IsSolved = false,
+                RoleId = roleid
+            };
+            _context.NotificationMessages.Add(msg);
+            _context.SaveChanges();
+            return Ok();
+        }
+        [HttpPost("reject")]
+        public IActionResult RejectDeclaration([FromBody] SolveDeclarationParam param)
+        {
+            // change state
+            var form = _context.DeclarationForms.Where(u => u.Id == param.DeclarationFormId).Single();
+            form.ApproverId = param.UserId;
+            var workflow = _context.WorkFlows.Where(u => u.Id == form.WorkFlowId).Single();
+            var data = util.StateRoute[workflow.State];
+            workflow.State = data.Next[0];
+            // send msg
+            data = util.StateRoute[workflow.State];
+            var roleid = _context.Roles.Where(r => r.RoleName == data.RoleName).Select(r => r.RoleId).Single();
+            var msg = new NotificationMessage
+            {
+                FormId = form.Id,
+                FormType = FormType.DeclarationForm,
+                IsSolved = false,
+                RoleId = roleid
+            };
+            _context.NotificationMessages.Add(msg);
+            _context.SaveChanges();
             return Ok();
         }
     }

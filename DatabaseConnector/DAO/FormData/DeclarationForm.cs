@@ -27,5 +27,7 @@ namespace DatabaseConnector.DAO.FormData
         // 申报理由、用途
         [JsonPropertyName("reason")]
         public string Reason { get; set; }
+        [JsonPropertyName("aid")]
+        public int? ApproverId { get; set; }
     }
 }
