@@ -18,15 +18,21 @@ namespace DatabaseConnector.DAO.Utils
     public class PostFinancialFormParam
     {
         [JsonPropertyName("form")]
-        public List<FinancialForm> Form { get; set; }
+        public FinancialForm Form { get; set; }
     }
-    public class SolveDeclarationParam
+    public class PostClaimFormParam
+    {
+        [JsonPropertyName("form")]
+        public ClaimForm Form { get; set; }
+        [JsonPropertyName("chemicals")]
+        public List<Chemical> Chemicals { get; set; }
+    }
+    public class SolveFormParam
     {
         // 操作者
         [JsonPropertyName("uid")]
         public int UserId { get; set; }
-        [JsonPropertyName("wfid")]
-        public int DeclarationFormId { get; set; }
+        [JsonPropertyName("fid")]
+        public int FormId { get; set; }
     }
-
 }

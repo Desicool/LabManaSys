@@ -14,66 +14,61 @@ namespace DatabaseConnector.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DeclarationController : ControllerBase
+    public class FinancialController : ControllerBase
     {
-        private readonly ILogger<DeclarationController> _logger;
+        private readonly ILogger<FinancialController> _logger;
         private readonly LabContext _context;
         private readonly StateUtil util;
-        public DeclarationController(LabContext context, ILogger<DeclarationController> logger, StateUtil state)
+        public FinancialController(LabContext context, ILogger<FinancialController> logger, StateUtil state)
         {
             _context = context;
             _logger = logger;
             util = state;
         }
         [HttpGet("workflow")]
-        public IActionResult GetDeclarationForms([FromQuery] long workflowid)
+        public IActionResult GetFinancialForms([FromQuery] long workflowid)
         {
-            return Ok(_context.DeclarationForms.Where(u => u.WorkFlowId == workflowid).ToList());
-        }
-        [HttpGet("person")]
-        public IActionResult GetDeclarationForm([FromQuery] int userid)
-        {
-            return Ok(_context.DeclarationForms.Where(u => u.UserId == userid).ToList());
+            return Ok(_context.FinancialForms.Where(u => u.WorkFlowId == workflowid).ToList());
         }
         [HttpGet("lab")]
-        public IActionResult GetLabDeclarationForms([FromQuery] int labid)
+        public IActionResult GetLabFinancialForms([FromQuery] int labid)
         {
-            return Ok(_context.DeclarationForms.Where(u => u.LabId == labid).ToList());
+            return Ok(_context.FinancialForms.Where(u => u.LabId == labid).ToList());
+        }
+        [HttpGet("person")]
+        public IActionResult GetFinancialForm([FromQuery] int userid)
+        {
+            return Ok(_context.FinancialForms.Where(u => u.UserId == userid).ToList());
         }
         [HttpPost("apply")]
-        public IActionResult PostDeclarationForm([FromBody] PostDeclarationFormParam param)
+        public IActionResult PostFinancialForm([FromBody] PostFinancialFormParam param)
         {
             var form = param.Form;
-            // first create a workflow
-            var workflow = new WorkFlow
-            {
-                UserId = param.Form.UserId,
-                StartTime = DateTime.Now,
-                State = "declearing",
-                Chemicals = param.Chemicals,
-            };
-            _context.WorkFlows.Add(workflow);
-            // create form_workflow_relationship
-            form.WorkFlowId = workflow.Id;
-            _context.DeclarationForms.Add(form);
-            var role = GetNotifyRoleId(util.StateRoute[workflow.State].RoleName, param.Form.LabId);
+            _context.FinancialForms.Add(form);
+            // workflow state should be at securityOk
+            // move to financial
+            var workflow = _context.WorkFlows.Where(u => u.Id == param.Form.WorkFlowId).Single();
+            workflow.State = util.StateRoute[workflow.State].Next[1];
+            var role = _context.Roles
+                .Where(r => r.RoleName == util.StateRoute[workflow.State].RoleName)
+                .Single();
             // send message to role 
             var msg = new NotificationMessage
             {
                 FormId = form.Id,
                 FormType = FormType.DeclarationForm,
                 IsSolved = false,
-                RoleId = role
+                RoleId = role.RoleId
             };
             _context.NotificationMessages.Add(msg);
             _context.SaveChanges();
             return Ok();
         }
         [HttpPost("approve")]
-        public IActionResult ApproveClaim([FromBody] SolveFormParam param)
+        public IActionResult ApproveFinancial([FromBody] SolveFormParam param)
         {
             // change state
-            var form = _context.DeclarationForms.Where(u => u.Id == param.FormId).Single();
+            var form = _context.FinancialForms.Where(u => u.Id == param.FormId).Single();
             form.ApproverId = param.UserId;
             var workflow = _context.WorkFlows.Where(u => u.Id == form.WorkFlowId).Single();
             var data = util.StateRoute[workflow.State];
@@ -84,7 +79,7 @@ namespace DatabaseConnector.Controllers
             var msg = new NotificationMessage
             {
                 FormId = form.Id,
-                FormType = FormType.DeclarationForm,
+                FormType = FormType.FinancialForm,
                 IsSolved = false,
                 RoleId = roleid
             };
@@ -96,18 +91,21 @@ namespace DatabaseConnector.Controllers
         public IActionResult RejectDeclaration([FromBody] SolveFormParam param)
         {
             // change state
-            var form = _context.DeclarationForms.Where(u => u.Id == param.FormId).Single();
+            var form = _context.FinancialForms.Where(u => u.Id == param.FormId).Single();
             form.ApproverId = param.UserId;
             var workflow = _context.WorkFlows.Where(u => u.Id == form.WorkFlowId).Single();
             var data = util.StateRoute[workflow.State];
             workflow.State = data.Next[0];
             // send msg
             data = util.StateRoute[workflow.State];
+            var query = from role in _context.Roles
+                        where role.RoleName == data.RoleName && (role.LabId.HasValue ? role.LabId == form.LabId : true)
+                        select role.RoleId;
             var roleid = GetNotifyRoleId(data.RoleName, form.LabId);
             var msg = new NotificationMessage
             {
                 FormId = form.Id,
-                FormType = FormType.DeclarationForm,
+                FormType = FormType.FinancialForm,
                 IsSolved = false,
                 RoleId = roleid
             };

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DatabaseConnector.Utils;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -30,5 +31,7 @@ namespace DatabaseConnector.DAO.FormData
         public string Receiver { get; set; }
         [JsonPropertyName("aid")]
         public int? ApproverId { get; set; }
+        [JsonPropertyName("state")]
+        public FormState State { get; set; }
     }
 }

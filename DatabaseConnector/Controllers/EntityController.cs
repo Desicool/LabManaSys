@@ -43,10 +43,5 @@ namespace DatabaseConnector.Controllers
                     .ToList();
             throw new ArgumentOutOfRangeException();
         }
-        [HttpPost("financialform")]
-        public IActionResult PostFinancialForm([FromBody] PostFinancialFormParam param)
-        {
-            return Ok();
-        }
     }
 }

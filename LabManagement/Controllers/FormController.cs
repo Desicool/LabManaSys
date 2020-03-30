@@ -40,6 +40,42 @@ namespace LabManagement.Controllers
                 return NotFound(e.Message);
             }
         }
+        [HttpPost("declear/approve")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public IActionResult ApproveDeclear([FromBody]SolveFormParam param)
+        {
+            try
+            {
+                RpcWrapper.CallServiceByPost("/api/declaration/approve",
+                    JsonSerializer.Serialize(param));
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return NotFound(e.Message);
+            }
+        }
+        [HttpPost("declear/reject")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public IActionResult RejectDeclear([FromBody]SolveFormParam param)
+        {
+            try
+            {
+                RpcWrapper.CallServiceByPost("/api/declaration/reject",
+                    JsonSerializer.Serialize(param));
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return NotFound(e.Message);
+            }
+        }
         [Authorize(Role ="FinanceTeacher")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
@@ -48,7 +84,7 @@ namespace LabManagement.Controllers
         {
             try
             {
-                RpcWrapper.CallServiceByPost("/api/entity/financialform",
+                RpcWrapper.CallServiceByPost("/api/financial/apply",
                     JsonSerializer.Serialize(param));
                 return Ok();
             }

@@ -16,5 +16,8 @@ namespace DatabaseConnector.DAO.Entity
         public int RoleId { get; set; }
         [JsonPropertyName("roleName")]
         public string RoleName { get; set; }
+        // for teacher and msg pull
+        [JsonPropertyName("lid")]
+        public int? LabId { get; set; }
     }
 }

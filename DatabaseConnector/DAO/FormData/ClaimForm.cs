@@ -1,4 +1,5 @@
 ﻿using DatabaseConnector.DAO.Entity;
+using DatabaseConnector.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -27,10 +28,12 @@ namespace DatabaseConnector.DAO.FormData
         public DateTime ReturnTime { get; set; }
         //实际归还时间
         [JsonPropertyName("rrtime")]
-        public DateTime RealReturnTime { get; set; }
+        public DateTime? RealReturnTime { get; set; }
         //审核人
         [JsonPropertyName("aid")]
         public int? ApproverId { get; set; }
+        [JsonPropertyName("state")]
+        public FormState State { get; set; }
     }
     [Table("ClaimFormChemical")]
     public class ClaimFormChemical
@@ -47,4 +50,5 @@ namespace DatabaseConnector.DAO.FormData
         [JsonIgnore]
         public ClaimForm ClaimForm { get; set; }
     }
+
 }

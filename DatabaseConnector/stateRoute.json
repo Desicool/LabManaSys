@@ -8,13 +8,17 @@
       "roleName": "LabTeacher",
       "next": [ "default", "security" ]
     },
-    "financial": {
-      "roleName": "FinanceTeacher",
-      "next": [ "declearing", "" ]
-    },
     "security": {
       "roleName": "Security",
-      "next": [ "declearing" ]
+      "next": [ "declearing", "securityOk" ]
+    },
+    "securityOk": {
+      "roleName": "",
+      "next": [ "declearing", "financial" ]
+    },
+    "financial": {
+      "roleName": "FinanceTeacher",
+      "next": [ "declearing", "inPurchasing" ]
     },
     "inPurchasing": {
       "roleName": "",
