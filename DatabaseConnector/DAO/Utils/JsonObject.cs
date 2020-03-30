@@ -34,5 +34,7 @@ namespace DatabaseConnector.DAO.Utils
         public int UserId { get; set; }
         [JsonPropertyName("fid")]
         public int FormId { get; set; }
+        [JsonPropertyName("lid")]
+        public int LabId { get; set; }
     }
 }

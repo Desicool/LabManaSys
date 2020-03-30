@@ -43,5 +43,15 @@ namespace DatabaseConnector.Controllers
                     .ToList();
             throw new ArgumentOutOfRangeException();
         }
+        [HttpPost("chemical/discard")]
+        public IActionResult DiscardChemical([FromBody] List<Chemical> chemicals)
+        {
+            var list = _context.Chemicals
+                .Where(u => chemicals.Exists(v => v.ChemicalId == u.ChemicalId))
+                .ToList();
+            _context.Chemicals.RemoveRange(list);
+            _context.SaveChanges();
+            return Ok();
+        }
     }
 }

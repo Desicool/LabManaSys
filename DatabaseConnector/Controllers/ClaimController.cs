@@ -113,6 +113,28 @@ namespace DatabaseConnector.Controllers
             _context.SaveChanges();
             return Ok();
         }
+        [HttpPost("return")]
+        public IActionResult ReturnChemicals([FromBody] SolveFormParam param)
+        {
+            // change state
+            var formlist = _context.ClaimFormChemicalMap
+                .Where(u => u.ClaimFormId == param.FormId)
+                .Include(u => u.Chemical)
+                .Include(u => u.ClaimForm)
+                .ToList();
+            if (formlist.Count <= 0)
+            {
+                _logger.LogError("ClaimForm not found");
+                throw new NullReferenceException();
+            }
+            formlist[0].ClaimForm.RealReturnTime = DateTime.Now;
+            foreach (var item in formlist)
+            {
+                item.Chemical.State = ChemicalState.Lab;
+            }
+            return Ok();
+        }
+
         public int GetNotifyRoleId(string roleName, int? labId)
         {
             return _context.Roles
