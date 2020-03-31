@@ -53,5 +53,60 @@ namespace DatabaseConnector.Controllers
             _context.SaveChanges();
             return Ok();
         }
+        [HttpGet("msg")]
+        public MsgResult GetMessages([FromQuery]int userid)
+        {
+            var ur = _context.UserRoleRelation
+                .Where(u => u.UserId == userid)
+                .ToList();
+            var ret = new MsgResult
+            {
+                DeclarationForms = new List<DeclarationForm>(),
+                ClaimForms = new List<ClaimForm>(),
+                FinancialForms = new List<FinancialForm>()
+            };
+            foreach(var role in ur)
+            {
+                var msgs = _context.NotificationMessages
+                    .Where(u => u.RoleId == role.RoleId)
+                    .GroupBy(u => u.FormType)
+                    .ToList();
+                foreach(var msg in msgs)
+                {
+                    var group = msg.ToList();
+                    switch (msg.Key)
+                    {
+                        case FormType.ClaimForm:
+                            {
+                                var t = _context.ClaimForms
+                                    .Where(c => group.Exists(g=>g.FormId == c.Id))
+                                    .ToList();
+                                ret.ClaimForms.AddRange(t);
+                                break;
+                            }
+                        case FormType.DeclarationForm:
+                            {
+                                var t = _context.DeclarationForms
+                                    .Where(c => group.Exists(g => g.FormId == c.Id))
+                                    .ToList();
+                                ret.DeclarationForms.AddRange(t);
+                                break;
+                            }
+                        case FormType.FinancialForm:
+                            {
+                                var t = _context.FinancialForms
+                                    .Where(c => group.Exists(g => g.FormId == c.Id))
+                                    .ToList();
+                                ret.FinancialForms.AddRange(t);
+                                break;
+                            }
+                    }
+                }
+            }
+            ret.DeclarationForms.Sort();
+            ret.ClaimForms.Sort();
+            ret.FinancialForms.Sort();
+            return ret;
+        }
     }
 }

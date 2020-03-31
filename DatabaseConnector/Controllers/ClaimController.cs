@@ -38,6 +38,7 @@ namespace DatabaseConnector.Controllers
         public IActionResult PostClaimForm([FromBody] PostClaimFormParam param)
         {
             var form = param.Form;
+            form.State = Utils.FormState.InProcess;
             _context.ClaimForms.Add(form);
             // data format
             foreach(var chemical in param.Chemicals)
@@ -79,7 +80,8 @@ namespace DatabaseConnector.Controllers
                 _logger.LogError("ClaimForm not found");
                 throw new NullReferenceException();
             }
-            formlist[0].ClaimForm.ApproverId = param.UserId;
+            formlist[0].ClaimForm.HandlerId = param.UserId;
+            formlist[0].ClaimForm.State = Utils.FormState.Approved;
             foreach(var item in formlist)
             {
                 item.Chemical.State = ChemicalState.InUse;
@@ -97,9 +99,11 @@ namespace DatabaseConnector.Controllers
             _context.SaveChanges();
             return Ok();
         }
-        [HttpPost("approve")]
+        [HttpPost("reject")]
         public IActionResult RejectClaim([FromBody] SolveFormParam param)
         {
+            var form = _context.ClaimForms.Where(u => u.Id == param.FormId).Single();
+            form.State = Utils.FormState.Rejected;
             // send msg
             var roleid = GetNotifyRoleId("Applicant", null);
             var msg = new NotificationMessage

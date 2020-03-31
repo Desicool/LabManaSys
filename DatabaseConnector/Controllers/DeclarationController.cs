@@ -44,6 +44,7 @@ namespace DatabaseConnector.Controllers
         public IActionResult PostDeclarationForm([FromBody] PostDeclarationFormParam param)
         {
             var form = param.Form;
+            form.State = FormState.InProcess;
             // first create a workflow
             var workflow = new WorkFlow
             {
@@ -70,11 +71,12 @@ namespace DatabaseConnector.Controllers
             return Ok();
         }
         [HttpPost("approve")]
-        public IActionResult ApproveClaim([FromBody] SolveFormParam param)
+        public IActionResult ApproveDeclaration([FromBody] SolveFormParam param)
         {
             // change state
             var form = _context.DeclarationForms.Where(u => u.Id == param.FormId).Single();
-            form.ApproverId = param.UserId;
+            form.HandlerId = param.UserId;
+            form.State = FormState.Approved;
             var workflow = _context.WorkFlows.Where(u => u.Id == form.WorkFlowId).Single();
             var data = util.StateRoute[workflow.State];
             workflow.State = data.Next[1];
@@ -97,7 +99,8 @@ namespace DatabaseConnector.Controllers
         {
             // change state
             var form = _context.DeclarationForms.Where(u => u.Id == param.FormId).Single();
-            form.ApproverId = param.UserId;
+            form.HandlerId = param.UserId;
+            form.State = FormState.Rejected;
             var workflow = _context.WorkFlows.Where(u => u.Id == form.WorkFlowId).Single();
             var data = util.StateRoute[workflow.State];
             workflow.State = data.Next[0];

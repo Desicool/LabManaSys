@@ -31,6 +31,7 @@ namespace LabManagement.Controllers
         {
             try
             {
+                param.Form.SubmitTime = DateTime.Now;
                 RpcWrapper.CallServiceByPost("/api/declaration/apply",
                     JsonSerializer.Serialize(param));
                 return Ok();
@@ -99,6 +100,7 @@ namespace LabManagement.Controllers
         {
             try
             {
+                param.Form.SubmitTime = DateTime.Now;
                 RpcWrapper.CallServiceByPost("/api/financial/apply",
                     JsonSerializer.Serialize(param));
                 return Ok();
@@ -157,6 +159,7 @@ namespace LabManagement.Controllers
         {
             try
             {
+                param.Form.SubmitTime = DateTime.Now;
                 RpcWrapper.CallServiceByPost("/api/claim/apply",
                     JsonSerializer.Serialize(param));
                 return Ok();

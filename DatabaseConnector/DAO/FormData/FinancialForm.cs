@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace DatabaseConnector.DAO.FormData
 {
     [Table("FinancialForm")]
-    public class FinancialForm
+    public class FinancialForm : IComparable<FinancialForm>
     {
         [JsonPropertyName("id")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -29,9 +29,17 @@ namespace DatabaseConnector.DAO.FormData
         //收款方
         [JsonPropertyName("receiver")]
         public string Receiver { get; set; }
-        [JsonPropertyName("aid")]
-        public int? ApproverId { get; set; }
+        [JsonPropertyName("hid")]
+        public int? HandlerId { get; set; }
+        [JsonPropertyName("stime")]
+        public DateTime SubmitTime { get; set; }
         [JsonPropertyName("state")]
         public FormState State { get; set; }
+        public int CompareTo(FinancialForm obj)
+        {
+            if (SubmitTime == obj.SubmitTime)
+                return Id.CompareTo(obj.Id);
+            return SubmitTime < obj.SubmitTime ? -1 : 1;
+        }
     }
 }

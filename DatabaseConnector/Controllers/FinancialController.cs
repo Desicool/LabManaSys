@@ -44,6 +44,7 @@ namespace DatabaseConnector.Controllers
         public IActionResult PostFinancialForm([FromBody] PostFinancialFormParam param)
         {
             var form = param.Form;
+            form.State = FormState.InProcess;
             _context.FinancialForms.Add(form);
             // workflow state should be at securityOk
             // move to financial
@@ -69,7 +70,8 @@ namespace DatabaseConnector.Controllers
         {
             // change state
             var form = _context.FinancialForms.Where(u => u.Id == param.FormId).Single();
-            form.ApproverId = param.UserId;
+            form.HandlerId = param.UserId;
+            form.State = FormState.Approved;
             var workflow = _context.WorkFlows.Where(u => u.Id == form.WorkFlowId).Single();
             var data = util.StateRoute[workflow.State];
             workflow.State = data.Next[1];
@@ -88,11 +90,12 @@ namespace DatabaseConnector.Controllers
             return Ok();
         }
         [HttpPost("reject")]
-        public IActionResult RejectDeclaration([FromBody] SolveFormParam param)
+        public IActionResult RejectFinancial([FromBody] SolveFormParam param)
         {
             // change state
             var form = _context.FinancialForms.Where(u => u.Id == param.FormId).Single();
-            form.ApproverId = param.UserId;
+            form.HandlerId = param.UserId;
+            form.State = FormState.Rejected;
             var workflow = _context.WorkFlows.Where(u => u.Id == form.WorkFlowId).Single();
             var data = util.StateRoute[workflow.State];
             workflow.State = data.Next[0];

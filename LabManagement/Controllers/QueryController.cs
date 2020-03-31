@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 using DatabaseConnector.DAO.Entity;
+using DatabaseConnector.DAO.Utils;
 
 namespace LabManagement.Controllers
 {
@@ -41,6 +42,27 @@ namespace LabManagement.Controllers
             {
                 var response = RpcWrapper.CallServiceByGet("/api/entity/chemicals", $"labId={labId}");
                 var res = JsonSerializer.Deserialize<List<Chemical>>(response);
+                return Ok(res);
+            }
+            catch (JsonException)
+            {
+                return BadRequest("internal error");
+            }
+            catch (Exception)
+            {
+                return NotFound("try again");
+            }
+        }
+        [HttpGet("msg")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public IActionResult QueryMessages([FromQuery] int userId)
+        {
+            try
+            {
+                var response = RpcWrapper.CallServiceByGet("/api/entity/msg", $"userid={userId}");
+                var res = JsonSerializer.Deserialize<MsgResult>(response);
                 return Ok(res);
             }
             catch (JsonException)

@@ -37,4 +37,13 @@ namespace DatabaseConnector.DAO.Utils
         [JsonPropertyName("lid")]
         public int LabId { get; set; }
     }
+    public class MsgResult
+    {
+        [JsonPropertyName("cform")]
+        public List<ClaimForm> ClaimForms { get; set; }
+        [JsonPropertyName("dform")]
+        public List<DeclarationForm> DeclarationForms { get; set; }
+        [JsonPropertyName("fform")]
+        public List<FinancialForm> FinancialForms { get; set; }
+    }
 }

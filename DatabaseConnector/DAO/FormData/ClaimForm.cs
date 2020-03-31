@@ -12,7 +12,7 @@ namespace DatabaseConnector.DAO.FormData
 {
     //申领表
     [Table("ChaimForm")]
-    public class ClaimForm
+    public class ClaimForm : IComparable<ClaimForm>
     {
         [JsonPropertyName("id")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -30,10 +30,18 @@ namespace DatabaseConnector.DAO.FormData
         [JsonPropertyName("rrtime")]
         public DateTime? RealReturnTime { get; set; }
         //审核人
-        [JsonPropertyName("aid")]
-        public int? ApproverId { get; set; }
+        [JsonPropertyName("hid")]
+        public int? HandlerId { get; set; }
+        [JsonPropertyName("stime")]
+        public DateTime SubmitTime { get; set; }
         [JsonPropertyName("state")]
         public FormState State { get; set; }
+        public int CompareTo(ClaimForm obj)
+        {
+            if (SubmitTime == obj.SubmitTime)
+                return Id.CompareTo(obj.Id);
+            return SubmitTime < obj.SubmitTime ? -1 : 1;
+        }
     }
     [Table("ClaimFormChemical")]
     public class ClaimFormChemical
