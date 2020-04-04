@@ -1,7 +1,12 @@
-import { Effect, Reducer } from 'umi';
+import { Reducer } from 'umi';
 
-import { queryCurrent, query as queryUsers } from '@/services/user';
-
+export interface IUser {
+  userName?: string;
+  userId?: number;
+  userPassword?: string;
+  labId?: number;
+  labName?: string;
+}
 export interface CurrentUser {
   avatar?: string;
   name?: string;
@@ -17,18 +22,15 @@ export interface CurrentUser {
 }
 
 export interface UserModelState {
-  currentUser?: CurrentUser;
+  currentUser?: IUser;
 }
 
 export interface UserModelType {
   namespace: 'user';
   state: UserModelState;
-  effects: {
-    fetch: Effect;
-    fetchCurrent: Effect;
-  };
+  effects: {};
   reducers: {
-    saveCurrentUser: Reducer<UserModelState>;
+    setCurrentUser: Reducer<UserModelState>;
     changeNotifyCount: Reducer<UserModelState>;
   };
 }
@@ -40,25 +42,10 @@ const UserModel: UserModelType = {
     currentUser: {},
   },
 
-  effects: {
-    *fetch(_, { call, put }) {
-      const response = yield call(queryUsers);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-    },
-    *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
-      yield put({
-        type: 'saveCurrentUser',
-        payload: response,
-      });
-    },
-  },
+  effects: {},
 
   reducers: {
-    saveCurrentUser(state, action) {
+    setCurrentUser(state, action) {
       return {
         ...state,
         currentUser: action.payload || {},

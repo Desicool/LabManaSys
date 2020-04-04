@@ -23,7 +23,7 @@ namespace DatabaseConnector.DAO.Entity
         [JsonPropertyName("labId")]
         public int LabId { get; set; }
 
-        [JsonPropertyName("LabName")]
+        [JsonPropertyName("labName")]
         public string LabName { get; set; }
     }
 }

@@ -7,13 +7,24 @@ export interface LoginParamsType {
   captcha: string;
 }
 
-export async function fakeAccountLogin(params: LoginParamsType) {
-  return request('/api/login/account', {
-    method: 'POST',
-    data: params,
-  });
+export interface LoginParamsForm {
+  userName: string;
+  password: string;
 }
 
 export async function getFakeCaptcha(mobile: string) {
   return request(`/api/login/captcha?mobile=${mobile}`);
+}
+
+export async function AccountLogin(params: LoginParamsForm) {
+  const formData = new FormData();
+  formData.set('username', params.userName);
+  formData.set('password', params.password);
+  return request('/api/account/login', {
+    method: 'POST',
+    data: formData,
+    headers: new Headers({
+      'Content-Type': 'multipart/form-data',
+    }),
+  });
 }

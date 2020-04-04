@@ -32,7 +32,7 @@ namespace DatabaseConnector.DAO.Entity
         [JsonPropertyName("fname")]
         public string FactoryName { get; set; }
         // 生产日期
-        [JsonPropertyName("pname")]
+        [JsonPropertyName("ptime")]
         public DateTime ProductionTime { get; set; }
         // 单价
         [JsonPropertyName("unitprice")]

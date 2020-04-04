@@ -1,7 +1,7 @@
 import { stringify } from 'querystring';
 import { history, Reducer, Effect } from 'umi';
 
-import { fakeAccountLogin } from '@/services/login';
+import { AccountLogin } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 
@@ -32,13 +32,18 @@ const Model: LoginModelType = {
 
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(fakeAccountLogin, payload);
+      const response = yield call(AccountLogin, payload);
       yield put({
         type: 'changeLoginStatus',
         payload: response,
       });
+      yield put({
+        type: 'user/setCurrentUser',
+        payload: response.user,
+      });
       // Login successfully
-      if (response.status === 'ok') {
+      // if (response.status === 'ok') {
+      if (response.success) {
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };
@@ -77,8 +82,10 @@ const Model: LoginModelType = {
       setAuthority(payload.currentAuthority);
       return {
         ...state,
-        status: payload.status,
-        type: payload.type,
+        // status: payload.status,
+        // type: payload.type,
+        status: 'ok',
+        type: 'account',
       };
     },
   },
