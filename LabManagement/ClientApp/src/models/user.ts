@@ -23,6 +23,7 @@ export interface CurrentUser {
 
 export interface UserModelState {
   currentUser?: IUser;
+  messageCount?: number;
 }
 
 export interface UserModelType {

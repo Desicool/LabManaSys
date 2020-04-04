@@ -4,14 +4,15 @@ import { Tag, message } from 'antd';
 import groupBy from 'lodash/groupBy';
 import moment from 'moment';
 import { NoticeItem } from '@/models/global';
-import { CurrentUser } from '@/models/user';
+import { IUser } from '@/models/user';
 import { ConnectState } from '@/models/connect';
 import NoticeIcon from '../NoticeIcon';
 import styles from './index.less';
 
 export interface GlobalHeaderRightProps extends Partial<ConnectProps> {
   notices?: NoticeItem[];
-  currentUser?: CurrentUser;
+  currentUser?: IUser;
+  unreadCount?: number;
   fetchingNotices?: boolean;
   onNoticeVisibleChange?: (visible: boolean) => void;
   onNoticeClear?: (tabName?: string) => void;
@@ -115,13 +116,13 @@ class GlobalHeaderRight extends Component<GlobalHeaderRightProps> {
   };
 
   render() {
-    const { currentUser, fetchingNotices, onNoticeVisibleChange } = this.props;
+    const { currentUser, fetchingNotices, onNoticeVisibleChange, unreadCount } = this.props;
     const noticeData = this.getNoticeData();
     const unreadMsg = this.getUnreadData(noticeData);
     return (
       <NoticeIcon
         className={styles.action}
-        count={currentUser && currentUser.unreadCount}
+        count={currentUser && unreadCount}
         onItemClick={(item) => {
           this.changeReadState(item as NoticeItem);
         }}
@@ -164,6 +165,7 @@ class GlobalHeaderRight extends Component<GlobalHeaderRightProps> {
 
 export default connect(({ user, global, loading }: ConnectState) => ({
   currentUser: user.currentUser,
+  unreadCount: user.messageCount,
   collapsed: global.collapsed,
   fetchingMoreNotices: loading.effects['global/fetchMoreNotices'],
   fetchingNotices: loading.effects['global/fetchNotices'],
