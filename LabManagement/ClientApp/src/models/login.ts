@@ -1,9 +1,10 @@
 import { stringify } from 'querystring';
-import { history, Reducer, Effect } from 'umi';
+import { history, Reducer, Effect, IUser } from 'umi';
 
 import { AccountLogin } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
+import { addCertificationToHeader } from '@/utils/request';
 
 export interface StateType {
   status?: 'ok' | 'error';
@@ -22,7 +23,11 @@ export interface LoginModelType {
     changeLoginStatus: Reducer<StateType>;
   };
 }
-
+interface ILoginReturn{
+  success:boolean;
+  user?: IUser;
+  certification?: string;
+}
 const Model: LoginModelType = {
   namespace: 'login',
 
@@ -32,18 +37,19 @@ const Model: LoginModelType = {
 
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(AccountLogin, payload);
-      yield put({
-        type: 'changeLoginStatus',
-        payload: response,
-      });
-      yield put({
-        type: 'user/setCurrentUser',
-        payload: response.user,
-      });
+      const response : ILoginReturn = yield call(AccountLogin, payload);
       // Login successfully
       // if (response.status === 'ok') {
       if (response.success) {
+        yield put({
+          type: 'changeLoginStatus',
+          payload: response,
+        });
+        yield put({
+          type: 'user/setCurrentUser',
+          payload: response.user,
+        });
+        addCertificationToHeader(response.certification as string);
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };

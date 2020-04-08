@@ -150,7 +150,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         return first ? (
           <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
         ) : (
-          <span>{route.breadcrumbName}</span>
+          <Link to={route.path}>{route.breadcrumbName}</Link>
         );
       }}
       footerRender={() => defaultFooterDom}
