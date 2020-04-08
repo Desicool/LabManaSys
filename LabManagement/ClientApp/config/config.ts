@@ -99,7 +99,7 @@ export default defineConfig({
               ],
             },
             {
-              name: '标准列表',
+              name: '我的申请',
               icon: 'smile',
               path: '/my/workflow',
               component: './My/WorkFlowList',

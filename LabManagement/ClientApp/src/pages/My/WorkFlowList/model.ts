@@ -1,5 +1,5 @@
 import { Effect, Reducer } from 'umi';
-import { addFakeList, queryFakeList, removeFakeList, updateFakeList } from './service';
+import { queryFakeList } from './service';
 
 import { IWorkFlow } from '@/models/entity';
 
@@ -13,7 +13,6 @@ export interface WorkFlowListModelType {
   effects: {
     fetch: Effect;
     appendFetch: Effect;
-    submit: Effect;
   };
   reducers: {
     queryList: Reducer<WorkFlowListStateType>;
@@ -41,19 +40,6 @@ const Model: WorkFlowListModelType = {
       yield put({
         type: 'appendList',
         payload: Array.isArray(response) ? response : [],
-      });
-    },
-    *submit({ payload }, { call, put }) {
-      let callback;
-      if (payload.id) {
-        callback = Object.keys(payload).length === 1 ? removeFakeList : updateFakeList;
-      } else {
-        callback = addFakeList;
-      }
-      const response = yield call(callback, payload); // post
-      yield put({
-        type: 'queryList',
-        payload: response,
       });
     },
   },

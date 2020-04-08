@@ -23,6 +23,8 @@ namespace DatabaseConnector.DAO.FormData
         //申请人
         [JsonPropertyName("uid")]
         public int UserId { get; set; }
+        [JsonPropertyName("uname")]
+        public string UserName { get; set; }
         //预计归还时间
         [JsonPropertyName("rtime")]
         public DateTime ReturnTime { get; set; }

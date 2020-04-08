@@ -1,5 +1,5 @@
 import { stringify } from 'querystring';
-import { history, Reducer, Effect, IUser } from 'umi';
+import { history, Reducer, Effect, IUser, IRole } from 'umi';
 
 import { AccountLogin } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
@@ -26,6 +26,7 @@ export interface LoginModelType {
 interface ILoginReturn{
   success:boolean;
   user?: IUser;
+  roles?: IRole[];
   certification?: string;
 }
 const Model: LoginModelType = {
@@ -47,7 +48,7 @@ const Model: LoginModelType = {
         });
         yield put({
           type: 'user/setCurrentUser',
-          payload: response.user,
+          payload: response,
         });
         addCertificationToHeader(response.certification as string);
         const urlParams = new URL(window.location.href);

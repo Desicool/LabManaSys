@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { IUser } from '@/models/user';
+import { IUser, IRole } from '@/models/user';
 
 const mockuser: IUser = {
   userId: 1,
@@ -8,6 +8,13 @@ const mockuser: IUser = {
   labId: 1,
   labName: 'testLab',
 };
+const mockRoles: IRole[] = [
+  {
+    roleId: 1,
+    roleName: 'admin',
+    lid: 1,
+  }
+]
 function getFakeCaptcha(req: Request, res: Response) {
   return res.json('captcha-xxx');
 }
@@ -42,6 +49,7 @@ export default {
       res.send({
         success: true,
         user: mockuser,
+        roles: mockRoles,
         certification: '111',
       });
       return;
@@ -50,6 +58,7 @@ export default {
       res.send({
         success: true,
         user: mockuser,
+        roles: mockRoles,
         certification: '111',
       });
       return;
@@ -58,6 +67,7 @@ export default {
       res.send({
         success: true,
         user: mockuser,
+        roles: mockRoles,
         certification: '111',
       });
       return;

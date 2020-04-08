@@ -14,11 +14,13 @@ namespace DatabaseConnector.DAO.Entity
         [JsonPropertyName("userId")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UserId { get; set; }
+        // 用于显示申请人等
+        [JsonPropertyName("realName")]
+        public string RealName { get; set; }
         [JsonPropertyName("userName")]
         public string UserName { get; set; }
         [JsonPropertyName("userPassword")]
         public string UserPassword { get; set; }
-
         //所属实验室的编号和名称
         [JsonPropertyName("labId")]
         public int LabId { get; set; }

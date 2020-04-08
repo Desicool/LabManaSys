@@ -2,10 +2,16 @@ import { Reducer } from 'umi';
 
 export interface IUser {
   userName?: string;
+  realName?: string;
   userId?: number;
   userPassword?: string;
   labId?: number;
   labName?: string;
+}
+export interface IRole {
+  roleId?: number;
+  lid?: number;
+  roleName?: string;
 }
 export interface CurrentUser {
   avatar?: string;
@@ -23,6 +29,7 @@ export interface CurrentUser {
 
 export interface UserModelState {
   currentUser?: IUser;
+  roles?: IRole[];
   messageCount?: number;
 }
 
@@ -49,7 +56,8 @@ const UserModel: UserModelType = {
     setCurrentUser(state, action) {
       return {
         ...state,
-        currentUser: action.payload || {},
+        currentUser: action.payload.user,
+        roles: action.payload.roles,
       };
     },
     changeNotifyCount(

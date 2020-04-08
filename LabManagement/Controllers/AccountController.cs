@@ -37,6 +37,7 @@ namespace LabManagement.Controllers
                     {
                         Success = true,
                         User = result.User,
+                        Roles = result.Roles,
                         Certification = certification
                     };
                     //UserRoleCache.AddUserRoleToCache(certification, result);

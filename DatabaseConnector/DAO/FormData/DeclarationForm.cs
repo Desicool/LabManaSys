@@ -25,6 +25,8 @@ namespace DatabaseConnector.DAO.FormData
         //申请人
         [JsonPropertyName("uid")]
         public int UserId { get; set; }
+        [JsonPropertyName("uname")]
+        public string UserName { get; set; }
         // 申报理由、用途
         [JsonPropertyName("reason")]
         public string Reason { get; set; }

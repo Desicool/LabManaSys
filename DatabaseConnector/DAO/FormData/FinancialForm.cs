@@ -24,6 +24,8 @@ namespace DatabaseConnector.DAO.FormData
         //申请人
         [JsonPropertyName("uid")]
         public int UserId { get; set; }
+        [JsonPropertyName("uname")]
+        public string UserName { get; set; }
         [JsonPropertyName("price")]
         public double Price { get; set; }
         //收款方

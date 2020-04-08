@@ -18,6 +18,8 @@ export interface IChemical {
 export interface IWorkFlow {
     id?: number;
     uid?: number;
+    uname?: string;
+    description?: string;
     chemicals?: IChemical[];
     startTime?: string;
     state?: string;
@@ -32,6 +34,7 @@ export interface IFinancialForm {
     lid?: number;
     // 申请人
     uid?: number;
+    uname?: string;
     price?: number;
     // 收款方
     receiver?: string;
@@ -50,6 +53,7 @@ export interface IDeclarationForm {
     lid?: number;
     // 申请人
     uid?: number;
+    uname?: string;
     reason?: string;
     // 处理人id
     hid?: number;
@@ -63,6 +67,7 @@ export interface IClaimForm{
     lid?:number;
     // 申请人
     uid?: number;
+    uname?: string;
     // 预计归还时间
     rtime?: string;
     // 实际归还时间

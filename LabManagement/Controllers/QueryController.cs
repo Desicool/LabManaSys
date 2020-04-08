@@ -74,5 +74,27 @@ namespace LabManagement.Controllers
                 return NotFound("try again");
             }
         }
+        [HttpGet("msg")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public IActionResult QueryWorkFlows([FromQuery] int userId)
+        {
+            try
+            {
+                var response = RpcWrapper.CallServiceByGet("/api/entity/workflows", $"id={userId}",$"type=userid");
+                var res = JsonSerializer.Deserialize<MsgResult>(response);
+                return Ok(res);
+            }
+            catch (JsonException)
+            {
+                return BadRequest("internal error");
+            }
+            catch (Exception)
+            {
+                return NotFound("try again");
+            }
+            return Ok();
+        }
     }
 }

@@ -15,6 +15,8 @@ namespace LabManagement.Utils
         public bool Success { get; set; }
         [JsonPropertyName("user")]
         public User User { get; set; }
+        [JsonPropertyName("roles")]
+        public List<Role> Roles { get; set; }
         [JsonPropertyName("certification")]
         public string Certification { get; set; }
     }

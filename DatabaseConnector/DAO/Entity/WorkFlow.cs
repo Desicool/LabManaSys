@@ -18,10 +18,15 @@ namespace DatabaseConnector.DAO.Entity
         // 申请账号的id
         [JsonPropertyName("uid")]
         public int UserId { get; set; }
+        [JsonPropertyName("uname")]
+        public string UserName { get; set; }
         [JsonPropertyName("chemicals")]
         public List<Chemical> Chemicals { get; set; }
         [JsonPropertyName("startTime")]
         public DateTime StartTime { get; set; }
+        // 简单的概括
+        [JsonPropertyName("description")]
+        public string Description { get; set; }
         [JsonPropertyName("state")]
         public string State { get; set; } = "None";
     }

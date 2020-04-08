@@ -23,14 +23,14 @@ interface WorkFlowListProps {
 }
 
 const ListContent = ({
-  data: { uid,startTime },
+  data: { uname,startTime },
 }: {
   data: IWorkFlow;
 }) => (
   <div className={styles.listContent}>
     <div className={styles.listContentItem}>
       <span>Owner</span>
-      <p>{uid}</p>
+      <p>{uname}</p>
     </div>
     <div className={styles.listContentItem}>
       <span>开始时间</span>
@@ -80,7 +80,7 @@ export const WorkFlowList: FC<WorkFlowListProps> = (props) => {
           <Card
             className={styles.listCard}
             bordered={false}
-            title="基本列表"
+            title="流程列表"
             style={{ marginTop: 24 }}
             bodyStyle={{ padding: '0 32px 40px 32px' }}
             extra={extraContent}
@@ -108,7 +108,7 @@ export const WorkFlowList: FC<WorkFlowListProps> = (props) => {
                   ]}
                 >
                   <List.Item.Meta
-                    title={item.id?.toString()}
+                    title={item.description}
                   />
                   <ListContent data={item} />
                 </List.Item>
