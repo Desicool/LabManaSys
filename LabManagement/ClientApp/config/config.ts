@@ -108,7 +108,7 @@ export default defineConfig({
               name: '高级详情页',
               path: '/my/workflow/:workflowid',
               hideInMenu: true,
-              component: './My/WorkFlowList/WorkFlowDetail',
+              component: './My/WorkFlowDetail',
             },
             {
               component: './404',

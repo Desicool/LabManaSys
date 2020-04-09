@@ -28,7 +28,7 @@ namespace DatabaseConnector.Controllers
         [HttpGet("workflow")]
         public IActionResult GetDeclarationForms([FromQuery] long workflowid)
         {
-            return Ok(_context.DeclarationForms.Where(u => u.WorkFlowId == workflowid).ToList());
+            return Ok(_context.DeclarationForms.Where(u => u.WorkFlowId == workflowid).Single());
         }
         [HttpGet("person")]
         public IActionResult GetDeclarationForm([FromQuery] int userid)
@@ -76,6 +76,7 @@ namespace DatabaseConnector.Controllers
             // change state
             var form = _context.DeclarationForms.Where(u => u.Id == param.FormId).Single();
             form.HandlerId = param.UserId;
+            form.HandlerName = param.UserName;
             form.State = FormState.Approved;
             var workflow = _context.WorkFlows.Where(u => u.Id == form.WorkFlowId).Single();
             var data = util.StateRoute[workflow.State];
@@ -100,6 +101,7 @@ namespace DatabaseConnector.Controllers
             // change state
             var form = _context.DeclarationForms.Where(u => u.Id == param.FormId).Single();
             form.HandlerId = param.UserId;
+            form.HandlerName = param.UserName;
             form.State = FormState.Rejected;
             var workflow = _context.WorkFlows.Where(u => u.Id == form.WorkFlowId).Single();
             var data = util.StateRoute[workflow.State];

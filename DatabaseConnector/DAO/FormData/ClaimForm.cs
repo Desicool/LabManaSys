@@ -34,6 +34,8 @@ namespace DatabaseConnector.DAO.FormData
         //审核人
         [JsonPropertyName("hid")]
         public int? HandlerId { get; set; }
+        [JsonPropertyName("hname")]
+        public string HandlerName { get; set; }
         [JsonPropertyName("stime")]
         public DateTime SubmitTime { get; set; }
         [JsonPropertyName("state")]

@@ -71,6 +71,7 @@ namespace DatabaseConnector.Controllers
             // change state
             var form = _context.FinancialForms.Where(u => u.Id == param.FormId).Single();
             form.HandlerId = param.UserId;
+            form.HandlerName = param.UserName;
             form.State = FormState.Approved;
             var workflow = _context.WorkFlows.Where(u => u.Id == form.WorkFlowId).Single();
             var data = util.StateRoute[workflow.State];
@@ -95,6 +96,7 @@ namespace DatabaseConnector.Controllers
             // change state
             var form = _context.FinancialForms.Where(u => u.Id == param.FormId).Single();
             form.HandlerId = param.UserId;
+            form.HandlerName = param.UserName;
             form.State = FormState.Rejected;
             var workflow = _context.WorkFlows.Where(u => u.Id == form.WorkFlowId).Single();
             var data = util.StateRoute[workflow.State];

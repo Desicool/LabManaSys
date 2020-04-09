@@ -35,12 +35,20 @@ namespace DatabaseConnector.Controllers
         public List<WorkFlow> GetWorkFlowsByUserId([FromQuery] int id, [FromQuery] string type)
         {
             type = type.ToLower();
-            if(type == "userid")
-                return _context.WorkFlows.Where(w=>w.UserId == id).ToList();
+            if (type == "userid")
+                return _context.WorkFlows.Where(w => w.UserId == id)
+                    .ToList();
             if (type == "labid")
                 return _context.WorkFlows
                     .Where(u => _context.Users.Any(x => x.LabId == id))
                     .ToList();
+            throw new ArgumentOutOfRangeException();
+        }
+        [HttpGet("workflow")]
+        public WorkFlow GetWorkFlowById([FromQuery] int workflowid)
+        {
+            return _context.WorkFlows.Where(w=>w.Id == workflowid)
+                    .Include(w => w.Chemicals).Single();
             throw new ArgumentOutOfRangeException();
         }
         [HttpPost("chemical/discard")]

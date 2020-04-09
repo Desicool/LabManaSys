@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 using DatabaseConnector.DAO.Entity;
 using DatabaseConnector.DAO.Utils;
+using DatabaseConnector.DAO.FormData;
 
 namespace LabManagement.Controllers
 {
@@ -74,7 +75,7 @@ namespace LabManagement.Controllers
                 return NotFound("try again");
             }
         }
-        [HttpGet("msg")]
+        [HttpGet("workflows")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
@@ -83,7 +84,7 @@ namespace LabManagement.Controllers
             try
             {
                 var response = RpcWrapper.CallServiceByGet("/api/entity/workflows", $"id={userId}",$"type=userid");
-                var res = JsonSerializer.Deserialize<MsgResult>(response);
+                var res = JsonSerializer.Deserialize<List<WorkFlow>>(response);
                 return Ok(res);
             }
             catch (JsonException)
@@ -94,7 +95,48 @@ namespace LabManagement.Controllers
             {
                 return NotFound("try again");
             }
-            return Ok();
+        }
+        [HttpGet("workflow/declaration")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public IActionResult QueryDeclarationByWorkFlow([FromQuery] int workflowId)
+        {
+            try
+            {
+                var response = RpcWrapper.CallServiceByGet("/api/declaration/workflow", $"workflowid={workflowId}");
+                var res = JsonSerializer.Deserialize<DeclarationForm>(response);
+                return Ok(res);
+            }
+            catch (JsonException)
+            {
+                return BadRequest("internal error");
+            }
+            catch (Exception)
+            {
+                return NotFound("try again");
+            }
+        }
+        [HttpGet("workflow/financial")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public IActionResult QueryFinancialByWorkFlow([FromQuery] int workflowId)
+        {
+            try
+            {
+                var response = RpcWrapper.CallServiceByGet("/api/financial/workflow", $"id={workflowId}", $"type=workflowid");
+                var res = JsonSerializer.Deserialize<List<FinancialForm>>(response);
+                return Ok(res);
+            }
+            catch (JsonException)
+            {
+                return BadRequest("internal error");
+            }
+            catch (Exception)
+            {
+                return NotFound("try again");
+            }
         }
     }
 }

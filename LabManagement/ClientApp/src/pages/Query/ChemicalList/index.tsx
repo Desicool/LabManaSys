@@ -76,11 +76,6 @@ export const ChemicalList: FC<ChemicalListProps> = (props) => {
     total: 50,
   };
 
-  const showModal = () => {
-    setVisible(true);
-    setCurrent(undefined);
-  };
-
   const showEditModal = (item: IChemical) => {
     setVisible(true);
     setCurrent(item);

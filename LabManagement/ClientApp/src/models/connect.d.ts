@@ -5,7 +5,7 @@ import { UserModelState } from './user';
 import { StateType } from './login';
 import { ChemicalListModelState } from '../pages/Query/ChemicalList/model';
 import { WorkFlowListModelType } from '../pages/My/WorkFlowList/model';
-
+import { WorkFlowDetailModelType } from '../pages/My/WorkFlowDetail/model';
 export { GlobalModelState, SettingModelState, UserModelState };
 
 export interface Loading {
@@ -19,6 +19,7 @@ export interface Loading {
     login?: boolean;
     chemicalList?: boolean;
     workflowList?: boolean;
+    currentWorkFlow?: boolean;
   };
 }
 
@@ -30,6 +31,7 @@ export interface ConnectState {
   login: StateType;
   chemicalList: ChemicalListModelState;
   workflowList: WorkFlowListModelType;
+  currentWorkFlowDetail: WorkFlowDetailModelType;
 }
 
 export interface Route extends MenuDataItem {

@@ -33,6 +33,8 @@ namespace DatabaseConnector.DAO.FormData
         public string Receiver { get; set; }
         [JsonPropertyName("hid")]
         public int? HandlerId { get; set; }
+        [JsonPropertyName("hname")]
+        public string HandlerName { get; set; }
         [JsonPropertyName("stime")]
         public DateTime SubmitTime { get; set; }
         [JsonPropertyName("state")]

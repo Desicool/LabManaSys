@@ -81,6 +81,7 @@ namespace DatabaseConnector.Controllers
                 throw new NullReferenceException();
             }
             formlist[0].ClaimForm.HandlerId = param.UserId;
+            formlist[0].ClaimForm.HandlerName = param.UserName;
             formlist[0].ClaimForm.State = Utils.FormState.Approved;
             foreach(var item in formlist)
             {
@@ -104,6 +105,7 @@ namespace DatabaseConnector.Controllers
         {
             var form = _context.ClaimForms.Where(u => u.Id == param.FormId).Single();
             form.State = Utils.FormState.Rejected;
+            form.HandlerName = param.UserName;
             // send msg
             var roleid = GetNotifyRoleId("Applicant", null);
             var msg = new NotificationMessage

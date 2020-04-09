@@ -1,5 +1,5 @@
 import { Effect, Reducer } from 'umi';
-import { addFakeList, queryChemicals, removeFakeList, updateFakeList } from './service';
+import { queryChemicals } from './service';
 import { IChemical } from '@/models/entity';
 
 export interface StateType {
@@ -12,7 +12,6 @@ export interface ChemicalListModelState {
   effects: {
     fetch: Effect;
     appendFetch: Effect;
-    submit: Effect;
   };
   reducers: {
     queryList: Reducer<StateType>;
@@ -40,19 +39,6 @@ const Model: ChemicalListModelState = {
       yield put({
         type: 'appendList',
         payload: Array.isArray(response) ? response : [],
-      });
-    },
-    *submit({ payload }, { call, put }) {
-      let callback;
-      if (payload.id) {
-        callback = Object.keys(payload).length === 1 ? removeFakeList : updateFakeList;
-      } else {
-        callback = addFakeList;
-      }
-      const response = yield call(callback, payload); // post
-      yield put({
-        type: 'queryList',
-        payload: response,
       });
     },
   },
