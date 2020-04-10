@@ -12,8 +12,8 @@ export default defineConfig({
   antd: {},
   analytics: GA_KEY
     ? {
-        ga: GA_KEY,
-      }
+      ga: GA_KEY,
+    }
     : false,
   dva: {
     hmr: true,
@@ -80,14 +80,7 @@ export default defineConfig({
               ],
             },
             {
-              name: 'list.table-list',
-              icon: 'table',
-              path: '/list',
-              component: './ListTableList',
-            },
-            {
               name: '实体管理',
-              icon: 'smile',
               path: '/query',
               routes: [
                 {
@@ -100,15 +93,25 @@ export default defineConfig({
             },
             {
               name: '我的申请',
-              icon: 'smile',
               path: '/my/workflow',
               component: './My/WorkFlowList',
             },
             {
-              name: '高级详情页',
+              name: '申请详情',
               path: '/my/workflow/:workflowid',
               hideInMenu: true,
               component: './My/WorkFlowDetail',
+            },
+            {
+              name: '提交申请',
+              routes: [
+                {
+                  name: '申请危险品',
+                  icon: 'smile',
+                  path: '/post/declear',
+                  component: './Post/DeclarationForm',
+                },
+              ]
             },
             {
               component: './404',

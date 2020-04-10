@@ -6,8 +6,9 @@ import { StateType } from './login';
 import { ChemicalListModelState } from '../pages/Query/ChemicalList/model';
 import { WorkFlowListModelType } from '../pages/My/WorkFlowList/model';
 import { WorkFlowDetailModelType } from '../pages/My/WorkFlowDetail/model';
-export { GlobalModelState, SettingModelState, UserModelState };
+import { PostDeclarationFormModelType } from '../pages/Post/DeclarationForm/model';
 
+export { GlobalModelState, SettingModelState, UserModelState };
 export interface Loading {
   global: boolean;
   effects: { [key: string]: boolean | undefined };
@@ -20,6 +21,7 @@ export interface Loading {
     chemicalList?: boolean;
     workflowList?: boolean;
     currentWorkFlow?: boolean;
+    postDeclarationForm?: boolean;
   };
 }
 
@@ -32,6 +34,7 @@ export interface ConnectState {
   chemicalList: ChemicalListModelState;
   workflowList: WorkFlowListModelType;
   currentWorkFlowDetail: WorkFlowDetailModelType;
+  postDeclarationForm: PostDeclarationFormModelType;
 }
 
 export interface Route extends MenuDataItem {

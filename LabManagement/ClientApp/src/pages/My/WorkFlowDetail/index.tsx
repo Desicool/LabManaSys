@@ -1,7 +1,4 @@
 import {
-  DingdingOutlined,
-} from '@ant-design/icons';
-import {
   Card,
   Statistic,
   Descriptions,
@@ -12,12 +9,10 @@ import {
 } from 'antd';
 import 'antd/dist/antd.css';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
-import React, { Fragment, FC, useEffect } from 'react';
-
-import classNames from 'classnames';
+import React, { FC, useEffect } from 'react';
 import { connect, Dispatch, WorkFlowDetailStateType } from 'umi';
 import styles from './style.less';
-import { IChemical, IFinancialForm, IDeclarationForm } from '@/models/entity';
+import { IChemical, IFinancialForm, IDeclarationForm, IWorkFlow } from '@/models/entity';
 
 const { Step } = Steps;
 const extra = (
@@ -27,47 +22,23 @@ const extra = (
   </div>
 );
 
-const description = (
-  <RouteContext.Consumer>
-    {(value) => {
-      const { isMobile } = value;
-      return (
-        <Descriptions className={styles.headerList} size="small" column={isMobile ? 1 : 2}>
-          <Descriptions.Item label="创建人">曲丽丽</Descriptions.Item>
-          <Descriptions.Item label="订购产品">XX 服务</Descriptions.Item>
-          <Descriptions.Item label="创建时间">2017-07-07</Descriptions.Item>
-          <Descriptions.Item label="关联单据">
-            <a href="">12421</a>
-          </Descriptions.Item>
-          <Descriptions.Item label="生效日期">2017-07-07 ~ 2017-08-08</Descriptions.Item>
-          <Descriptions.Item label="备注">请于两个工作日内确认</Descriptions.Item>
-        </Descriptions>
-      )
-    }}
-  </RouteContext.Consumer>
-);
-
-const desc1 = (
-  <div className={classNames(styles.textSecondary, styles.stepDescription)}>
-    <Fragment>
-      曲丽丽
-      <DingdingOutlined style={{ marginLeft: 8 }} />
-    </Fragment>
-    <div>2016-12-12 12:32</div>
-  </div>
-);
-
-const desc2 = (
-  <div className={styles.stepDescription}>
-    <Fragment>
-      周毛毛
-      <DingdingOutlined style={{ color: '#00A0E9', marginLeft: 8 }} />
-    </Fragment>
-    <div>
-      <a href="">催一下</a>
-    </div>
-  </div>
-);
+const Description = (param: {
+  workflow?: IWorkFlow
+}) => (
+    <RouteContext.Consumer>
+      {(value) => {
+        const { isMobile } = value;
+        return (
+          <Descriptions className={styles.headerList} size="small" column={isMobile ? 1 : 2}>
+            <Descriptions.Item label="创建人">{param.workflow?.uname}</Descriptions.Item>
+            <Descriptions.Item label="简介">{param.workflow?.description}</Descriptions.Item>
+            <Descriptions.Item label="创建时间">{param.workflow?.startTime}</Descriptions.Item>
+            <Descriptions.Item label="备注">{param.workflow?.state}</Descriptions.Item>
+          </Descriptions>
+        )
+      }}
+    </RouteContext.Consumer>
+  );
 const ChemicalList = (param: {
   loading: boolean;
   chemicals: IChemical[];
@@ -140,13 +111,11 @@ const WorkFlowDetail: FC<
     }
   }, []);
   const { currentWorkFlow, declarationForm, financialForms } = props.workFlowDetailState || {};
-  console.log(currentWorkFlow);
-  console.log(props.workFlowDetailState);
   return (
     <PageHeaderWrapper
       title={'单号: ' + props.id.toString()}
       className={styles.pageHeader}
-      content={description}
+      content={<Description workflow={currentWorkFlow} />}
       extraContent={extra}
     >
       <div className={styles.main}>
@@ -158,9 +127,9 @@ const WorkFlowDetail: FC<
                   direction={isMobile ? 'vertical' : 'horizontal'}
                   current={1}
                 >
-                  <Step title="创建项目" description={desc1} />
-                  <Step title="部门初审" description={desc2} />
-                  <Step title="财务复核" />
+                  <Step title="提交申请" />
+                  <Step title="实验室老师审批" />
+                  <Step title="财务审批" />
                   <Step title="完成" />
                 </Steps>
               )}
@@ -180,7 +149,7 @@ const WorkFlowDetail: FC<
                 <FinancialFormCollapse loading={loading} financialForms={financialForms} />
               </Tabs.TabPane>
               <Tabs.TabPane tab='申请表' key='declaration'>
-                <DeclarationFormDescription declarationForm={declarationForm || {}}/>
+                <DeclarationFormDescription declarationForm={declarationForm || {}} />
               </Tabs.TabPane>
             </Tabs>
           </Card>

@@ -45,7 +45,6 @@ const Model: ChemicalListModelState = {
 
   reducers: {
     queryList(state, action) {
-      console.log(action.payload);
       return {
         ...state,
         list: action.payload,
