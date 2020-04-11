@@ -12,8 +12,8 @@ export default defineConfig({
   antd: {},
   analytics: GA_KEY
     ? {
-      ga: GA_KEY,
-    }
+        ga: GA_KEY,
+      }
     : false,
   dva: {
     hmr: true,
@@ -107,11 +107,15 @@ export default defineConfig({
               routes: [
                 {
                   name: '申请危险品',
-                  icon: 'smile',
                   path: '/post/declear',
                   component: './Post/DeclarationForm',
                 },
-              ]
+                {
+                  name: '提交财务表单',
+                  path: '/post/financial',
+                  component: './Post/FinancialForm',
+                },
+              ],
             },
             {
               component: './404',

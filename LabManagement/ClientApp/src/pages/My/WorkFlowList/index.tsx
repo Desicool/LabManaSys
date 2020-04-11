@@ -23,21 +23,21 @@ interface WorkFlowListProps {
 }
 
 const ListContent = ({
-  data: { uname,startTime },
+  data: { uname, startTime },
 }: {
   data: IWorkFlow;
 }) => (
-  <div className={styles.listContent}>
-    <div className={styles.listContentItem}>
-      <span>Owner</span>
-      <p>{uname}</p>
+    <div className={styles.listContent}>
+      <div className={styles.listContentItem}>
+        <span>Owner</span>
+        <p>{uname}</p>
+      </div>
+      <div className={styles.listContentItem}>
+        <span>开始时间</span>
+        <p>{moment(startTime).format('YYYY-MM-DD HH:mm')}</p>
+      </div>
     </div>
-    <div className={styles.listContentItem}>
-      <span>开始时间</span>
-      <p>{moment(startTime).format('YYYY-MM-DD HH:mm')}</p>
-    </div>
-  </div>
-);
+  );
 
 export const WorkFlowList: FC<WorkFlowListProps> = (props) => {
   const {
@@ -48,19 +48,8 @@ export const WorkFlowList: FC<WorkFlowListProps> = (props) => {
   useEffect(() => {
     dispatch({
       type: 'workFlowList/fetch',
-      payload: {
-        count: 5,
-      },
     });
   }, [1]);
-
-  const paginationProps = {
-    showSizeChanger: true,
-    showQuickJumper: true,
-    pageSize: 5,
-    total: 50,
-  };
-
 
   const extraContent = (
     <div className={styles.extraContent}>
@@ -89,7 +78,12 @@ export const WorkFlowList: FC<WorkFlowListProps> = (props) => {
               size="large"
               rowKey="id"
               loading={loading}
-              pagination={paginationProps}
+              pagination={{
+                showSizeChanger: true,
+                showQuickJumper: true,
+                pageSize: 5,
+                total: list.length,
+              }}
               dataSource={list}
               renderItem={(item) => (
                 <List.Item
@@ -98,8 +92,8 @@ export const WorkFlowList: FC<WorkFlowListProps> = (props) => {
                       key="edit"
                       onClick={(e) => {
                         e.preventDefault();
-                        history.push('/my/workflow/' + item.id?.toString(),{
-                          workflow : item
+                        history.push('/my/workflow/' + item.id?.toString(), {
+                          workflow: item
                         });
                       }}
                     >

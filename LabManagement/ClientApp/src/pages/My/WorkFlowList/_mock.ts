@@ -39,8 +39,8 @@ function fakeList(count: number): IWorkFlow[] {
     list.push({
       id: i,
       uid: i * 2,
-      state: 'None',
-      description: '这是简介' + i.toString(),
+      state: 'financial',
+      description: '这是用于标题的申请简介' + i.toString(),
       uname: '用户名' + i.toString(),
       startTime: moment(new Date()).toString(),
       chemicals: fakeChemicals(3)

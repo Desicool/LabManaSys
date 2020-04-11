@@ -3,14 +3,14 @@ import { Request, Response } from 'express';
 import { IChemical } from '@/models/entity';
 
 const titles = [
-  'Alipay',
-  'Angular',
-  'Ant Design',
-  'Ant Design Pro',
-  'Bootstrap',
-  'React',
-  'Vue',
-  'Webpack',
+  '甲苯',
+  '硝化纤维素',
+  '硝化丙三醇',
+  '乙炔（溶于介质的）',
+  '氯甲烷',
+  '金属钠',
+  '硝酸钠',
+  '硝酸铅',
 ];
 
 const status = [

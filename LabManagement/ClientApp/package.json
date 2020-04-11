@@ -33,8 +33,7 @@
     "tsc": "tsc"
   },
   "husky": {
-    "hooks": {
-    }
+    "hooks": {}
   },
   "browserslist": [
     "> 1%",
@@ -50,6 +49,7 @@
     "lodash": "^4.17.11",
     "lodash-decorators": "^6.0.1",
     "moment": "^2.24.0",
+    "nzh": "^1.0.4",
     "omit.js": "^1.0.2",
     "path-to-regexp": "2.4.0",
     "qs": "^6.9.0",

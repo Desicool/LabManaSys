@@ -58,8 +58,15 @@ namespace LabManagement.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
-        public IActionResult QueryMessages([FromQuery] int userId)
+        public IActionResult QueryMessages()
         {
+            var certification = HttpContext.Request.Headers["certification"];
+            var success = UserRoleCache.TryGetUserRole(certification, out var userRole);
+            if (!success)
+            {
+                return NotFound("try again");
+            }
+            int userId = userRole.User.UserId;
             try
             {
                 var response = RpcWrapper.CallServiceByGet("/api/entity/msg", $"userid={userId}");
@@ -79,8 +86,15 @@ namespace LabManagement.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
-        public IActionResult QueryWorkFlows([FromQuery] int userId)
+        public IActionResult QueryWorkFlows()
         {
+            var certification = HttpContext.Request.Headers["certification"];
+            var success = UserRoleCache.TryGetUserRole(certification, out var userRole);
+            if (!success)
+            {
+                return NotFound("try again");
+            }
+            int userId = userRole.User.UserId;
             try
             {
                 var response = RpcWrapper.CallServiceByGet("/api/entity/workflows", $"id={userId}",$"type=userid");

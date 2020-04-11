@@ -7,6 +7,7 @@ import { ChemicalListModelState } from '../pages/Query/ChemicalList/model';
 import { WorkFlowListModelType } from '../pages/My/WorkFlowList/model';
 import { WorkFlowDetailModelType } from '../pages/My/WorkFlowDetail/model';
 import { PostDeclarationFormModelType } from '../pages/Post/DeclarationForm/model';
+import { PostFinancialFormModelType } from '../pages/Post/FinancialForm/model';
 
 export { GlobalModelState, SettingModelState, UserModelState };
 export interface Loading {
@@ -35,6 +36,7 @@ export interface ConnectState {
   workflowList: WorkFlowListModelType;
   currentWorkFlowDetail: WorkFlowDetailModelType;
   postDeclarationForm: PostDeclarationFormModelType;
+  postFinancialForm: PostFinancialFormModelType;
 }
 
 export interface Route extends MenuDataItem {
