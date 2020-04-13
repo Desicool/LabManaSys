@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Alert, Button, Descriptions, Divider, Statistic, Input } from 'antd';
+import { Form, Button, Input } from 'antd';
 import { connect, Dispatch, UserModelState, IUser } from 'umi';
 import { PostFinancialFormStateType } from '../../model';
 import styles from './index.less';
@@ -68,7 +68,7 @@ const Step2: React.FC<Step2Props> = (props) => {
         name="price"
         rules={[{ required: true, message: '请输入需要申请的金额' }]}
       >
-        <Input autoComplete="off" style={{ width: '80%' }}  suffix='元'/>
+        <Input autoComplete="off" style={{ width: '80%' }}  addonAfter='元'/>
       </Form.Item>
       <Form.Item
         label="收款方"

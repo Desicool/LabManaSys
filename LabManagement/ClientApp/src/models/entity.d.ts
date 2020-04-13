@@ -5,6 +5,7 @@ export interface IChemical {
     wfId?: number;
     labName?: string;
     amount?: number;
+    // factory name
     fname?: string;
     // or Date type?
     ptime?: string;

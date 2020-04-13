@@ -11,6 +11,8 @@ const titles = [
   '金属钠',
   '硝酸钠',
   '硝酸铅',
+  '金属钾',
+  '金属钙',
 ];
 
 const status = [
@@ -19,12 +21,12 @@ const status = [
   '已销毁',
 ];
 
-function fakeList(count: number): IChemical[] {
+function fakeList(): IChemical[] {
   const list : IChemical[] = [];
-  for (let i = 0; i < count; i += 1) {
+  for (let i = 0; i < 10; i += 1) {
     list.push({
       id: i,
-      name: titles[i % count],
+      name: titles[i],
       state: status[i % 3],
       amount: i,
       unitprice: 100,
@@ -40,9 +42,7 @@ let sourceData: IChemical[] = [];
 function getFakeList(req: Request, res: Response) {
   const params = req.query;
 
-  const count = params.count * 1 || 20;
-
-  const result = fakeList(count);
+  const result = fakeList();
   sourceData = result;
   return res.json(result);
 }

@@ -8,6 +8,7 @@ import { WorkFlowListModelType } from '../pages/My/WorkFlowList/model';
 import { WorkFlowDetailModelType } from '../pages/My/WorkFlowDetail/model';
 import { PostDeclarationFormModelType } from '../pages/Post/DeclarationForm/model';
 import { PostFinancialFormModelType } from '../pages/Post/FinancialForm/model';
+import { PostClaimFormModelType } from 'umi';
 
 export { GlobalModelState, SettingModelState, UserModelState };
 export interface Loading {
@@ -23,6 +24,7 @@ export interface Loading {
     workflowList?: boolean;
     currentWorkFlow?: boolean;
     postDeclarationForm?: boolean;
+    postClaimForm?: boolean;
   };
 }
 
@@ -37,6 +39,7 @@ export interface ConnectState {
   currentWorkFlowDetail: WorkFlowDetailModelType;
   postDeclarationForm: PostDeclarationFormModelType;
   postFinancialForm: PostFinancialFormModelType;
+  postClaimForm: PostClaimFormModelType;
 }
 
 export interface Route extends MenuDataItem {

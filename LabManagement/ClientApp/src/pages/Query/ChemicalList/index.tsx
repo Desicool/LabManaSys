@@ -10,7 +10,7 @@ import { findDOMNode } from 'react-dom';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect, Dispatch } from 'umi';
 import OperationModal from './components/OperationModal';
-import { StateType } from './model';
+import { ChemicalListModelState } from './model';
 import styles from './style.less';
 import { IChemical } from '@/models/entity';
 
@@ -19,7 +19,7 @@ const RadioGroup = Radio.Group;
 const { Search } = Input;
 
 interface ChemicalListProps {
-  chemicalListState: StateType;
+  chemicalListState: ChemicalListModelState;
   dispatch: Dispatch;
   loading: boolean;
 }
@@ -63,9 +63,6 @@ export const ChemicalList: FC<ChemicalListProps> = (props) => {
   useEffect(() => {
     dispatch({
       type: 'chemicalList/fetch',
-      payload: {
-        count: 5,
-      },
     });
   }, [1]);
 
@@ -205,7 +202,7 @@ export default connect(
     chemicalList,
     loading,
   }: {
-    chemicalList: StateType;
+    chemicalList: ChemicalListModelState;
     loading: {
       models: { [key: string]: boolean };
     };

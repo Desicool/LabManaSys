@@ -106,7 +106,7 @@ export default defineConfig({
               name: '提交申请',
               routes: [
                 {
-                  name: '申请危险品',
+                  name: '危险品采购申请',
                   path: '/post/declear',
                   component: './Post/DeclarationForm',
                 },
@@ -114,6 +114,11 @@ export default defineConfig({
                   name: '提交财务表单',
                   path: '/post/financial',
                   component: './Post/FinancialForm',
+                },
+                {
+                  name: '化学危险品领用申报',
+                  path: '/post/claim',
+                  component: './Post/ClaimForm',
                 },
               ],
             },

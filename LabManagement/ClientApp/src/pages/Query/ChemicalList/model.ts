@@ -2,24 +2,24 @@ import { Effect, Reducer } from 'umi';
 import { queryChemicals } from './service';
 import { IChemical } from '@/models/entity';
 
-export interface StateType {
+export interface ChemicalListModelState {
   list: IChemical[];
 }
 
-export interface ChemicalListModelState {
+export interface ChemicalListModelType {
   namespace: string;
-  state: StateType;
+  state: ChemicalListModelState;
   effects: {
     fetch: Effect;
     appendFetch: Effect;
   };
   reducers: {
-    queryList: Reducer<StateType>;
-    appendList: Reducer<StateType>;
+    queryList: Reducer<ChemicalListModelState>;
+    appendList: Reducer<ChemicalListModelState>;
   };
 }
 
-const Model: ChemicalListModelState = {
+const Model: ChemicalListModelType = {
   namespace: 'chemicalList',
 
   state: {
@@ -27,8 +27,8 @@ const Model: ChemicalListModelState = {
   },
 
   effects: {
-    *fetch({ payload }, { call, put }) {
-      const response = yield call(queryChemicals, payload);
+    *fetch(_,{ call, put }) {
+      const response = yield call(queryChemicals);
       yield put({
         type: 'queryList',
         payload: Array.isArray(response) ? response : [],
