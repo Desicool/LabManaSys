@@ -12,8 +12,8 @@ export default defineConfig({
   antd: {},
   analytics: GA_KEY
     ? {
-        ga: GA_KEY,
-      }
+      ga: GA_KEY,
+    }
     : false,
   dva: {
     hmr: true,
@@ -103,7 +103,14 @@ export default defineConfig({
               component: './My/WorkFlowDetail',
             },
             {
+              name: '我的待办',
+              //hideInMenu: true,
+              path: '/my/form-to-process',
+              component: './My/FormToProcess',
+            },
+            {
               name: '提交申请',
+              path: '/post',
               routes: [
                 {
                   name: '危险品采购申请',

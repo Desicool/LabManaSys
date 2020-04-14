@@ -1,10 +1,8 @@
 import { CloseCircleOutlined } from '@ant-design/icons';
-import { Button, Card, Col, DatePicker, Form, Input, Popover, Row, Select, TimePicker, Checkbox, Table } from 'antd';
-
+import { Button, Card, Col, DatePicker, Form, Input, Popover, Row, Table } from 'antd';
 import React, { FC, useState, useEffect } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect, Dispatch, UserModelState, IUser, IPostClaimFormParam, ChemicalListModelState } from 'umi';
-import FooterToolbar from './components/FooterToolbar';
 import styles from './style.less';
 import { IChemical } from '@/models/entity';
 import { TableRowSelection } from 'antd/lib/table/interface';
