@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { connect, FormToProcessState, history } from 'umi';
 import { IDeclarationForm } from '@/models/entity';
 import { Table } from 'antd';
+import { ColumnsType } from 'antd/lib/table';
 
 interface DeclarationProcessProps {
     declarations: IDeclarationForm[];
@@ -11,14 +12,14 @@ const DeclarationProcessComponent: FC<DeclarationProcessProps> = (props) => {
     const { declarations } = props;
     const dataSource = declarations.map(u => ({ ...u, key: u.id }));
 
-    const columns = [
+    const columns: ColumnsType<IDeclarationForm> = [
         {
             title: '编号',
             dataIndex: 'id',
             width: '4em'
         },
         {
-            title:'申请人',
+            title: '申请人',
             dataIndex: 'uname',
             width: '8em'
         },
@@ -26,11 +27,11 @@ const DeclarationProcessComponent: FC<DeclarationProcessProps> = (props) => {
             title: '申请理由',
             dataIndex: 'reason'
         },
-         {
+        {
             title: '进行处理',
             key: 'operation',
-            
-            render: () => <a onClick={()=>history.push('/my/process/declear')}>查看详情</a>,
+
+            render: (_, record) => <a onClick={() => history.push('/process/declear/' + record.id)}>查看详情</a>,
         },
     ];
     return <div><Table dataSource={dataSource} columns={columns} />

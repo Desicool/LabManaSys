@@ -42,6 +42,7 @@ export interface ConnectState {
   postFinancialForm: PostFinancialFormModelType;
   postClaimForm: PostClaimFormModelType;
   myFormToProcess: FormToProcessModelType;
+  declearationFormProcess: DeclarationProcessModelType;
 }
 
 export interface Route extends MenuDataItem {

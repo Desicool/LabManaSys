@@ -59,15 +59,15 @@ const FormToProcess: FC<FormToProcessProps> = (props) => {
     {
       key: 'declaration',
       tab:
-        <Badge count={5} offset={[10, 0]}><p>申报</p></Badge>,
+        <Badge count={myFormToProcess.msg?.dform.filter(u=>u.state === 'InProcess').length} offset={[10, 0]}><p>申报</p></Badge>,
     },
     {
       key: 'financial',
-      tab: <Badge count={5} offset={[10, 0]}><p>财务申请</p></Badge>
+      tab: <Badge count={myFormToProcess.msg?.fform.filter(u=>u.state === 'InProcess').length} offset={[10, 0]}><p>财务申请</p></Badge>
     },
     {
       key: 'claimform',
-      tab: <Badge count={5} offset={[10, 0]}><p>领用</p></Badge>
+      tab: <Badge count={myFormToProcess.msg?.cform.filter(u=>u.state === 'InProcess').length} offset={[10, 0]}><p>领用</p></Badge>
     },
   ];
 

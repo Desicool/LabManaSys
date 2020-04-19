@@ -7,7 +7,8 @@ const claimform: IClaimForm[] = [
     id: 1,
     uid: 2,
     uname: '学生1号',
-    rtime: moment(new Date()).format('YYYY-MM-DD hh:mm:ss')
+    rtime: moment(new Date()).format('YYYY-MM-DD hh:mm:ss'),
+    state: 'InProcess',
   }
 ]
 const financialform: IFinancialForm[] = [
@@ -16,6 +17,7 @@ const financialform: IFinancialForm[] = [
     uid: 1,
     uname: '另一个用户名',
     price: 123,
+    state: 'InProcess',
   }
 
 ]
@@ -24,7 +26,8 @@ const declarationform: IDeclarationForm[] = [
   id: 1,
   uid: 2,
   uname: '用户名1',
-  reason: '为了实验需要'
+  reason: '为了实验需要',
+  state: 'InProcess',
 }
 ]
 const msg: IMsgResult = {

@@ -26,9 +26,15 @@ namespace DatabaseConnector.Controllers
             util = state;
         }
         [HttpGet("workflow")]
-        public IActionResult GetDeclarationForms([FromQuery] long workflowid)
+        public IActionResult GetDeclarationForms([FromQuery] long formid)
         {
-            return Ok(_context.DeclarationForms.Where(u => u.WorkFlowId == workflowid).Single());
+            var form = _context.DeclarationForms.Where(u => u.Id == formid).Single();
+            var ret = new PostDeclarationFormParam()
+            {
+                Form = form,
+                Chemicals = _context.Chemicals.Where(c=>c.WorkFlowId == form.WorkFlowId).ToList()
+            };
+            return Ok(ret);
         }
         [HttpGet("person")]
         public IActionResult GetDeclarationForm([FromQuery] int userid)

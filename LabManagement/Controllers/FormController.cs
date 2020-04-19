@@ -90,6 +90,24 @@ namespace LabManagement.Controllers
                 return NotFound(e.Message);
             }
         }
+        [HttpGet("declear")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public IActionResult GetDeclearDetail ([FromQuery]int formid)
+        {
+            try
+            {
+                string response = RpcWrapper.CallServiceByGet("/api/declaration/workflow",$"formid={formid}");
+                var res = JsonSerializer.Deserialize<PostDeclarationFormParam>(response);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return NotFound(e.Message);
+            }
+        }
         #endregion
         #region Financial
         [HttpPost("financial")]

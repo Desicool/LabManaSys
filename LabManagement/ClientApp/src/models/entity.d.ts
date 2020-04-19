@@ -79,3 +79,11 @@ export interface IClaimForm{
     stime?: number;
     state?: string;
 }
+
+
+export interface ISolveFormParam{
+    uid: number;
+    uname: string;
+    fid: number;
+    lid: number;
+}
