@@ -7,51 +7,28 @@ import {
 import { GridContent, PageHeaderWrapper } from '@ant-design/pro-layout';
 import React, { FC, useEffect } from 'react';
 import { connect, Dispatch, UserModelState, IUser } from 'umi';
-import styles from './style.less';
-import { DeclarationProcessModelState } from './model';
-import { IDeclarationForm, IChemical } from '@/models/entity';
+import styles from './index.less';
+import { FinancialProcessModelState } from './model';
+import { IFinancialForm } from '@/models/entity';
 
 interface DeclarationProcessProps {
   loading: boolean;
-  detail?: {
-    form: IDeclarationForm;
-    chemicals: IChemical[];
-  }
+  form?: IFinancialForm;
   formid: number;
   currentUser?: IUser;
   dispatch: Dispatch;
 }
 
 const DeclarationProcess: FC<DeclarationProcessProps> = (props) => {
-  const { dispatch, detail, formid, currentUser } = props;
+  const { dispatch, form, formid, currentUser } = props;
   useEffect(() => {
     dispatch({
-      type: 'declarationProcess/fetch',
+      type: 'financialProcess/fetch',
       payload: {
         formid: formid
       }
     });
   }, [formid]);
-  const columns = [
-    {
-      title: '编号',
-      dataIndex: 'id',
-      width: '6em'
-    },
-    {
-      title: '名称',
-      dataIndex: 'name',
-      width: '8em'
-    },
-    {
-      title: '数量',
-      dataIndex: 'amount'
-    },
-    {
-      title: '单价',
-      dataIndex: 'unitprice',
-    }
-  ]
   return (
     <PageHeaderWrapper
       title="采购申请详情"
@@ -61,20 +38,14 @@ const DeclarationProcess: FC<DeclarationProcessProps> = (props) => {
           <Card style={{ marginBottom: 24 }} bordered={false} title={'表单'} >
 
             <Descriptions bordered>
-              <Descriptions.Item label="申请编号">{detail?.form.id}</Descriptions.Item>
-              <Descriptions.Item label="所属实验室编号">{detail?.form.lid}</Descriptions.Item>
-              <Descriptions.Item label="提交时间">{detail?.form.stime}</Descriptions.Item>
-              <Descriptions.Item label="当前状态">{detail?.form.uname}</Descriptions.Item>
-              <Descriptions.Item label="申请理由" span={2}>{detail?.form.reason}</Descriptions.Item>
+              <Descriptions.Item label="申请编号">{form?.id}</Descriptions.Item>
+              <Descriptions.Item label="所属实验室编号">{form?.lid}</Descriptions.Item>
+              <Descriptions.Item label="提交时间">{form?.stime}</Descriptions.Item>
+              <Descriptions.Item label="申请人姓名">{form?.uname}</Descriptions.Item>
+              <Descriptions.Item label="当前状态">{form?.state}</Descriptions.Item>
+              <Descriptions.Item label="金额">{form?.price}</Descriptions.Item>
 
             </Descriptions>
-          </Card>
-          <Card style={{ marginBottom: 24 }} bordered={false} title={'化学危险品列表'} >
-            <Table
-              dataSource={detail?.chemicals.map(u => ({ ...u, key: u.id }))}
-              columns={columns}
-              bordered
-            />
           </Card>
         </GridContent>
       </div>
@@ -88,7 +59,7 @@ const DeclarationProcess: FC<DeclarationProcessProps> = (props) => {
                 uid: currentUser?.userId,
                 uname: currentUser?.userName,
                 lid: currentUser?.labId,
-                fid: detail?.form.id
+                fid: formid
               }
             })
           }}>
@@ -102,7 +73,7 @@ const DeclarationProcess: FC<DeclarationProcessProps> = (props) => {
                 uid: currentUser?.userId,
                 uname: currentUser?.userName,
                 lid: currentUser?.labId,
-                fid: detail?.form.id
+                fid: formid
               }
             })
           }}>
@@ -115,19 +86,14 @@ const DeclarationProcess: FC<DeclarationProcessProps> = (props) => {
 
 export default connect(
   ({
-    declarationProcess,
-    loading,
+    financialProcess,
     user,
   }: {
-    declarationProcess: DeclarationProcessModelState;
+    financialProcess: FinancialProcessModelState;
     user: UserModelState;
-    loading: {
-      effects: { [key: string]: boolean };
-    };
   }, ownProps: any) => ({
     currentUser: user.currentUser,
     formid: ownProps.match.params.formid,
-    detail: declarationProcess.detail,
-    loading: loading.effects['myDeclarationProcess/fetchAdvanced'],
+    form: financialProcess.form,
   }),
 )(DeclarationProcess);

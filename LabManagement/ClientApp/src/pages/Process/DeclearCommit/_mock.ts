@@ -6,6 +6,7 @@ import moment from 'moment';
 const data: { form: IDeclarationForm; chemicals: IChemical[] } = {
   form: {
     id: 1,
+    uname:'学生姓名x',
     state: 'InProcess',
     lid: 999,
     stime: moment(new Date()).format('YYYY-MM-DD hh:mm:ss'),

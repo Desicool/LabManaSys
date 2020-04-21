@@ -167,6 +167,24 @@ namespace LabManagement.Controllers
                 return NotFound(e.Message);
             }
         }
+        [HttpGet("financial")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public IActionResult GetFinancialDetail([FromQuery]int formid)
+        {
+            try
+            {
+                string response = RpcWrapper.CallServiceByGet("/api/financial/workflow", $"formid={formid}");
+                var res = JsonSerializer.Deserialize<PostDeclarationFormParam>(response);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return NotFound(e.Message);
+            }
+        }
         #endregion
         #region claim
         [HttpPost("claim")]
@@ -247,6 +265,24 @@ namespace LabManagement.Controllers
                 RpcWrapper.CallServiceByPost("/api/claim/return",
                     JsonSerializer.Serialize(param));
                 return Ok();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return NotFound(e.Message);
+            }
+        }
+        [HttpGet("claim")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public IActionResult GetClaimDetail([FromQuery]int formid)
+        {
+            try
+            {
+                string response = RpcWrapper.CallServiceByGet("/api/claim", $"formid={formid}");
+                var res = JsonSerializer.Deserialize<PostClaimFormParam>(response);
+                return Ok(res);
             }
             catch (Exception e)
             {

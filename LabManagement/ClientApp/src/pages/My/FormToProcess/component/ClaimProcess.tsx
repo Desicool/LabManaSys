@@ -15,21 +15,21 @@ const FinancialProcessComponent: FC<ClaimProcessProps> = (props) => {
         {
             title: '编号',
             dataIndex: 'id',
-            width: '4em'
+            width: '6em'
         },
         {
-            title:'申请人',
+            title: '申请人',
             dataIndex: 'uname',
-            width: '8em'
+            width: '12em'
         },
         {
             title: '预计归还时间',
             dataIndex: 'rtime'
         },
-         {
+        {
             title: '进行处理',
             key: 'operation',
-            render: () => <a onClick={()=>history.push('/my/process/financial')}>查看详情</a>,
+            render: (_: any, record: IClaimForm) => <a onClick={() => history.push('/process/claim/' + record.id)}>查看详情</a>,
         },
     ];
     return <div><Table dataSource={dataSource} columns={columns} />

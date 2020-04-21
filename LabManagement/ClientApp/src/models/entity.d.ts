@@ -76,7 +76,7 @@ export interface IClaimForm{
     // 审核人
     hid?: number;
     // 提交时间
-    stime?: number;
+    stime?: string;
     state?: string;
 }
 

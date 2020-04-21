@@ -32,7 +32,6 @@ const Model: DeclarationProcessModelType = {
     effects: {
         *fetch({ payload }, { call, put }) {
             const response = yield call(queryDeclarationDetail, payload.workflowid);
-            console.log(response);
             yield put({
                 type: 'fetchSuccess',
                 payload: response,

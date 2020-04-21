@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { connect, FormToProcessState, history } from 'umi';
 import { IFinancialForm } from '@/models/entity';
 import { Table } from 'antd';
+import { ColumnsType } from 'antd/lib/table';
 
 interface FinancialProcessProps {
     financials: IFinancialForm[];
@@ -11,16 +12,16 @@ const FinancialProcessComponent: FC<FinancialProcessProps> = (props) => {
     const { financials } = props;
     const dataSource = financials.map(u => ({ ...u, key: u.id }));
 
-    const columns = [
+    const columns: ColumnsType<IFinancialForm> = [
         {
             title: '编号',
             dataIndex: 'id',
-            width: '4em'
+            width: '6em'
         },
         {
             title:'申请人',
             dataIndex: 'uname',
-            width: '8em'
+            width: '12em'
         },
         {
             title: '申请金额',
@@ -29,7 +30,7 @@ const FinancialProcessComponent: FC<FinancialProcessProps> = (props) => {
          {
             title: '进行处理',
             key: 'operation',
-            render: () => <a onClick={()=>history.push('/my/process/financial')}>查看详情</a>,
+            render: (_, record) => <a onClick={()=>history.push('/process/financial/' + record.id)}>查看详情</a>,
         },
     ];
     return <div><Table dataSource={dataSource} columns={columns} />

@@ -12,8 +12,8 @@ export default defineConfig({
   antd: {},
   analytics: GA_KEY
     ? {
-        ga: GA_KEY,
-      }
+      ga: GA_KEY,
+    }
     : false,
   dva: {
     hmr: true,
@@ -133,6 +133,16 @@ export default defineConfig({
               name: '处理采购申请',
               path: '/process/declear/:formid',
               component: './Process/DeclearCommit',
+            },
+            {
+              name: '处理财务申请',
+              path: '/process/financial/:formid',
+              component: './Process/FinancialCommit',
+            },
+            {
+              name: '处理领用申请',
+              path: '/process/claim/:formid',
+              component: './Process/ClaimCommit',
             },
             {
               component: './404',

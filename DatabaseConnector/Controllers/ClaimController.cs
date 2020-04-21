@@ -24,15 +24,62 @@ namespace DatabaseConnector.Controllers
             _context = context;
             _logger = logger;
         }
+        [HttpGet]
+        public IActionResult GetClaimFormDetail([FromQuery] int formid)
+        {
+            var tmp = _context.ClaimFormChemicalMap
+                .Where(u => u.ClaimFormId == formid)
+                .Include(u => u.Chemical)
+                .Include(u => u.ClaimForm)
+                .ToList();
+            var ret = new PostClaimFormParam
+            {
+                Form = tmp[0].ClaimForm,
+                Chemicals = tmp.Select(t => t.Chemical).ToList()
+            };
+            return Ok(ret);
+        }
         [HttpGet("person")]
         public IActionResult GetClaimForm([FromQuery] int userid)
         {
-            return Ok(_context.ClaimForms.Where(u => u.UserId == userid).ToList());
+            var ret = new List<PostClaimFormParam>();
+            var tmp = _context.ClaimFormChemicalMap
+                .Include(u => u.Chemical)
+                .Include(u => u.ClaimForm)
+                .Where(u => u.ClaimForm.UserId == userid)
+                .GroupBy(u => u.ClaimFormId)
+                .ToList();
+            foreach (var item in tmp)
+            {
+                var group = item.ToList();
+                ret.Add(new PostClaimFormParam
+                {
+                    Form = group[0].ClaimForm,
+                    Chemicals = group.Select(u => u.Chemical).ToList()
+                });
+            }
+            return Ok(ret);
         }
         [HttpGet("lab")]
         public IActionResult GetLabClaimForms([FromQuery] int labid)
         {
-            return Ok(_context.ClaimForms.Where(u => u.LabId == labid).ToList());
+            var ret = new List<PostClaimFormParam>();
+            var tmp = _context.ClaimFormChemicalMap
+                .Include(u => u.Chemical)
+                .Include(u => u.ClaimForm)
+                .Where(u => u.ClaimForm.LabId == labid)
+                .GroupBy(u => u.ClaimFormId)
+                .ToList();
+            foreach (var item in tmp)
+            {
+                var group = item.ToList();
+                ret.Add(new PostClaimFormParam
+                {
+                    Form = group[0].ClaimForm,
+                    Chemicals = group.Select(u => u.Chemical).ToList()
+                });
+            }
+            return Ok(ret);
         }
         [HttpPost("apply")]
         public IActionResult PostClaimForm([FromBody] PostClaimFormParam param)

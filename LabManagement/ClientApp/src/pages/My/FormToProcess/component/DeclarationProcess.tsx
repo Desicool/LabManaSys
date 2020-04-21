@@ -16,12 +16,12 @@ const DeclarationProcessComponent: FC<DeclarationProcessProps> = (props) => {
         {
             title: '编号',
             dataIndex: 'id',
-            width: '4em'
+            width: '6em'
         },
         {
             title: '申请人',
             dataIndex: 'uname',
-            width: '8em'
+            width: '12em'
         },
         {
             title: '申请理由',
