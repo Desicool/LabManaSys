@@ -48,4 +48,12 @@ namespace DatabaseConnector.DAO.Utils
         [JsonPropertyName("fform")]
         public List<FinancialForm> FinancialForms { get; set; }
     }
+    public class NotifyResult
+    {
+        [JsonPropertyName("cform")]
+        public List<ClaimForm> ClaimForms { get; set; }
+
+        [JsonPropertyName("wf")]
+        public List<WorkFlow> WorkFlows { get; set; }
+    }
 }

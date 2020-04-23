@@ -1,4 +1,5 @@
 ﻿using DatabaseConnector.DAO.FormData;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,6 +16,7 @@ namespace DatabaseConnector.DAO.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long NotificationMessageId { get; set; }
         [JsonPropertyName("formType")]
+        [JsonConverter(typeof(StringEnumConverter))]
         public FormType FormType { get; set; }
         [JsonPropertyName("fid")]
         public long FormId { get; set; }
@@ -25,5 +27,6 @@ namespace DatabaseConnector.DAO.Entity
         [JsonIgnore]
         public Role Role { get; set; }
     }
+
     public enum FormType { ClaimForm, DeclarationForm, FinancialForm }
 }

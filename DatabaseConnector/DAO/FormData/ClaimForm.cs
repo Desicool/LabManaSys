@@ -1,5 +1,6 @@
 ﻿using DatabaseConnector.DAO.Entity;
 using DatabaseConnector.Utils;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -39,6 +40,7 @@ namespace DatabaseConnector.DAO.FormData
         [JsonPropertyName("stime")]
         public DateTime SubmitTime { get; set; }
         [JsonPropertyName("state")]
+        [JsonConverter(typeof(StringEnumConverter))]
         public FormState State { get; set; }
         public int CompareTo(ClaimForm obj)
         {

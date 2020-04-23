@@ -81,6 +81,10 @@ namespace DatabaseConnector.Controllers
         {
             // change state
             var form = _context.DeclarationForms.Where(u => u.Id == param.FormId).Single();
+            if(form.State != FormState.InProcess)
+            {
+                return NotFound("已有其他老师处理过该申请。");
+            }
             form.HandlerId = param.UserId;
             form.HandlerName = param.UserName;
             form.State = FormState.Approved;
@@ -88,16 +92,29 @@ namespace DatabaseConnector.Controllers
             var data = util.StateRoute[workflow.State];
             workflow.State = data.Next[1];
             data = util.StateRoute[workflow.State];
+            // change msg status
+            var oldmsg = _context.NotificationMessages.Where(m => m.FormId == param.FormId).Single();
+            oldmsg.IsSolved = true;
             // send msg
-            var roleid = GetNotifyRoleId(data.RoleName, form.LabId);
-            var msg = new NotificationMessage
+            var msgs = _context.WorkFlowStatusChangeMessages.Where(u => u.RelatedId == workflow.Id).ToList();
+            if (msgs.Count > 0)
             {
-                FormId = form.Id,
-                FormType = FormType.DeclarationForm,
-                IsSolved = false,
-                RoleId = roleid
-            };
-            _context.NotificationMessages.Add(msg);
+                foreach (var msg in msgs)
+                {
+                    msg.IsRead = false;
+                }
+            }
+            else
+            {
+                var msg = new StatusChangeMessage
+                {
+                    RelatedId = workflow.Id,
+                    RelatedType = RelatedTypeEnum.WorkFlow,
+                    IsRead = false,
+                    UserId = workflow.UserId
+                };
+                _context.WorkFlowStatusChangeMessages.Add(msg);
+            }
             _context.SaveChanges();
             return Ok();
         }
@@ -106,23 +123,39 @@ namespace DatabaseConnector.Controllers
         {
             // change state
             var form = _context.DeclarationForms.Where(u => u.Id == param.FormId).Single();
+            if (form.State != FormState.InProcess)
+            {
+                return NotFound("已有其他老师处理过该申请。");
+            }
             form.HandlerId = param.UserId;
             form.HandlerName = param.UserName;
             form.State = FormState.Rejected;
             var workflow = _context.WorkFlows.Where(u => u.Id == form.WorkFlowId).Single();
             var data = util.StateRoute[workflow.State];
             workflow.State = data.Next[0];
+            // change msg status
+            var oldmsg = _context.NotificationMessages.Where(m => m.FormId == param.FormId).Single();
+            oldmsg.IsSolved = true;
             // send msg
-            data = util.StateRoute[workflow.State];
-            var roleid = GetNotifyRoleId(data.RoleName, form.LabId);
-            var msg = new NotificationMessage
+            var msgs = _context.WorkFlowStatusChangeMessages.Where(u => u.RelatedId == workflow.Id).ToList();
+            if (msgs.Count > 0)
             {
-                FormId = form.Id,
-                FormType = FormType.DeclarationForm,
-                IsSolved = false,
-                RoleId = roleid
-            };
-            _context.NotificationMessages.Add(msg);
+                foreach (var msg in msgs)
+                {
+                    msg.IsRead = false;
+                }
+            }
+            else
+            {
+                var msg = new StatusChangeMessage
+                {
+                    RelatedId = workflow.Id,
+                    RelatedType = RelatedTypeEnum.WorkFlow,
+                    IsRead = false,
+                    UserId = workflow.UserId
+                };
+                _context.WorkFlowStatusChangeMessages.Add(msg);
+            }
             _context.SaveChanges();
             return Ok();
         }

@@ -116,5 +116,47 @@ namespace DatabaseConnector.Controllers
             ret.FinancialForms.Sort();
             return ret;
         }
+        [HttpGet("notify")]
+        public NotifyResult GetNotifies([FromQuery]int userid)
+        {
+            var ur = _context.Users
+                .Where(u => u.UserId == userid)
+                .Single();
+            var ret = new NotifyResult
+            {
+                ClaimForms = new List<ClaimForm>(),
+                WorkFlows = new List<WorkFlow>()
+            };
+
+            var msgs = _context.WorkFlowStatusChangeMessages
+                .Where(u => u.UserId == userid)
+                .GroupBy(u => u.RelatedType)
+                .ToList();
+            foreach (var msg in msgs)
+            {
+                var group = msg.ToList();
+                switch (msg.Key)
+                {
+                    case RelatedTypeEnum.ClaimForm:
+                        {
+                            var t = _context.ClaimForms
+                                .Where(c => group.Exists(g => g.RelatedId == c.Id))
+                                .ToList();
+                            ret.ClaimForms.AddRange(t);
+                            break;
+                        }
+                    case RelatedTypeEnum.WorkFlow:
+                        {
+                            var t = _context.WorkFlows
+                                .Where(c => group.Exists(g => g.RelatedId == c.Id))
+                                .ToList();
+                            ret.WorkFlows.AddRange(t);
+                            break;
+                        }
+                }
+            }
+
+            return ret;
+        }
     }
 }

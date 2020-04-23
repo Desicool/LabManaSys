@@ -4,14 +4,16 @@ using DatabaseConnector.DAO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DatabaseConnector.Migrations
 {
     [DbContext(typeof(LabContext))]
-    partial class LabContextModelSnapshot : ModelSnapshot
+    [Migration("20200422115624_LabDb_3_0")]
+    partial class LabDb_3_0
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,35 +143,6 @@ namespace DatabaseConnector.Migrations
                     b.ToTable("Role");
                 });
 
-            modelBuilder.Entity("DatabaseConnector.DAO.Entity.StatusChangeMessage", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("IsRead")
-                        .HasColumnType("bit");
-
-                    b.Property<long>("RelatedId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("RelatedType")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<long?>("WorkFlowId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("WorkFlowId");
-
-                    b.ToTable("StatusChangeMessage");
-                });
-
             modelBuilder.Entity("DatabaseConnector.DAO.Entity.User", b =>
                 {
                     b.Property<int>("UserId")
@@ -244,6 +217,29 @@ namespace DatabaseConnector.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("WorkFlow");
+                });
+
+            modelBuilder.Entity("DatabaseConnector.DAO.Entity.WorkFlowStatusChangeMessage", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("WorkFlowId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkFlowId");
+
+                    b.ToTable("WorkFlowStatusChangeMessage");
                 });
 
             modelBuilder.Entity("DatabaseConnector.DAO.FormData.ClaimForm", b =>
@@ -416,13 +412,6 @@ namespace DatabaseConnector.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DatabaseConnector.DAO.Entity.StatusChangeMessage", b =>
-                {
-                    b.HasOne("DatabaseConnector.DAO.Entity.WorkFlow", "WorkFlow")
-                        .WithMany()
-                        .HasForeignKey("WorkFlowId");
-                });
-
             modelBuilder.Entity("DatabaseConnector.DAO.Entity.UserRole", b =>
                 {
                     b.HasOne("DatabaseConnector.DAO.Entity.Role", "Role")
@@ -434,6 +423,15 @@ namespace DatabaseConnector.Migrations
                     b.HasOne("DatabaseConnector.DAO.Entity.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DatabaseConnector.DAO.Entity.WorkFlowStatusChangeMessage", b =>
+                {
+                    b.HasOne("DatabaseConnector.DAO.Entity.WorkFlow", "WorkFlow")
+                        .WithMany()
+                        .HasForeignKey("WorkFlowId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

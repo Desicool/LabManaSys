@@ -24,6 +24,11 @@ const DeclarationProcessComponent: FC<DeclarationProcessProps> = (props) => {
             width: '12em'
         },
         {
+            title: '所属实验室',
+            dataIndex: 'lid',
+            width: '10em'
+        },
+        {
             title: '申请理由',
             dataIndex: 'reason'
         },
@@ -34,7 +39,7 @@ const DeclarationProcessComponent: FC<DeclarationProcessProps> = (props) => {
             render: (_, record) => <a onClick={() => history.push('/process/declear/' + record.id)}>查看详情</a>,
         },
     ];
-    return <div><Table dataSource={dataSource} columns={columns} />
+    return <div><Table dataSource={dataSource} columns={columns} bordered={true}/>
     </div>
 }
 

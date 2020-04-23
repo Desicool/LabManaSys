@@ -8,39 +8,13 @@ import {
   Table,
   Badge,
 } from 'antd';
-import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
+import { GridContent, PageHeaderWrapper } from '@ant-design/pro-layout';
 import React, { FC, useEffect, useState } from 'react';
 import { connect, Dispatch, FormToProcessState } from 'umi';
 import styles from './style.less';
 import DeclarationProcess from './component/DeclarationProcess';
 import FinancialProcess from './component/FinancialProcess';
 import ClaimProcess from './component/ClaimProcess';
-
-
-const extra = (
-  <div className={styles.moreInfo}>
-    <Statistic title="状态" value="待审批" />
-    <Statistic title="订单金额" value={568.08} prefix="¥" />
-  </div>
-);
-
-const description = (
-  <RouteContext.Consumer>
-    {({ isMobile }) => (
-      <Descriptions className={styles.headerList} size="small" column={isMobile ? 1 : 2}>
-        <Descriptions.Item label="创建人">曲丽丽</Descriptions.Item>
-        <Descriptions.Item label="订购产品">XX 服务</Descriptions.Item>
-        <Descriptions.Item label="创建时间">2017-07-07</Descriptions.Item>
-        <Descriptions.Item label="关联单据">
-          <a href="">12421</a>
-        </Descriptions.Item>
-        <Descriptions.Item label="生效日期">2017-07-07 ~ 2017-08-08</Descriptions.Item>
-        <Descriptions.Item label="备注">请于两个工作日内确认</Descriptions.Item>
-      </Descriptions>
-    )}
-  </RouteContext.Consumer>
-);
-
 interface FormToProcessProps {
   loading: boolean;
   myFormToProcess: FormToProcessState;
@@ -48,46 +22,59 @@ interface FormToProcessProps {
 }
 
 const FormToProcess: FC<FormToProcessProps> = (props) => {
-  const { dispatch, myFormToProcess, loading } = props;
+  const { dispatch, myFormToProcess } = props;
   useEffect(() => {
     dispatch({
       type: 'myFormToProcess/fetchMessage',
     });
   }, []);
   const [tabKey, setTabKey] = useState<string>('declaration');
+  const declearTodo = myFormToProcess.msg?.dform.filter(u => u.state === 'InProcess').length;
+  const financialTodo = myFormToProcess.msg?.fform.filter(u => u.state === 'InProcess').length;
+  const claimTodo = myFormToProcess.msg?.cform.filter(u => u.state === 'InProcess').length;
   const tabList = [
     {
       key: 'declaration',
       tab:
-        <Badge count={myFormToProcess.msg?.dform.filter(u=>u.state === 'InProcess').length} offset={[10, 0]}><p>申报</p></Badge>,
+        <Badge count={declearTodo} offset={[10, 0]}><p>申报</p></Badge>,
     },
     {
       key: 'financial',
-      tab: <Badge count={myFormToProcess.msg?.fform.filter(u=>u.state === 'InProcess').length} offset={[10, 0]}><p>财务申请</p></Badge>
+      tab: <Badge count={financialTodo} offset={[10, 0]}><p>财务申请</p></Badge>
     },
     {
       key: 'claimform',
-      tab: <Badge count={myFormToProcess.msg?.cform.filter(u=>u.state === 'InProcess').length} offset={[10, 0]}><p>领用申请</p></Badge>
+      tab: <Badge count={claimTodo} offset={[10, 0]}><p>领用申请</p></Badge>
     },
   ];
-
   const contentList = {
     declaration: <DeclarationProcess />,
     claimform: <ClaimProcess />,
     financial: <FinancialProcess />
   };
 
+  const TodoList = () => {
+    if (!declearTodo || !financialTodo || !claimTodo)
+      return null;
+    if (declearTodo + financialTodo + claimTodo == 0) {
+      return null;
+    }
+    return (
+      <Card title='需要处理的申请' style={{ marginBottom: 24 }} bordered={false} tabList={tabList} onTabChange={setTabKey} activeTabKey={tabKey}>
+        {contentList[tabKey]}
+      </Card>
+    )
+  }
   return (
     <PageHeaderWrapper
       title="我的待办"
       className={styles.pageHeader}
-      content={description}
-      extraContent={extra}
     >
       <div className={styles.main}>
         <GridContent>
-          <Card style={{ marginBottom: 24 }} bordered={false} tabList={tabList} onTabChange={setTabKey}>
-            {contentList[tabKey]}
+          <TodoList />
+          <Card title='有状态更新的项目'style={{ marginBottom: 24 }} bordered={false}>
+              2123
           </Card>
         </GridContent>
       </div>

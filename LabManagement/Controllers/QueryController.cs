@@ -82,6 +82,34 @@ namespace LabManagement.Controllers
                 return NotFound("try again");
             }
         }
+        [HttpGet("msg")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public IActionResult GetNotifyMessages()
+        {
+            var certification = HttpContext.Request.Headers["certification"];
+            var success = UserRoleCache.TryGetUserRole(certification, out var userRole);
+            if (!success)
+            {
+                return NotFound("try again");
+            }
+            int userId = userRole.User.UserId;
+            try
+            {
+                var response = RpcWrapper.CallServiceByGet("/api/entity/notify", $"userid={userId}");
+                var res = JsonSerializer.Deserialize<NotifyResult>(response);
+                return Ok(res);
+            }
+            catch (JsonException)
+            {
+                return BadRequest("internal error");
+            }
+            catch (Exception)
+            {
+                return NotFound("try again");
+            }
+        }
         [HttpGet("workflows")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]

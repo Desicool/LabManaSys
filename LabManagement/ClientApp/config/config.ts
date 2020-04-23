@@ -105,7 +105,7 @@ export default defineConfig({
             {
               name: '我的待办',
               //hideInMenu: true,
-              path: '/my/form-to-process',
+              path: '/my/process',
               component: './My/FormToProcess',
             },
             {

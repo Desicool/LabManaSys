@@ -24,6 +24,11 @@ const FinancialProcessComponent: FC<FinancialProcessProps> = (props) => {
             width: '12em'
         },
         {
+            title: '所属实验室',
+            dataIndex: 'lid',
+            width: '10em'
+        },
+        {
             title: '申请金额',
             dataIndex: 'price'
         },
@@ -33,7 +38,7 @@ const FinancialProcessComponent: FC<FinancialProcessProps> = (props) => {
             render: (_, record) => <a onClick={()=>history.push('/process/financial/' + record.id)}>查看详情</a>,
         },
     ];
-    return <div><Table dataSource={dataSource} columns={columns} />
+    return <div><Table dataSource={dataSource} columns={columns} bordered={true}/>
     </div>
 }
 

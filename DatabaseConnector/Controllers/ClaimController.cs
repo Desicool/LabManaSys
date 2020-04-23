@@ -6,6 +6,7 @@ using DatabaseConnector.DAO;
 using DatabaseConnector.DAO.Entity;
 using DatabaseConnector.DAO.FormData;
 using DatabaseConnector.DAO.Utils;
+using DatabaseConnector.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -127,6 +128,10 @@ namespace DatabaseConnector.Controllers
                 _logger.LogError("ClaimForm not found");
                 throw new NullReferenceException();
             }
+            if (formlist[0].ClaimForm.State != FormState.InProcess)
+            {
+                return NotFound("已有其他老师处理过该申请。");
+            }
             formlist[0].ClaimForm.HandlerId = param.UserId;
             formlist[0].ClaimForm.HandlerName = param.UserName;
             formlist[0].ClaimForm.State = Utils.FormState.Approved;
@@ -134,16 +139,29 @@ namespace DatabaseConnector.Controllers
             {
                 item.Chemical.State = ChemicalState.InUse;
             }
+            // change msg status
+            var oldmsg = _context.NotificationMessages.Where(m => m.FormId == param.FormId).Single();
+            oldmsg.IsSolved = true;
             // send msg
-            var roleid = GetNotifyRoleId("Applicant",null);
-            var msg = new NotificationMessage
+            var msgs = _context.WorkFlowStatusChangeMessages.Where(u => u.RelatedId == param.FormId).ToList();
+            if (msgs.Count > 0)
             {
-                FormId = param.FormId,
-                FormType = FormType.ClaimForm,
-                IsSolved = false,
-                RoleId = roleid
-            };
-            _context.NotificationMessages.Add(msg);
+                foreach (var msg in msgs)
+                {
+                    msg.IsRead = false;
+                }
+            }
+            else
+            {
+                var msg = new StatusChangeMessage
+                {
+                    RelatedId = param.FormId,
+                    RelatedType = RelatedTypeEnum.ClaimForm,
+                    IsRead = false,
+                    UserId = formlist[0].ClaimForm.UserId
+                };
+                _context.WorkFlowStatusChangeMessages.Add(msg);
+            }
             _context.SaveChanges();
             return Ok();
         }
@@ -151,18 +169,35 @@ namespace DatabaseConnector.Controllers
         public IActionResult RejectClaim([FromBody] SolveFormParam param)
         {
             var form = _context.ClaimForms.Where(u => u.Id == param.FormId).Single();
+            if (form.State != FormState.InProcess)
+            {
+                return NotFound("已有其他老师处理过该申请。");
+            }
             form.State = Utils.FormState.Rejected;
             form.HandlerName = param.UserName;
+            // change msg status
+            var oldmsg = _context.NotificationMessages.Where(m => m.FormId == param.FormId).Single();
+            oldmsg.IsSolved = true;
             // send msg
-            var roleid = GetNotifyRoleId("Applicant", null);
-            var msg = new NotificationMessage
+            var msgs = _context.WorkFlowStatusChangeMessages.Where(u => u.RelatedId == param.FormId).ToList();
+            if (msgs.Count > 0)
             {
-                FormId = param.FormId,
-                FormType = FormType.ClaimForm,
-                IsSolved = false,
-                RoleId = roleid
-            };
-            _context.NotificationMessages.Add(msg);
+                foreach (var msg in msgs)
+                {
+                    msg.IsRead = false;
+                }
+            }
+            else
+            {
+                var msg = new StatusChangeMessage
+                {
+                    RelatedId = param.FormId,
+                    RelatedType = RelatedTypeEnum.ClaimForm,
+                    IsRead = false,
+                    UserId = form.UserId
+                };
+                _context.WorkFlowStatusChangeMessages.Add(msg);
+            }
             _context.SaveChanges();
             return Ok();
         }

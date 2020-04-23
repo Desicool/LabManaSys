@@ -1,4 +1,4 @@
-import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+import { LogoutOutlined, SettingOutlined, UserOutlined, MessageOutlined } from '@ant-design/icons';
 import { Menu, Spin } from 'antd';
 import { ClickParam } from 'antd/es/menu';
 import React from 'react';
@@ -13,61 +13,42 @@ export interface GlobalHeaderRightProps extends Partial<ConnectProps> {
   menu?: boolean;
 }
 
-class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
-  onMenuClick = (event: ClickParam) => {
-    const { key } = event;
+const AvatarDropdown: React.FC<GlobalHeaderRightProps> = (props) => {
+  const { dispatch } = props;
+  const {
+    currentUser = {
+      userName: '',
+    },
+  } = props;
+  const menuHeaderDropdown = (
+    <Menu className={styles.menu}>
+      <Menu.Item key="message" onClick={() => {
+        history.push('/my/process');
+      }}>
+        <MessageOutlined />
+          我的待办
+        </Menu.Item>
+      <Menu.Divider />
 
-    if (key === 'logout') {
-      const { dispatch } = this.props;
-
-      if (dispatch) {
-        dispatch({
-          type: 'login/logout',
-        });
-      }
-
-      return;
-    }
-
-    history.push(`/account/${key}`);
-  };
-
-  render(): React.ReactNode {
-    const {
-      currentUser = {
-        userName: '',
-      },
-      menu,
-    } = this.props;
-    const menuHeaderDropdown = (
-      <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
-        {menu && (
-          <Menu.Item key="center">
-            <UserOutlined />
-            个人中心
-          </Menu.Item>
-        )}
-        {menu && (
-          <Menu.Item key="settings">
-            <SettingOutlined />
-            个人设置
-          </Menu.Item>
-        )}
-        {menu && <Menu.Divider />}
-
-        <Menu.Item key="logout">
-          <LogoutOutlined />
+      <Menu.Item key="logout" onClick={() => {
+        if (dispatch) {
+          dispatch({
+            type: 'login/logout',
+          });
+        }
+      }}>
+        <LogoutOutlined />
           退出登录
         </Menu.Item>
-      </Menu>
-    );
-    return currentUser && currentUser.userName ? (
-      <HeaderDropdown overlay={menuHeaderDropdown}>
-        <span className={`${styles.action} ${styles.account}`}>
-          <span className={styles.name}>{currentUser.userName}</span>
-        </span>
-      </HeaderDropdown>
-    ) : (
+    </Menu>
+  );
+  return currentUser && currentUser.userName ? (
+    <HeaderDropdown overlay={menuHeaderDropdown}>
+      <span className={`${styles.action} ${styles.account}`}>
+        <span className={styles.name}>{currentUser.userName}</span>
+      </span>
+    </HeaderDropdown>
+  ) : (
       <span className={`${styles.action} ${styles.account}`}>
         <Spin
           size="small"
@@ -78,7 +59,6 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
         />
       </span>
     );
-  }
 }
 
 export default connect(({ user }: ConnectState) => ({
