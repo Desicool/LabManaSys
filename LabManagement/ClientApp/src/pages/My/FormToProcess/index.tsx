@@ -1,20 +1,18 @@
 import {
   Card,
-  Statistic,
-  Descriptions,
-  Divider,
-  Tooltip,
-  Empty,
-  Table,
   Badge,
+  Tabs,
 } from 'antd';
 import { GridContent, PageHeaderWrapper } from '@ant-design/pro-layout';
 import React, { FC, useEffect, useState } from 'react';
-import { connect, Dispatch, FormToProcessState } from 'umi';
+import { connect, Dispatch, FormToProcessState, history } from 'umi';
 import styles from './style.less';
 import DeclarationProcess from './component/DeclarationProcess';
 import FinancialProcess from './component/FinancialProcess';
 import ClaimProcess from './component/ClaimProcess';
+import { NotifyWorkFlowComponent } from './component/WorkFlowNotify';
+import { ClaimFormList } from './component/ClaimFormNotify';
+
 interface FormToProcessProps {
   loading: boolean;
   myFormToProcess: FormToProcessState;
@@ -27,6 +25,9 @@ const FormToProcess: FC<FormToProcessProps> = (props) => {
     dispatch({
       type: 'myFormToProcess/fetchMessage',
     });
+    dispatch({
+      type: 'myFormToProcess/fetchNotify'
+    })
   }, []);
   const [tabKey, setTabKey] = useState<string>('declaration');
   const declearTodo = myFormToProcess.msg?.dform.filter(u => u.state === 'InProcess').length;
@@ -60,11 +61,18 @@ const FormToProcess: FC<FormToProcessProps> = (props) => {
       return null;
     }
     return (
-      <Card title='需要处理的申请' style={{ marginBottom: 24 }} bordered={false} tabList={tabList} onTabChange={setTabKey} activeTabKey={tabKey}>
+      <Card title='需要处理的申请'
+        style={{ marginBottom: 24 }}
+        bordered={false}
+        tabList={tabList}
+        onTabChange={setTabKey}
+        activeTabKey={tabKey}
+      >
         {contentList[tabKey]}
       </Card>
     )
   }
+  console.log('render!')
   return (
     <PageHeaderWrapper
       title="我的待办"
@@ -73,9 +81,24 @@ const FormToProcess: FC<FormToProcessProps> = (props) => {
       <div className={styles.main}>
         <GridContent>
           <TodoList />
-          <Card title='有状态更新的项目'style={{ marginBottom: 24 }} bordered={false}>
-              2123
-          </Card>
+          <div className={styles.standardList}>
+            <Card
+              className={styles.listCard}
+              bordered={false}
+              title="有状态更新的项目"
+              style={{ marginTop: 24 }}
+              bodyStyle={{ padding: '0 32px 40px 32px' }}
+            >
+              <Tabs>
+                <Tabs.TabPane tab="流程" key="workflownotify">
+                  <NotifyWorkFlowComponent notify={myFormToProcess.notify} />
+                </Tabs.TabPane>
+                <Tabs.TabPane tab="申领进度" key="chemicalnotify">
+                  <ClaimFormList cform={myFormToProcess.notify?.cform}/>
+                </Tabs.TabPane>
+              </Tabs>
+            </Card>
+          </div>
         </GridContent>
       </div>
     </PageHeaderWrapper>

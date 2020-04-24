@@ -72,7 +72,6 @@ export const WorkFlowList: FC<WorkFlowListProps> = (props) => {
             title="流程列表"
             style={{ marginTop: 24 }}
             bodyStyle={{ padding: '0 32px 40px 32px' }}
-            extra={extraContent}
           >
             <List
               size="large"

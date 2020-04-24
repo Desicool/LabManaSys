@@ -1,23 +1,30 @@
 import { Effect, Reducer } from 'umi';
-import { queryMessage } from './service';
-import { IClaimForm, IDeclarationForm, IFinancialForm } from '@/models/entity';
+import { queryMessage, queryNotify } from './service';
+import { IClaimForm, IDeclarationForm, IFinancialForm, IWorkFlow } from '@/models/entity';
 
-export interface IMsgResult{
+export interface IMsgResult {
   cform: IClaimForm[];
   dform: IDeclarationForm[];
   fform: IFinancialForm[];
 }
-export interface FormToProcessState{
+export interface INotifyResult{
+  cform: IClaimForm[];
+  wf: IWorkFlow[];
+}
+export interface FormToProcessState {
   msg?: IMsgResult;
+  notify?: INotifyResult;
 }
 export interface FormToProcessModelType {
   namespace: string;
   state: FormToProcessState;
   effects: {
     fetchMessage: Effect;
+    fetchNotify: Effect;
   };
   reducers: {
     fetchMessageSuccess: Reducer<FormToProcessState>;
+    fetchNotifySuccess: Reducer<FormToProcessState>;
   };
 }
 
@@ -25,7 +32,7 @@ const Model: FormToProcessModelType = {
   namespace: 'myFormToProcess',
 
   state: {
-    
+
   },
 
   effects: {
@@ -36,6 +43,13 @@ const Model: FormToProcessModelType = {
         payload: response,
       });
     },
+    *fetchNotify(_, { call, put }) {
+      const response = yield call(queryNotify);
+      yield put({
+        type: 'fetchNotifySuccess',
+        payload: response,
+      })
+    }
   },
 
   reducers: {
@@ -45,6 +59,12 @@ const Model: FormToProcessModelType = {
         msg: payload
       };
     },
+    fetchNotifySuccess(state, {payload}){
+      return {
+        ...state,
+        notify: payload,
+      }
+    }
   },
 };
 
