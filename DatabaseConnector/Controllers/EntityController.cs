@@ -31,6 +31,14 @@ namespace DatabaseConnector.Controllers
         {
             return _context.Chemicals.Where(c => c.LabId == labId).ToList();
         }
+        [HttpGet("user/chemicals")]
+        public List<Chemical> GetUserChemicals(int userid)
+        {
+            var query = from x in _context.ClaimFormChemicalMap.Include(u => u.ClaimForm).Include(u => u.Chemical)
+                        where x.ClaimForm.State == FormState.Approved && x.ClaimForm.UserId == userid
+                        select x.Chemical;
+            return query.ToList();
+        }
         [HttpGet("workflows")]
         public List<WorkFlow> GetWorkFlowsByUserId([FromQuery] int id, [FromQuery] string type)
         {

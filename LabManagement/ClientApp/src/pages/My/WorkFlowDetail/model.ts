@@ -45,7 +45,6 @@ const Model: WorkFlowDetailModelType = {
 
     reducers: {
         fetchWorkFlowSuccess(state = initState, action) {
-            console.log(action);
             return {
                 ...state,
                 ...action.payload

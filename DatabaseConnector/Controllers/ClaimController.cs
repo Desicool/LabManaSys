@@ -218,6 +218,7 @@ namespace DatabaseConnector.Controllers
             formlist[0].ClaimForm.RealReturnTime = DateTime.Now;
             foreach (var item in formlist)
             {
+                item.ClaimForm.State = FormState.Returned;
                 item.Chemical.State = ChemicalState.Lab;
             }
             return Ok();

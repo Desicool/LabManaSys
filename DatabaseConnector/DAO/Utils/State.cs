@@ -25,5 +25,5 @@ namespace DatabaseConnector.Utils
         }
         
     }
-    public enum FormState { None = 0, InProcess, Approved, Rejected }
+    public enum FormState { None = 0, InProcess, Approved, Rejected, Returned }
 }

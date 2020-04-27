@@ -72,7 +72,6 @@ const FormToProcess: FC<FormToProcessProps> = (props) => {
       </Card>
     )
   }
-  console.log('render!')
   return (
     <PageHeaderWrapper
       title="我的待办"
@@ -91,10 +90,10 @@ const FormToProcess: FC<FormToProcessProps> = (props) => {
             >
               <Tabs>
                 <Tabs.TabPane tab="流程" key="workflownotify">
-                  <NotifyWorkFlowComponent notify={myFormToProcess.notify} />
+                  <NotifyWorkFlowComponent notify={myFormToProcess.notify} dispatch={dispatch}/>
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="申领进度" key="chemicalnotify">
-                  <ClaimFormList cform={myFormToProcess.notify?.cform}/>
+                  <ClaimFormList cform={myFormToProcess.notify?.cform} dispatch={dispatch}/>
                 </Tabs.TabPane>
               </Tabs>
             </Card>

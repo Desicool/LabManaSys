@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Request, Response } from 'express';
-import { IClaimForm, IChemical } from '@/models/entity';
+import { IChemical } from '@/models/entity';
+import { IPostClaimFormParam } from 'umi';
 import moment from 'moment';
 
 const titles = [
@@ -22,7 +23,7 @@ const status = [
   '已销毁',
 ];
 
-function fakeList(): IChemical[] {
+function fakeList(): IPostClaimFormParam {
   const list : IChemical[] = [];
   for (let i = 0; i < 10; i += 1) {
     list.push({
@@ -35,35 +36,26 @@ function fakeList(): IChemical[] {
     });
   }
 
-  return list;
+  return {
+    form:{
+      id: 1,
+      uid: 1,
+      lid: 2,
+      uname: '一个用户名',
+      state: 'InProcess',
+      stime: moment(new Date()).format('YYYY-MM-DD hh:mm:ss'),
+      rtime: moment(new Date()).format('YYYY-MM-DD hh:mm:ss'),
+    },
+    chemicals: list
+  };
 }
-const claimForm: IClaimForm =
-{
-  id: 1,
-  uid: 1,
-  lid: 2,
-  uname: '一个用户名',
-  state: 'InProcess',
-  stime: moment(new Date()).format('YYYY-MM-DD hh:mm:ss'),
-  rtime: moment(new Date()).format('YYYY-MM-DD hh:mm:ss'),
-}
+
 function getFakeList(req: Request, res: Response) {
   const params = req.query;
-  const chemicals = fakeList();
-  const result = {
-    form: claimForm,
-    chemicals: chemicals
-  }
+  const {formid} = params;
+  const result = fakeList();
   return res.json(result);
 }
-function approveMock(_: Request, res: Response) {
-  res.status(200).send();
-}
-function rejectMock(_: Request, res: Response) {
-  res.status(200).send();
-}
 export default {
-  'GET  /api/form/claim': getFakeList,
-  'POST  /api/form/claim/approve': approveMock,
-  'POST  /api/form/claim/reject': rejectMock
+  'GET  /api/form/claimdetail': getFakeList,
 };

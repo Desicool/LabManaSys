@@ -1,6 +1,7 @@
 import { Effect, Reducer } from 'umi';
-import { queryMessage, queryNotify } from './service';
+import { queryMessage, queryNotify, updateNotify } from './service';
 import { IClaimForm, IDeclarationForm, IFinancialForm, IWorkFlow } from '@/models/entity';
+import { message } from 'antd';
 
 export interface IMsgResult {
   cform: IClaimForm[];
@@ -10,6 +11,9 @@ export interface IMsgResult {
 export interface INotifyResult{
   cform: IClaimForm[];
   wf: IWorkFlow[];
+}
+export interface INotifyUpdateParam{
+  rid: number;
 }
 export interface FormToProcessState {
   msg?: IMsgResult;
@@ -21,6 +25,7 @@ export interface FormToProcessModelType {
   effects: {
     fetchMessage: Effect;
     fetchNotify: Effect;
+    updateNotifyStatus: Effect;
   };
   reducers: {
     fetchMessageSuccess: Reducer<FormToProcessState>;
@@ -49,6 +54,10 @@ const Model: FormToProcessModelType = {
         type: 'fetchNotifySuccess',
         payload: response,
       })
+    },
+    *updateNotifyStatus({payload}, {call}){
+      yield call(updateNotify, payload);
+      console.log('ok!');
     }
   },
 

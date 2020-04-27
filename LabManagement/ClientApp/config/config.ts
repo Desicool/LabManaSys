@@ -80,69 +80,78 @@ export default defineConfig({
               ],
             },
             {
-              name: '实体管理',
+              name: 'entity',
               path: '/query',
               routes: [
                 {
-                  name: '危险品列表',
-                  icon: 'smile',
+                  name: 'labchemicals',
                   path: '/query/chemical',
                   component: './Query/ChemicalList',
+                },
+                {
+                  name: 'mychemicals',
+                  path: '/query/mychemical',
+                  component: './Query/ChemicalsInUsing'
                 },
               ],
             },
             {
-              name: '我的申请',
+              name: 'myworkflow',
               path: '/my/workflow',
               component: './My/WorkFlowList',
             },
             {
-              name: '申请详情',
+              name: 'workflowdetail',
               path: '/my/workflow/:workflowid',
               hideInMenu: true,
               component: './My/WorkFlowDetail',
             },
             {
-              name: '我的待办',
+              name: 'process',
               //hideInMenu: true,
               path: '/my/process',
               component: './My/FormToProcess',
             },
             {
-              name: '提交申请',
+              name: 'post',
               path: '/post',
               routes: [
                 {
-                  name: '危险品采购申请',
+                  name: 'declear',
                   path: '/post/declear',
                   component: './Post/DeclarationForm',
                 },
                 {
-                  name: '提交财务表单',
+                  name: 'financial',
                   path: '/post/financial',
                   component: './Post/FinancialForm',
                 },
                 {
-                  name: '化学危险品领用申报',
+                  name: 'claim',
                   path: '/post/claim',
                   component: './Post/ClaimForm',
                 },
               ],
             },
             {
-              name: '处理采购申请',
+              name: 'processdeclear',
               path: '/process/declear/:formid',
               component: './Process/DeclearCommit',
             },
             {
-              name: '处理财务申请',
+              name: 'processfinancial',
               path: '/process/financial/:formid',
               component: './Process/FinancialCommit',
             },
             {
-              name: '处理领用申请',
+              name: 'processclaim',
               path: '/process/claim/:formid',
               component: './Process/ClaimCommit',
+            },
+            {
+              name: 'claimdetail',
+              path: '/process/claim/:formid/detail',
+              component: './Query/ClaimFormChemicals',
             },
             {
               component: './404',

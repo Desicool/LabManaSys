@@ -11,11 +11,9 @@ export interface ChemicalListModelType {
   state: ChemicalListModelState;
   effects: {
     fetch: Effect;
-    appendFetch: Effect;
   };
   reducers: {
     queryList: Reducer<ChemicalListModelState>;
-    appendList: Reducer<ChemicalListModelState>;
   };
 }
 
@@ -34,13 +32,6 @@ const Model: ChemicalListModelType = {
         payload: Array.isArray(response) ? response : [],
       });
     },
-    *appendFetch({ payload }, { call, put }) {
-      const response = yield call(queryChemicals, payload);
-      yield put({
-        type: 'appendList',
-        payload: Array.isArray(response) ? response : [],
-      });
-    },
   },
 
   reducers: {
@@ -48,12 +39,6 @@ const Model: ChemicalListModelType = {
       return {
         ...state,
         list: action.payload,
-      };
-    },
-    appendList(state = { list: [] }, action) {
-      return {
-        ...state,
-        list: state.list.concat(action.payload),
       };
     },
   },

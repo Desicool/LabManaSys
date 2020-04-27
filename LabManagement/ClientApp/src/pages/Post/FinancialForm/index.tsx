@@ -35,7 +35,6 @@ const FinancialForm: React.FC<FinancialFormProps> = ({ current }) => {
     setCurrentStep(step);
     setStepComponent(component);
   }, [current]);
-  console.log(current);
   return (
     <PageHeaderWrapper>
       <Card bordered={false}>

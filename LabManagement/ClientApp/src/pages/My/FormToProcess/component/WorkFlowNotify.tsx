@@ -3,7 +3,7 @@ import { Card, List } from 'antd';
 import styles from '../style.less';
 import { IWorkFlow } from '@/models/entity';
 import moment from 'moment';
-import { INotifyResult, history } from 'umi';
+import { INotifyResult, history, Dispatch } from 'umi';
 
 const ListContent = ({
     data: { uname, startTime },
@@ -21,15 +21,15 @@ const ListContent = ({
             </div>
         </div>
     );
-export const NotifyWorkFlowComponent = ({ notify }: {
-    notify?: INotifyResult
+export const NotifyWorkFlowComponent = ({ notify, dispatch }: {
+    notify?: INotifyResult;
+    dispatch: Dispatch;
 }) => {
     return (
         <List
             size="large"
             rowKey="id"
             pagination={{
-                showSizeChanger: true,
                 showQuickJumper: true,
                 pageSize: 5,
                 total: notify?.wf.length,
@@ -42,9 +42,13 @@ export const NotifyWorkFlowComponent = ({ notify }: {
                             key="edit"
                             onClick={(e) => {
                                 e.preventDefault();
-                                history.push('/my/workflow/' + item.id?.toString(), {
-                                    workflow: item
-                                });
+                                history.push('/my/workflow/' + item.id?.toString());
+                                dispatch({
+                                    type: 'myFormToProcess/updateNotifyStatus',
+                                    payload: {
+                                        rid: item.id
+                                    }
+                                })
                             }}
                         >
                             查看

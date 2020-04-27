@@ -23,7 +23,7 @@ namespace LabManagement.Utils
             foreach (var query in querys)
             {
                 uri += query + '&';
-            }            
+            }
             var res = client.GetAsync(new Uri(uri)).Result;
             if(res.IsSuccessStatusCode)
             {

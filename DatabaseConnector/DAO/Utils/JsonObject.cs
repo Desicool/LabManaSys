@@ -56,4 +56,11 @@ namespace DatabaseConnector.DAO.Utils
         [JsonPropertyName("wf")]
         public List<WorkFlow> WorkFlows { get; set; }
     }
+    public class NotifyUpdateParam
+    {
+        [JsonPropertyName("rid")]
+        public long RelatedId { get; set; }
+        [JsonPropertyName("uid")]
+        public int UserId { get; set; }
+    }
 }

@@ -162,7 +162,7 @@ const ClaimForm: FC<ClaimFormProps> = ({
                 label={fieldLabels.username}
                 name="uname"
               >
-                <Input disabled={true} defaultValue={currentUser?.userName} />
+                <Input disabled={true} placeholder={currentUser?.userName}  />
               </Form.Item>
             </Col>
             <Col xl={{ span: 6, offset: 2 }} lg={{ span: 8 }} md={{ span: 12 }} sm={24}>
@@ -173,7 +173,7 @@ const ClaimForm: FC<ClaimFormProps> = ({
                 <Input
                   style={{ width: '100%' }}
                   disabled={true}
-                  defaultValue={currentUser?.labId}
+                  placeholder={currentUser?.labId?.toString()}
                 />
               </Form.Item>
             </Col>

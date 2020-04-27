@@ -54,6 +54,55 @@ namespace LabManagement.Controllers
                 return NotFound("try again");
             }
         }
+        [HttpGet("user/chemicals")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public IActionResult QueryUserChemicals()
+        {
+            var certification = HttpContext.Request.Headers["certification"];
+            var success = UserRoleCache.TryGetUserRole(certification, out var userRole);
+            if (!success)
+            {
+                return NotFound("try again");
+            }
+            int userid = userRole.User.UserId;
+            try
+            {
+                var response = RpcWrapper.CallServiceByGet("/api/entity/chemicals", $"userid={userid}");
+                var res = JsonSerializer.Deserialize<List<Chemical>>(response);
+                return Ok(res);
+            }
+            catch (JsonException)
+            {
+                return BadRequest("internal error");
+            }
+            catch (Exception)
+            {
+                return NotFound("try again");
+            }
+        }
+        [HttpGet("claimform/chemicals")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public IActionResult QueryClaimChemicals([FromQuery] long formid)
+        {
+            try
+            {
+                var response = RpcWrapper.CallServiceByGet("/api/entity/chemicals", $"labId={formid}");
+                var res = JsonSerializer.Deserialize<List<Chemical>>(response);
+                return Ok(res);
+            }
+            catch (JsonException)
+            {
+                return BadRequest("internal error");
+            }
+            catch (Exception)
+            {
+                return NotFound("try again");
+            }
+        }
         [HttpGet("msg")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]

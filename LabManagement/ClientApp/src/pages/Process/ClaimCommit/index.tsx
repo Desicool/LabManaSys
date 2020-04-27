@@ -26,9 +26,7 @@ const claimProcess: FC<claimProcessProps> = (props) => {
         formid: formid
       }
     });
-    console.log(111);
   }, [formid]);
-  console.log(data);
   const columns = [
     {
       title: '化学品名称',
@@ -49,7 +47,7 @@ const claimProcess: FC<claimProcessProps> = (props) => {
   }));
   return (
     <PageHeaderWrapper
-      title="采购申请详情"
+      title="领用申请详情"
     >
       <div className={styles.main}>
         <GridContent>

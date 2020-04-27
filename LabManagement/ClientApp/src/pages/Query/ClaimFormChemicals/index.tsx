@@ -1,24 +1,18 @@
-import React, { FC, useRef, useState, useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import {
   Card,
-  Input,
   List,
-  Radio,
+  Descriptions,
 } from 'antd';
-
-import { findDOMNode } from 'react-dom';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { connect, Dispatch } from 'umi';
-import { ChemicalListModelState } from './model';
+import { connect, Dispatch, IPostClaimFormParam } from 'umi';
+import { ClaimFormChemicalModelState } from './model';
 import styles from './style.less';
 import { IChemical } from '@/models/entity';
 
-const RadioButton = Radio.Button;
-const RadioGroup = Radio.Group;
-const { Search } = Input;
-
 interface ChemicalListProps {
-  chemicalListState: ChemicalListModelState;
+  claimDetail?: IPostClaimFormParam;
+  formid: number;
   dispatch: Dispatch;
   loading: boolean;
 }
@@ -36,9 +30,9 @@ const Info: FC<{
 );
 */
 const ListContent = ({
-  data: { state },
+  claimDetail: { state },
 }: {
-  data: IChemical;
+  claimDetail: IChemical;
 }) => (
     <div className={styles.listContent}>
       <div className={styles.listContentItem}>
@@ -49,75 +43,58 @@ const ListContent = ({
   );
 
 export const ChemicalList: FC<ChemicalListProps> = (props) => {
+
   const {
     loading,
     dispatch,
-    chemicalListState: { list },
+    claimDetail,
+    formid
   } = props;
-
   useEffect(() => {
     dispatch({
-      type: 'chemicalList/fetch',
+      type: 'claimFormChemical/fetch',
+      payload: {
+        formid: formid
+      }
     });
-  }, [1]);
-
+  }, [formid]);
   const paginationProps = {
-    showSizeChanger: true,
     showQuickJumper: true,
     pageSize: 5,
-    total: 50,
+    total: claimDetail?.chemicals.length,
   };
 
-  const deleteItem = (id: number) => {
-    dispatch({
-      type: 'chemicalList/submit',
-      payload: { id },
-    });
-  };
-
-  const extraContent = (
-    <div className={styles.extraContent}>
-      <RadioGroup defaultValue="all">
-        <RadioButton value="all">全部</RadioButton>
-        <RadioButton value="progress">空闲</RadioButton>
-        <RadioButton value="waiting">使用中</RadioButton>
-      </RadioGroup>
-      <Search className={styles.extraContentSearch} placeholder="请输入" onSearch={() => ({})} />
-    </div>
-  );
   return (
     <div>
       <PageHeaderWrapper>
-        <div className={styles.standardList}>
 
+        <Card style={{ marginBottom: 24 }} bordered={false} title={'表单'} >
+
+          <Descriptions bordered>
+            <Descriptions.Item label="申请编号">{claimDetail?.form.id}</Descriptions.Item>
+            <Descriptions.Item label="所属实验室编号">{claimDetail?.form.lid}</Descriptions.Item>
+            <Descriptions.Item label="提交时间">{claimDetail?.form.stime}</Descriptions.Item>
+            <Descriptions.Item label="申请人姓名">{claimDetail?.form.uname}</Descriptions.Item>
+            <Descriptions.Item label="预计归还时间">{claimDetail?.form.rtime}</Descriptions.Item>
+            <Descriptions.Item label="当前状态">{claimDetail?.form.state}</Descriptions.Item>
+          </Descriptions>
+        </Card>
+        <div className={styles.standardList}>
           <Card
             className={styles.listCard}
             bordered={false}
             title="基本列表"
             style={{ marginTop: 24 }}
             bodyStyle={{ padding: '0 32px 40px 32px' }}
-            extra={extraContent}
           >
             <List
               size="large"
               rowKey="id"
               loading={loading}
               pagination={paginationProps}
-              dataSource={list}
+              dataSource={claimDetail?.chemicals}
               renderItem={(item) => (
-                <List.Item
-                  actions={[
-                    <a
-                      key="discard"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        deleteItem(item.id as number);
-                      }}
-                    >
-                      销毁
-                    </a>,
-                  ]}
-                >
+                <List.Item>
                   <List.Item.Meta
                     title={<span>{item.name}</span>}
                     description={<div>
@@ -125,28 +102,30 @@ export const ChemicalList: FC<ChemicalListProps> = (props) => {
                       <span>{item.unitmeasurement}</span>
                     </div>}
                   />
-                  <ListContent data={item} />
+                  <ListContent claimDetail={item} />
                 </List.Item>
               )}
             />
           </Card>
         </div>
       </PageHeaderWrapper>
+
     </div>
   );
 };
 
 export default connect(
   ({
-    chemicalList,
+    claimFormChemical,
     loading,
   }: {
-    chemicalList: ChemicalListModelState;
+    claimFormChemical: ClaimFormChemicalModelState;
     loading: {
       models: { [key: string]: boolean };
     };
-  }) => ({
-    chemicalListState: chemicalList,
+  }, ownProps: any) => ({
+    formid: ownProps.match.params.formid,
+    claimDetail: claimFormChemical.data,
     loading: loading.models.chemicalList,
-  }),
+  })
 )(ChemicalList);

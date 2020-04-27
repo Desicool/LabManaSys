@@ -26,7 +26,6 @@ const Step1: React.FC<Step1Props> = (props) => {
     })
   }, []);
   const { dispatch, workFlowList, workflowid } = props;
-  console.log(workflowid);
   const [form] = Form.useForm();
   const { validateFields } = form;
   const onValidateForm = async () => {
@@ -54,7 +53,8 @@ const Step1: React.FC<Step1Props> = (props) => {
         <Form.Item name={'wid'}>
           <Radio.Group>
             {workFlowList.map(u => (
-              <Radio value={u.id} 
+              <Radio key={u.id} 
+              value={u.id} 
               checked={u.id === workflowid}
               style={{
                 display: 'block',

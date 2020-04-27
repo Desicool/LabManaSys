@@ -7,6 +7,7 @@ import {
 } from 'antd';
 import styles from './style.less'
 import { IChemical, IClaimForm } from '@/models/entity';
+import { history, Dispatch } from 'umi';
 
 const ListContent = ({
     data: { state },
@@ -22,9 +23,10 @@ const ListContent = ({
     );
 
 export const ClaimFormList = (param: {
-    cform?: IClaimForm[]
+    cform?: IClaimForm[],
+    dispatch: Dispatch,
 }) => {
-    const { cform } = param;
+    const { cform, dispatch } = param;
 
     const paginationProps = {
         showSizeChanger: true,
@@ -46,15 +48,21 @@ export const ClaimFormList = (param: {
                             <a
                                 key="edit"
                                 onClick={(e) => {
-                                    
+                                    history.push('/process/claim/' + item.id + '/detail');
+                                    dispatch({
+                                        type: 'myFormToProcess/updateNotifyStatus',
+                                        payload: {
+                                            rid: item.id
+                                        }
+                                    })
                                 }}
                             >
-                                查看该次申请的化学危险品
+                                查看申请详情
                             </a>,
                         ]}
                     >
                         <List.Item.Meta
-                            title={<span>{'申请表编号：'+item.id}</span>}
+                            title={<span>{'申请表编号：' + item.id}</span>}
                             description={<div>
                                 <span>所属实验室：</span>
                                 <span>{item.lid}</span>

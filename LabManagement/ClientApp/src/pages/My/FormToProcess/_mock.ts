@@ -1,3 +1,5 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Request, Response } from 'express';
 import { IMsgResult, INotifyResult } from "umi";
 import { IClaimForm, IFinancialForm, IDeclarationForm, IWorkFlow, IChemical } from "@/models/entity";
 import moment from "moment";
@@ -66,7 +68,12 @@ const notify: INotifyResult = {
   cform: claimform,
   wf: workflows,
 }
+function fakeUpdateOk(req: Request, res: Response) {
+  res.status(200).send();
+}
+
 export default {
   'GET  /api/query/msg': msg,
   'GET  /api/query/notify': notify,
+  'PUT  /api/notify': fakeUpdateOk
 };
