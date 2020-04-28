@@ -27,6 +27,8 @@ namespace LabManagement.Controllers
             _logger.LogInformation("Username: {username} try login.", username);
             try
             {
+                _logger.LogInformation("Call RpcWrapper, method: get.");
+                _logger.LogInformation("port: {port}", RpcWrapper.Port);
                 var response = RpcWrapper.CallServiceByGet(
                     "/api/userrole", $"username={username}");
                 var result = JsonSerializer.Deserialize<UserRoleResult>(response);

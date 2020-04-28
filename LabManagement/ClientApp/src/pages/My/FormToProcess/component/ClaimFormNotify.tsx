@@ -48,7 +48,7 @@ export const ClaimFormList = (param: {
                             <a
                                 key="edit"
                                 onClick={(e) => {
-                                    history.push('/process/claim/' + item.id + '/detail');
+                                    history.push('/my/process/claim/' + item.id);
                                     dispatch({
                                         type: 'myFormToProcess/updateNotifyStatus',
                                         payload: {

@@ -1,4 +1,5 @@
 import { Reducer } from 'umi';
+import { setAuthority } from '@/utils/authority';
 
 export interface IUser {
   userName?: string;
@@ -54,6 +55,7 @@ const UserModel: UserModelType = {
 
   reducers: {
     setCurrentUser(state, action) {
+      setAuthority(action.payload.roles.map((u: IRole) => u.roleName));
       return {
         ...state,
         currentUser: action.payload.user,

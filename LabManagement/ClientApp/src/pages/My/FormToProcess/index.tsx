@@ -5,7 +5,7 @@ import {
 } from 'antd';
 import { GridContent, PageHeaderWrapper } from '@ant-design/pro-layout';
 import React, { FC, useEffect, useState } from 'react';
-import { connect, Dispatch, FormToProcessState, history } from 'umi';
+import { connect, Dispatch, FormToProcessState, history, UserModelState, IRole } from 'umi';
 import styles from './style.less';
 import DeclarationProcess from './component/DeclarationProcess';
 import FinancialProcess from './component/FinancialProcess';
@@ -16,11 +16,12 @@ import { ClaimFormList } from './component/ClaimFormNotify';
 interface FormToProcessProps {
   loading: boolean;
   myFormToProcess: FormToProcessState;
+  authority: IRole[];
   dispatch: Dispatch
 }
 
 const FormToProcess: FC<FormToProcessProps> = (props) => {
-  const { dispatch, myFormToProcess } = props;
+  const { dispatch, myFormToProcess, authority } = props;
   useEffect(() => {
     dispatch({
       type: 'myFormToProcess/fetchMessage',
@@ -79,7 +80,10 @@ const FormToProcess: FC<FormToProcessProps> = (props) => {
     >
       <div className={styles.main}>
         <GridContent>
-          <TodoList />
+          {
+            authority.find(u => u.roleName === 'Student') === undefined ?
+              <TodoList /> : null
+          }
           <div className={styles.standardList}>
             <Card
               className={styles.listCard}
@@ -90,10 +94,10 @@ const FormToProcess: FC<FormToProcessProps> = (props) => {
             >
               <Tabs>
                 <Tabs.TabPane tab="流程" key="workflownotify">
-                  <NotifyWorkFlowComponent notify={myFormToProcess.notify} dispatch={dispatch}/>
+                  <NotifyWorkFlowComponent notify={myFormToProcess.notify} dispatch={dispatch} />
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="申领进度" key="chemicalnotify">
-                  <ClaimFormList cform={myFormToProcess.notify?.cform} dispatch={dispatch}/>
+                  <ClaimFormList cform={myFormToProcess.notify?.cform} dispatch={dispatch} />
                 </Tabs.TabPane>
               </Tabs>
             </Card>
@@ -108,13 +112,16 @@ export default connect(
   ({
     myFormToProcess,
     loading,
+    user,
   }: {
     myFormToProcess: FormToProcessState;
+    user: UserModelState;
     loading: {
       effects: { [key: string]: boolean };
     };
   }) => ({
     myFormToProcess,
+    authority: user.roles || [],
     loading: loading.effects['myFormToProcess/fetchAdvanced'],
   }),
 )(FormToProcess);

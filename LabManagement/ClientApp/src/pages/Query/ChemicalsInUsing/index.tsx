@@ -16,7 +16,6 @@ interface claimProcessProps {
 const myChemicalComponent: FC<claimProcessProps> = (props) => {
   const { dispatch, chemicals } = props;
   useEffect(() => {
-    console.log('fetch');
     dispatch({
       type: 'myChemical/fetch',
     });

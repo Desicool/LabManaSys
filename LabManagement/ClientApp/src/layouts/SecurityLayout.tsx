@@ -30,7 +30,6 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
       });
     }
   }
-
   render() {
     const { isReady } = this.state;
     const { children, loading, currentUser } = this.props;

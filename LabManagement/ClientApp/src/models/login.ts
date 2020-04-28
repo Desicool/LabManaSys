@@ -20,7 +20,6 @@ export interface LoginModelType {
     logout: Effect;
   };
   reducers: {
-    changeLoginStatus: Reducer<StateType>;
   };
 }
 interface ILoginReturn{
@@ -42,10 +41,6 @@ const Model: LoginModelType = {
       // Login successfully
       // if (response.status === 'ok') {
       if (response.success) {
-        yield put({
-          type: 'changeLoginStatus',
-          payload: response,
-        });
         yield put({
           type: 'user/setCurrentUser',
           payload: response,
@@ -85,16 +80,6 @@ const Model: LoginModelType = {
   },
 
   reducers: {
-    changeLoginStatus(state, { payload }) {
-      setAuthority(payload.currentAuthority);
-      return {
-        ...state,
-        // status: payload.status,
-        // type: payload.type,
-        status: 'ok',
-        type: 'account',
-      };
-    },
   },
 };
 

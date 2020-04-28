@@ -51,7 +51,7 @@ export default defineConfig({
         {
           path: '/',
           component: '../layouts/BasicLayout',
-          authority: ['admin', 'user'],
+          authority: ['Administrator', 'Student','LabTeacher','FinanceTeacher','Security',],
           routes: [
             {
               path: '/',
@@ -68,14 +68,14 @@ export default defineConfig({
               name: 'admin',
               icon: 'crown',
               component: './Admin',
-              authority: ['admin'],
+              authority: ['Administrator'],
               routes: [
                 {
                   path: '/admin/sub-page',
                   name: 'sub-page',
                   icon: 'smile',
                   component: './Welcome',
-                  authority: ['admin'],
+                  authority: ['Administrator'],
                 },
               ],
             },
@@ -108,7 +108,6 @@ export default defineConfig({
             },
             {
               name: 'process',
-              //hideInMenu: true,
               path: '/my/process',
               component: './My/FormToProcess',
             },
@@ -137,21 +136,28 @@ export default defineConfig({
               name: 'processdeclear',
               path: '/process/declear/:formid',
               component: './Process/DeclearCommit',
+              hideInMenu: true,
+              authority: ['LabTeacher','Adminstrator'],
             },
             {
               name: 'processfinancial',
               path: '/process/financial/:formid',
               component: './Process/FinancialCommit',
+              hideInMenu: true,
+              authority: ['LabTeacher','Adminstrator'],
             },
             {
               name: 'processclaim',
               path: '/process/claim/:formid',
               component: './Process/ClaimCommit',
+              hideInMenu: true,
+              authority: ['LabTeacher','Adminstrator'],
             },
             {
               name: 'claimdetail',
-              path: '/process/claim/:formid/detail',
+              path: '/my/process/claim/:formid',
               component: './Query/ClaimFormChemicals',
+              hideInMenu: true,
             },
             {
               component: './404',

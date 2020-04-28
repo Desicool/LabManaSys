@@ -25,7 +25,7 @@ const Model: MyChemicalModelType = {
   },
 
   effects: {
-    *fetch({ payload }, { call, put }) {
+    *fetch(_, { call, put }) {
       const response = yield call(queryMyChemicals);
       yield put({
         type: 'fetchSuccess',

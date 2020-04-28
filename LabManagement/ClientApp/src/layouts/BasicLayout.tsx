@@ -94,7 +94,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   /**
    * constructor
    */
-
   useEffect(() => {
     if (dispatch) {
       dispatch({
@@ -119,7 +118,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
     authority: undefined,
   };
   const { formatMessage } = useIntl();
-
   return (
     <ProLayout
       logo={logo}
@@ -150,8 +148,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         return first ? (
           <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
         ) : (
-          <Link to={route.path}>{route.breadcrumbName}</Link>
-        );
+            <Link to={route.path}>{route.breadcrumbName}</Link>
+          );
       }}
       footerRender={() => defaultFooterDom}
       menuDataRender={menuDataRender}
