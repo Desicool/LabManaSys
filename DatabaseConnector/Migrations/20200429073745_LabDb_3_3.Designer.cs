@@ -4,14 +4,16 @@ using DatabaseConnector.DAO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DatabaseConnector.Migrations
 {
     [DbContext(typeof(LabContext))]
-    partial class LabContextModelSnapshot : ModelSnapshot
+    [Migration("20200429073745_LabDb_3_3")]
+    partial class LabDb_3_3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -162,11 +164,16 @@ namespace DatabaseConnector.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<long?>("WorkFlowId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RelatedType");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("WorkFlowId");
 
                     b.ToTable("StatusChangeMessage");
                 });
@@ -415,6 +422,13 @@ namespace DatabaseConnector.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("DatabaseConnector.DAO.Entity.StatusChangeMessage", b =>
+                {
+                    b.HasOne("DatabaseConnector.DAO.Entity.WorkFlow", "WorkFlow")
+                        .WithMany()
+                        .HasForeignKey("WorkFlowId");
                 });
 
             modelBuilder.Entity("DatabaseConnector.DAO.Entity.UserRole", b =>

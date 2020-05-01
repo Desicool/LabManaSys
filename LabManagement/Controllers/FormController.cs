@@ -98,8 +98,12 @@ namespace LabManagement.Controllers
         {
             try
             {
-                string response = RpcWrapper.CallServiceByGet("/api/declaration/workflow",$"formid={formid}");
-                var res = JsonSerializer.Deserialize<PostDeclarationFormParam>(response);
+                var response = RpcWrapper.CallServiceByGet("/api/declaration",$"formid={formid}");
+                if (!response.IsSuccessCode)
+                {
+                    return NotFound("try again");
+                }
+                var res = JsonSerializer.Deserialize<PostDeclarationFormParam>(response.Body);
                 return Ok(res);
             }
             catch (Exception e)
@@ -175,8 +179,12 @@ namespace LabManagement.Controllers
         {
             try
             {
-                string response = RpcWrapper.CallServiceByGet("/api/financial/workflow", $"formid={formid}");
-                var res = JsonSerializer.Deserialize<PostDeclarationFormParam>(response);
+                var response = RpcWrapper.CallServiceByGet("/api/financial/workflow", $"formid={formid}");
+                if (!response.IsSuccessCode)
+                {
+                    return NotFound("try again");
+                }
+                var res = JsonSerializer.Deserialize<PostDeclarationFormParam>(response.Body);
                 return Ok(res);
             }
             catch (Exception e)
@@ -193,6 +201,8 @@ namespace LabManagement.Controllers
         [ProducesDefaultResponseType]
         public IActionResult Claim([FromBody] PostClaimFormParam param)
         {
+            _logger.LogInformation("Post claim form. formid: {formid}", param.Form.Id);
+            _logger.LogInformation("With {count} chemicals.", param.Chemicals.Count);
             try
             {
                 param.Form.SubmitTime = DateTime.Now;
@@ -280,8 +290,12 @@ namespace LabManagement.Controllers
         {
             try
             {
-                string response = RpcWrapper.CallServiceByGet("/api/claim", $"formid={formid}");
-                var res = JsonSerializer.Deserialize<PostClaimFormParam>(response);
+                var response = RpcWrapper.CallServiceByGet("/api/claim", $"formid={formid}");
+                if (!response.IsSuccessCode)
+                {
+                    return NotFound("try again");
+                }
+                var res = JsonSerializer.Deserialize<PostClaimFormParam>(response.Body);
                 return Ok(res);
             }
             catch (Exception e)

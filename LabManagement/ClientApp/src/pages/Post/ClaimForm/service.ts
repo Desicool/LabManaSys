@@ -1,4 +1,4 @@
-import request from 'umi-request';
+import request from '../../../utils/request';
 import { IPostClaimFormParam } from 'umi';
 
 export async function submitClaimForm(params: IPostClaimFormParam) {

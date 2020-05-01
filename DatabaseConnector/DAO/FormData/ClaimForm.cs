@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace DatabaseConnector.DAO.FormData
 {
     //申领表
-    [Table("ChaimForm")]
+    [Table("ClaimForm")]
     public class ClaimForm : IComparable<ClaimForm>
     {
         [JsonPropertyName("id")]
@@ -40,7 +40,7 @@ namespace DatabaseConnector.DAO.FormData
         [JsonPropertyName("stime")]
         public DateTime SubmitTime { get; set; }
         [JsonPropertyName("state")]
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonConverter(typeof(FormStateConverter))]
         public FormState State { get; set; }
         public int CompareTo(ClaimForm obj)
         {

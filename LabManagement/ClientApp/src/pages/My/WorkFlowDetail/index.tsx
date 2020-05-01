@@ -109,7 +109,7 @@ const WorkFlowDetail: FC<
         payload: props.id
       });
     }
-  }, []);
+  }, [1]);
   const { currentWorkFlow, declarationForm, financialForms } = props.workFlowDetailState || {};
   return (
     <PageHeaderWrapper

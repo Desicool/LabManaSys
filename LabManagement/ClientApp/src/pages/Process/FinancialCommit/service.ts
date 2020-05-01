@@ -1,4 +1,4 @@
-import request from 'umi-request';
+import request from '../../../utils/request';
 import { ISolveFormParam } from '@/models/entity';
 
 export async function queryFinancialDetail(formid: number) {

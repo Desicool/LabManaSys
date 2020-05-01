@@ -52,7 +52,8 @@ export const ClaimFormList = (param: {
                                     dispatch({
                                         type: 'myFormToProcess/updateNotifyStatus',
                                         payload: {
-                                            rid: item.id
+                                            rid: item.id,
+                                            type: "claimform"
                                         }
                                     })
                                 }}

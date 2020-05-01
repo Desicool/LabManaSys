@@ -1,4 +1,4 @@
-import request from 'umi-request';
+import request from '../../../utils/request';
 
 export async function getFinancialForms(workFlowId: number) {
   return request.get('/api/query/workflow/financial',{

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
@@ -17,7 +18,7 @@ namespace LabManagement.Utils
         /// <param name="url">must start with '/'</param>
         /// <returns></returns>
         /// <exception cref="Exception">http call fail</exception>
-        public static string CallServiceByGet(string url,params string[] querys)
+        public static ResponseType CallServiceByGet(string url,params string[] querys)
         {
             string uri = $"https://localhost:{Port}{url}?";
             foreach (var query in querys)
@@ -25,14 +26,13 @@ namespace LabManagement.Utils
                 uri += query + '&';
             }
             var res = client.GetAsync(new Uri(uri)).Result;
-            if(res.IsSuccessStatusCode)
+            var body = res.Content.ReadAsStringAsync().Result;
+            return new ResponseType
             {
-                return res.Content.ReadAsStringAsync().Result;
-            }
-            else
-            {
-                throw new Exception("https call failed");
-            }
+                StatusCode = res.StatusCode,
+                Body = body,
+                IsSuccessCode = res.IsSuccessStatusCode,
+            };
         }
         /// <summary>
         /// 

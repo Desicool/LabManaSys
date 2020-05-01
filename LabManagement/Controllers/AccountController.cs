@@ -27,11 +27,37 @@ namespace LabManagement.Controllers
             _logger.LogInformation("Username: {username} try login.", username);
             try
             {
+                if (HttpContext.Request.Headers.ContainsKey("certification"))
+                {
+                    var ifcertification = HttpContext.Request.Headers["certification"];
+                    if (UserRoleCache.TryGetUserRole(ifcertification, out var userRole))
+                    {
+                        if (username == userRole.User.UserName)
+                        {
+                            var ret = new LoginReturn
+                            {
+                                Success = true,
+                                User = userRole.User,
+                                Roles = userRole.Roles,
+                                Certification = ifcertification
+                            };
+                            return Ok(ifcertification);
+                        }
+                        else
+                        {
+                            UserRoleCache.RemoveUserRoleFromCache(ifcertification);
+                        }
+                    }
+                }
                 _logger.LogInformation("Call RpcWrapper, method: get.");
                 _logger.LogInformation("port: {port}", RpcWrapper.Port);
                 var response = RpcWrapper.CallServiceByGet(
                     "/api/userrole", $"username={username}");
-                var result = JsonSerializer.Deserialize<UserRoleResult>(response);
+                if(!response.IsSuccessCode)
+                {
+                    return Ok(new LoginReturn { Success = false });
+                }
+                var result = JsonSerializer.Deserialize<UserRoleResult>(response.Body);
                 if (password == result.User.UserPassword)
                 {
                     string certification = Guid.NewGuid().ToString();
@@ -56,7 +82,7 @@ namespace LabManagement.Controllers
                 // not sure if this should be write here
                 _logger.LogError(e.Message);
                 _logger.LogError("Call database_connector failed.");
-                throw e;
+                return Ok(new LoginReturn { Success = false });
             }
         }
         [HttpPost("logout")]

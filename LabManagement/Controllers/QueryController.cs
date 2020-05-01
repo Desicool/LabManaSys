@@ -42,7 +42,11 @@ namespace LabManagement.Controllers
             try
             {
                 var response = RpcWrapper.CallServiceByGet("/api/entity/chemicals", $"labId={labId}");
-                var res = JsonSerializer.Deserialize<List<Chemical>>(response);
+                if (!response.IsSuccessCode)
+                {
+                    return NotFound("try again");
+                }
+                var res = JsonSerializer.Deserialize<List<Chemical>>(response.Body);
                 return Ok(res);
             }
             catch (JsonException)
@@ -70,7 +74,11 @@ namespace LabManagement.Controllers
             try
             {
                 var response = RpcWrapper.CallServiceByGet("/api/entity/chemicals", $"userid={userid}");
-                var res = JsonSerializer.Deserialize<List<Chemical>>(response);
+                if (!response.IsSuccessCode)
+                {
+                    return NotFound("try again");
+                }
+                var res = JsonSerializer.Deserialize<List<Chemical>>(response.Body);
                 return Ok(res);
             }
             catch (JsonException)
@@ -91,7 +99,11 @@ namespace LabManagement.Controllers
             try
             {
                 var response = RpcWrapper.CallServiceByGet("/api/entity/chemicals", $"labId={formid}");
-                var res = JsonSerializer.Deserialize<List<Chemical>>(response);
+                if (!response.IsSuccessCode)
+                {
+                    return NotFound("try again");
+                }
+                var res = JsonSerializer.Deserialize<List<Chemical>>(response.Body);
                 return Ok(res);
             }
             catch (JsonException)
@@ -119,7 +131,11 @@ namespace LabManagement.Controllers
             try
             {
                 var response = RpcWrapper.CallServiceByGet("/api/entity/msg", $"userid={userId}");
-                var res = JsonSerializer.Deserialize<MsgResult>(response);
+                if (!response.IsSuccessCode)
+                {
+                    return NotFound("try again");
+                }
+                var res = JsonSerializer.Deserialize<MsgResult>(response.Body);
                 return Ok(res);
             }
             catch (JsonException)
@@ -131,7 +147,7 @@ namespace LabManagement.Controllers
                 return NotFound("try again");
             }
         }
-        [HttpGet("msg")]
+        [HttpGet("notify")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
@@ -147,7 +163,11 @@ namespace LabManagement.Controllers
             try
             {
                 var response = RpcWrapper.CallServiceByGet("/api/entity/notify", $"userid={userId}");
-                var res = JsonSerializer.Deserialize<NotifyResult>(response);
+                if (!response.IsSuccessCode)
+                {
+                    return NotFound("try again");
+                }
+                var res = JsonSerializer.Deserialize<NotifyResult>(response.Body);
                 return Ok(res);
             }
             catch (JsonException)
@@ -175,7 +195,11 @@ namespace LabManagement.Controllers
             try
             {
                 var response = RpcWrapper.CallServiceByGet("/api/entity/workflows", $"id={userId}",$"type=userid");
-                var res = JsonSerializer.Deserialize<List<WorkFlow>>(response);
+                if (!response.IsSuccessCode)
+                {
+                    return NotFound("try again");
+                }
+                var res = JsonSerializer.Deserialize<List<WorkFlow>>(response.Body);
                 return Ok(res);
             }
             catch (JsonException)
@@ -196,8 +220,12 @@ namespace LabManagement.Controllers
             try
             {
                 var response = RpcWrapper.CallServiceByGet("/api/declaration/workflow", $"workflowid={workflowId}");
-                var res = JsonSerializer.Deserialize<DeclarationForm>(response);
-                return Ok(res);
+                if (!response.IsSuccessCode)
+                {
+                    return NotFound("try again");
+                }
+                var res = JsonSerializer.Deserialize<PostDeclarationFormParam>(response.Body);
+                return Ok(res.Form);
             }
             catch (JsonException)
             {
@@ -217,7 +245,36 @@ namespace LabManagement.Controllers
             try
             {
                 var response = RpcWrapper.CallServiceByGet("/api/financial/workflow", $"id={workflowId}", $"type=workflowid");
-                var res = JsonSerializer.Deserialize<List<FinancialForm>>(response);
+                if (!response.IsSuccessCode)
+                {
+                    return NotFound("try again");
+                }
+                var res = JsonSerializer.Deserialize<List<FinancialForm>>(response.Body);
+                return Ok(res);
+            }
+            catch (JsonException)
+            {
+                return BadRequest("internal error");
+            }
+            catch (Exception)
+            {
+                return NotFound("try again");
+            }
+        }
+        [HttpGet("workflow")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public IActionResult QueryWorkFlowById([FromQuery] int workflowId)
+        {
+            try
+            {
+                var response = RpcWrapper.CallServiceByGet("/api/entity/workflow", $"workflowid={workflowId}");
+                if (!response.IsSuccessCode)
+                {
+                    return NotFound("try again");
+                }
+                var res = JsonSerializer.Deserialize<WorkFlow>(response.Body);
                 return Ok(res);
             }
             catch (JsonException)

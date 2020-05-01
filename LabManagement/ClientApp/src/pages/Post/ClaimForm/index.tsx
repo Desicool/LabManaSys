@@ -113,11 +113,12 @@ const ClaimForm: FC<ClaimFormProps> = ({
       setError([{ name: ['chemicals'], errors: ['需要至少选择一项化学危险品才能进行提交'] }]);
       return;
     }
+    var tmp = (values.rtime as Moment).hour(23).minute(59).second(59);
     setError([]);
     const data: IPostClaimFormParam = {
       form: {
         ...values,
-        rtime: (values.rtime as Moment).hour(23).minute(59).second(59).format('YYYY/MM/DD HH:mm:ss'),
+        rtime: tmp.toISOString(),
         uid: currentUser?.userId,
         lid: currentUser?.labId,
         uname: currentUser?.userName

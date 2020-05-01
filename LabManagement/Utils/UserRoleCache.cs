@@ -33,7 +33,8 @@ namespace LabManagement.Utils
         }
         public static void AddUserRoleToCache(string certification, UserRoleResult userRole)
         {
-            _cache.Add(certification, new UserRoleWithTimestamp(userRole));
+            _cache[certification] = new UserRoleWithTimestamp(userRole);
+            //_cache.Add(certification, new UserRoleWithTimestamp(userRole));
         }
         public static void UpdateUserRole(string certification)
         {

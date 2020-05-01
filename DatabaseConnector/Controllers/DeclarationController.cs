@@ -25,7 +25,7 @@ namespace DatabaseConnector.Controllers
             _logger = logger;
             util = state;
         }
-        [HttpGet("workflow")]
+        [HttpGet]
         public IActionResult GetDeclarationForms([FromQuery] long formid)
         {
             var form = _context.DeclarationForms.Where(u => u.Id == formid).Single();
@@ -33,6 +33,18 @@ namespace DatabaseConnector.Controllers
             {
                 Form = form,
                 Chemicals = _context.Chemicals.Where(c=>c.WorkFlowId == form.WorkFlowId).ToList()
+            };
+            return Ok(ret);
+        }
+
+        [HttpGet("workflow")]
+        public IActionResult GetDeclarationFormByWorkFlow([FromQuery] long workflowid)
+        {
+            var form = _context.DeclarationForms.Where(u => u.WorkFlowId == workflowid).Single();
+            var ret = new PostDeclarationFormParam()
+            {
+                Form = form,
+                Chemicals = _context.Chemicals.Where(c => c.WorkFlowId == form.WorkFlowId).ToList()
             };
             return Ok(ret);
         }

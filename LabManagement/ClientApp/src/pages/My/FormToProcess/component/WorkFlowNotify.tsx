@@ -32,7 +32,7 @@ export const NotifyWorkFlowComponent = ({ notify, dispatch }: {
             pagination={{
                 showQuickJumper: true,
                 pageSize: 5,
-                total: notify?.wf.length,
+                total: notify?.wf.length || 0,
             }}
             dataSource={notify?.wf}
             renderItem={(item) => (
@@ -46,7 +46,8 @@ export const NotifyWorkFlowComponent = ({ notify, dispatch }: {
                                 dispatch({
                                     type: 'myFormToProcess/updateNotifyStatus',
                                     payload: {
-                                        rid: item.id
+                                        rid: item.id,
+                                        type: "workflow"
                                     }
                                 })
                             }}

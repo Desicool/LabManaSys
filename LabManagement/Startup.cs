@@ -50,7 +50,7 @@ namespace LabManagement
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                RpcWrapper.Port = 44398;
+                //RpcWrapper.Port = 44398;
             }
             else
             {

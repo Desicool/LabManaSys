@@ -3,6 +3,7 @@ using DatabaseConnector.DAO.FormData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
@@ -35,8 +36,10 @@ namespace LabManagement.Utils
         public string Password { get; set; }
     }
     #endregion
-    #region FormController
-
-    #endregion
-
+    public class ResponseType
+    {
+        public HttpStatusCode StatusCode { get; set; }
+        public string Body { get; set; }
+        public bool IsSuccessCode { get; set; }
+    }
 }

@@ -39,6 +39,12 @@ namespace DatabaseConnector.DAO
             modelBuilder.Entity<NotificationMessage>(options=>
             {
                 options.HasIndex(u => u.RoleId);
+                options.HasIndex(u => u.FormType);
+            });
+            modelBuilder.Entity<StatusChangeMessage>(options =>
+            {
+                options.HasIndex(u => u.UserId);
+                options.HasIndex(u => u.RelatedType);
             });
             modelBuilder.Entity<ClaimForm>(options=>
             {

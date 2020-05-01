@@ -72,6 +72,7 @@ namespace DatabaseConnector.Controllers
         [HttpGet("msg")]
         public MsgResult GetMessages([FromQuery]int userid)
         {
+            _logger.LogInformation("Get messages for user: {userid}", userid);
             var ur = _context.UserRoleRelation
                 .Where(u => u.UserId == userid)
                 .ToList();
@@ -81,44 +82,32 @@ namespace DatabaseConnector.Controllers
                 ClaimForms = new List<ClaimForm>(),
                 FinancialForms = new List<FinancialForm>()
             };
-            foreach(var role in ur)
-            {
-                var msgs = _context.NotificationMessages
-                    .Where(u => u.RoleId == role.RoleId)
-                    .GroupBy(u => u.FormType)
-                    .ToList();
-                foreach(var msg in msgs)
-                {
-                    var group = msg.ToList();
-                    switch (msg.Key)
-                    {
-                        case FormType.ClaimForm:
-                            {
-                                var t = _context.ClaimForms
-                                    .Where(c => group.Exists(g=>g.FormId == c.Id))
-                                    .ToList();
-                                ret.ClaimForms.AddRange(t);
-                                break;
-                            }
-                        case FormType.DeclarationForm:
-                            {
-                                var t = _context.DeclarationForms
-                                    .Where(c => group.Exists(g => g.FormId == c.Id))
-                                    .ToList();
-                                ret.DeclarationForms.AddRange(t);
-                                break;
-                            }
-                        case FormType.FinancialForm:
-                            {
-                                var t = _context.FinancialForms
-                                    .Where(c => group.Exists(g => g.FormId == c.Id))
-                                    .ToList();
-                                ret.FinancialForms.AddRange(t);
-                                break;
-                            }
-                    }
-                }
-            }
+            /* var msgs = _context.NotificationMessages
+                 .Where(v=>v.IsSolved == false)
+                 .GroupBy(v=>v.FormType)
+                 .ToList();*/
+
+            var cf = _context.ClaimForms.FromSqlRaw("select * from dbo.ClaimForm cf " + 
+                "where cf.Id in ("+
+                "select b.FormId from dbo.NotificationMessage b "+
+                "where b.IsSolved = 0 and b.FormType = {0} and b.RoleId in ("+
+                "select RoleId from dbo.UserRole "+
+                "where UserId = {1}))", FormType.ClaimForm, userid).ToList();
+            ret.ClaimForms.AddRange(cf);
+            var df = _context.DeclarationForms.FromSqlRaw("select * from dbo.DeclarationForm cf " +
+                "where cf.Id in (" +
+                "select b.FormId from dbo.NotificationMessage b " +
+                "where b.IsSolved = 0 and b.FormType = {0} and b.RoleId in (" +
+                "select RoleId from dbo.UserRole " +
+                "where UserId = {1}))", FormType.DeclarationForm, userid).ToList();
+            ret.DeclarationForms.AddRange(df);
+            var ff = _context.FinancialForms.FromSqlRaw("select * from dbo.FinancialForm cf " +
+                "where cf.Id in (" +
+                "select b.FormId from dbo.NotificationMessage b " +
+                "where b.IsSolved = 0 and b.FormType = {0} and b.RoleId in (" +
+                "select RoleId from dbo.UserRole " +
+                "where UserId = {1}))", FormType.FinancialForm, userid).ToList();
+            ret.FinancialForms.AddRange(ff);
             ret.DeclarationForms.Sort();
             ret.ClaimForms.Sort();
             ret.FinancialForms.Sort();
@@ -135,36 +124,36 @@ namespace DatabaseConnector.Controllers
                 ClaimForms = new List<ClaimForm>(),
                 WorkFlows = new List<WorkFlow>()
             };
-
-            var msgs = _context.WorkFlowStatusChangeMessages
-                .Where(u => u.UserId == userid)
-                .GroupBy(u => u.RelatedType)
+            var cf = _context.ClaimForms
+                .FromSqlRaw("select * from dbo.ClaimForm cf " +
+                    "where cf.Id in (" +
+                    "select b.RelatedId from dbo.StatusChangeMessage b " +
+                    "where b.IsRead = 0 and b.RelatedType = {0} and b.userId={1})",
+                    RelatedTypeEnum.ClaimForm, userid)
                 .ToList();
-            foreach (var msg in msgs)
-            {
-                var group = msg.ToList();
-                switch (msg.Key)
-                {
-                    case RelatedTypeEnum.ClaimForm:
-                        {
-                            var t = _context.ClaimForms
-                                .Where(c => group.Exists(g => g.RelatedId == c.Id))
-                                .ToList();
-                            ret.ClaimForms.AddRange(t);
-                            break;
-                        }
-                    case RelatedTypeEnum.WorkFlow:
-                        {
-                            var t = _context.WorkFlows
-                                .Where(c => group.Exists(g => g.RelatedId == c.Id))
-                                .ToList();
-                            ret.WorkFlows.AddRange(t);
-                            break;
-                        }
-                }
-            }
+            ret.ClaimForms.AddRange(cf);
+
+            var wf = _context.WorkFlows
+                .FromSqlRaw("select * from dbo.WorkFlow cf " +
+                    "where cf.Id in (" +
+                    "select b.RelatedId from dbo.StatusChangeMessage b " +
+                    "where b.IsRead = 0 and b.RelatedType = {0} and b.userId={1})",
+                    RelatedTypeEnum.WorkFlow, userid)
+                .ToList();
+            ret.WorkFlows.AddRange(wf);
 
             return ret;
+        }
+        [HttpPost("notify")]
+        public IActionResult UpdateNotifyStatus([FromBody]NotifyUpdateParam param)
+        {
+            _logger.LogInformation("update notify infos. relatedid: {relatedid}", param.RelatedId);
+            var notify = _context.WorkFlowStatusChangeMessages
+                .Where(u => u.RelatedId == param.RelatedId && u.UserId == param.UserId && u.RelatedType == param.RelatedType)
+                .Single();
+            notify.IsRead = true;
+            _context.SaveChanges();
+            return Ok();
         }
     }
 }

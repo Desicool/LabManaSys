@@ -38,7 +38,7 @@ namespace DatabaseConnector.DAO.FormData
         [JsonPropertyName("stime")]
         public DateTime SubmitTime { get; set; }
         [JsonPropertyName("state")]
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonConverter(typeof(FormStateConverter))]
         public FormState State { get; set; }
         public int CompareTo(DeclarationForm obj)
         {

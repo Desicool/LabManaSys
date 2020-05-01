@@ -8,12 +8,13 @@ export interface IMsgResult {
   dform: IDeclarationForm[];
   fform: IFinancialForm[];
 }
-export interface INotifyResult{
+export interface INotifyResult {
   cform: IClaimForm[];
   wf: IWorkFlow[];
 }
-export interface INotifyUpdateParam{
+export interface INotifyUpdateParam {
   rid: number;
+  type: "workflow" | "claimform" | "none" | undefined;
 }
 export interface FormToProcessState {
   msg?: IMsgResult;
@@ -55,9 +56,8 @@ const Model: FormToProcessModelType = {
         payload: response,
       })
     },
-    *updateNotifyStatus({payload}, {call}){
+    *updateNotifyStatus({ payload }, { call }) {
       yield call(updateNotify, payload);
-      console.log('ok!');
     }
   },
 
@@ -68,7 +68,7 @@ const Model: FormToProcessModelType = {
         msg: payload
       };
     },
-    fetchNotifySuccess(state, {payload}){
+    fetchNotifySuccess(state, { payload }) {
       return {
         ...state,
         notify: payload,

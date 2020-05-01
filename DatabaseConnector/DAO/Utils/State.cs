@@ -26,4 +26,40 @@ namespace DatabaseConnector.Utils
         
     }
     public enum FormState { None = 0, InProcess, Approved, Rejected, Returned }
+    public class FormStateConverter : JsonConverter<FormState>
+    {
+        public override FormState Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            if (reader.TokenType == JsonTokenType.String)
+            {
+                var tmp = reader.GetString().ToLower();
+                if (tmp == "none")
+                {
+                    return FormState.None;
+                }
+                if (tmp == "inprocess")
+                {
+                    return FormState.InProcess;
+                }
+                if (tmp == "approved")
+                {
+                    return FormState.Approved;
+                }
+                if(tmp == "rejected")
+                {
+                    return FormState.Rejected;
+                }
+                if(tmp == "returned")
+                {
+                    return FormState.Returned;
+                }
+            }
+            throw new NotImplementedException();
+        }
+
+        public override void Write(Utf8JsonWriter writer, FormState value, JsonSerializerOptions options)
+        {
+            writer.WriteStringValue(value.ToString());
+        }
+    }
 }

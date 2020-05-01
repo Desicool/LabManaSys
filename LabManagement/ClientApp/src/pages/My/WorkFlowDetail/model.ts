@@ -1,7 +1,8 @@
 import { Effect, Reducer } from 'umi';
 
-import { IFinancialForm, IDeclarationForm, IWorkFlow } from '@/models/entity';
+import { IFinancialForm, IDeclarationForm, IWorkFlow, IChemical } from '@/models/entity';
 import { getFinancialForms, getDeclarationForms, getWorkFlowById } from './service';
+import moment from 'moment';
 
 export interface WorkFlowDetailStateType {
     financialForms: IFinancialForm[];
@@ -30,13 +31,16 @@ const Model: WorkFlowDetailModelType = {
     effects: {
         *fetchWorkFlow({ payload }, { call, put }) {
             const workflow = yield call(getWorkFlowById, payload);
-            const declaration = yield call(getDeclarationForms, payload);
+            const declaration : IDeclarationForm = yield call(getDeclarationForms, payload);
             const financial = yield call(getFinancialForms, payload);
             yield put({
                 type: 'fetchWorkFlowSuccess',
                 payload: {
                     currentWorkFlow: workflow,
-                    declarationForm: declaration,
+                    declarationForm: {
+                        ...declaration,
+                        stime: moment(declaration.stime).format('YYYY-MM-DD HH:mm:ss')
+                    },
                     financialForms: Array.isArray(financial) ? financial : [],
                 }
             })

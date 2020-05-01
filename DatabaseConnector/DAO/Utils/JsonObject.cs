@@ -60,6 +60,9 @@ namespace DatabaseConnector.DAO.Utils
     {
         [JsonPropertyName("rid")]
         public long RelatedId { get; set; }
+        [JsonPropertyName("type")]
+        [JsonConverter(typeof(RelatedTypeConverter))]
+        public RelatedTypeEnum RelatedType { get; set; }
         [JsonPropertyName("uid")]
         public int UserId { get; set; }
     }

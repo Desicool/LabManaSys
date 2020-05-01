@@ -54,18 +54,11 @@ let request = extend({
 });
 
 export const addCertificationToHeader = (certification: string) => {
-  request = extend({
-    errorHandler, // 默认错误处理
-    credentials: 'include', // 默认请求是否带上cookie
+  console.log('add!');
+  request.extendOptions({
     headers: {
-      certification,
+      'certification': certification,
     }
-  });
-}
-export const removeCertificationToHeader = () => {
-  request = extend({
-    errorHandler, // 默认错误处理
-    credentials: 'include', // 默认请求是否带上cookie
   });
 }
 export default request;

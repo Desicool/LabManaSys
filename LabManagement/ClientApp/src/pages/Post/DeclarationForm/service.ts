@@ -1,4 +1,4 @@
-import request from 'umi-request';
+import request from '../../../utils/request';
 
 export async function submitDeclarationForm(params: any) {
   return request('/api/form/declear', {

@@ -1,4 +1,4 @@
-import request from 'umi-request';
+import request from '../../../utils/request';
 
 export async function queryMyChemicals() {
   return request('/api/query/user/chemicals', {

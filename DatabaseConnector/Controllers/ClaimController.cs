@@ -28,6 +28,7 @@ namespace DatabaseConnector.Controllers
         [HttpGet]
         public IActionResult GetClaimFormDetail([FromQuery] int formid)
         {
+            _logger.LogInformation("Query ClaimFormDetail with formid:{formid}", formid);
             var tmp = _context.ClaimFormChemicalMap
                 .Where(u => u.ClaimFormId == formid)
                 .Include(u => u.Chemical)
@@ -99,18 +100,21 @@ namespace DatabaseConnector.Controllers
                 };
                 _context.ClaimFormChemicalMap.Add(entity);
             }
-            var role = _context.Roles
+            var roles = _context.Roles
                 .Where(r => r.RoleName == "LabTeacher" && r.LabId.HasValue? r.LabId == form.LabId:false)
-                .First();
-            // send message to role 
-            var msg = new NotificationMessage
+                .ToList();
+            foreach (var role in roles)
             {
-                FormId = form.Id,
-                FormType = FormType.ClaimForm,
-                IsSolved = false,
-                RoleId = role.RoleId
-            };
-            _context.NotificationMessages.Add(msg);
+                // send message to role 
+                var msg = new NotificationMessage
+                {
+                    FormId = form.Id,
+                    FormType = FormType.ClaimForm,
+                    IsSolved = false,
+                    RoleId = role.RoleId
+                };
+                _context.NotificationMessages.Add(msg);
+            }
             _context.SaveChanges();
             return Ok();
         }
