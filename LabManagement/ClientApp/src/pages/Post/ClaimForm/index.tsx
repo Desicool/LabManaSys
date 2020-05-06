@@ -57,7 +57,7 @@ const ClaimForm: FC<ClaimFormProps> = ({
       dataIndex: 'fname',
     }
   ]
-  const dataSource = chemicals.filter(u=> u.state === 'Lab').map(u => ({
+  const dataSource = chemicals.filter(u=> u.state === '在库').map(u => ({
     ...u,
     key: u.id
   }));

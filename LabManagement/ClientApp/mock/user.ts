@@ -13,6 +13,11 @@ const mockRoles: IRole[] = [
     roleId: 1,
     roleName: 'admin',
     lid: 1,
+  },
+  {
+    roleId: 2,
+    roleName: 'LabTeacher',
+    lid: 3,
   }
 ]
 function getFakeCaptcha(req: Request, res: Response) {

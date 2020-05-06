@@ -17,7 +17,7 @@ const titles = [
 
 const status = [
   '使用中',
-  '闲置',
+  '在库',
   '已销毁',
 ];
 
