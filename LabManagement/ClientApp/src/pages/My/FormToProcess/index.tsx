@@ -2,6 +2,7 @@ import {
   Card,
   Badge,
   Tabs,
+  Empty,
 } from 'antd';
 import { GridContent, PageHeaderWrapper } from '@ant-design/pro-layout';
 import React, { FC, useEffect, useState } from 'react';
@@ -29,7 +30,7 @@ const FormToProcess: FC<FormToProcessProps> = (props) => {
     dispatch({
       type: 'myFormToProcess/fetchNotify'
     })
-  }, []);
+  }, [1]);
   const [tabKey, setTabKey] = useState<string>('declaration');
   const declearTodo = myFormToProcess.msg?.dform.filter(u => u.state === 'InProcess').length;
   const financialTodo = myFormToProcess.msg?.fform.filter(u => u.state === 'InProcess').length;
@@ -56,10 +57,20 @@ const FormToProcess: FC<FormToProcessProps> = (props) => {
   };
 
   const TodoList = () => {
-    if (!declearTodo || !financialTodo || !claimTodo)
+    if (declearTodo === undefined || financialTodo === undefined || claimTodo === undefined)
       return null;
     if (declearTodo + financialTodo + claimTodo == 0) {
-      return null;
+      return (
+        <Card title='需要处理的申请'
+          style={{ marginBottom: 24 }}
+          bordered={false}
+          tabList={tabList}
+          onTabChange={setTabKey}
+          activeTabKey={tabKey}
+        >
+          <Empty/>
+        </Card>
+      );
     }
     return (
       <Card title='需要处理的申请'

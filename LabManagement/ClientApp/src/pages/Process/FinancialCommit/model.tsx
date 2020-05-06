@@ -2,6 +2,7 @@ import { Effect, Reducer } from 'umi';
 import { queryFinancialDetail, approveFinancial, rejectFinancial } from './service';
 import { IFinancialForm } from '@/models/entity';
 import { message } from 'antd';
+import moment from 'moment';
 
 export interface FinancialProcessModelState {
     form?: IFinancialForm;
@@ -31,7 +32,13 @@ const Model: FinancialProcessModelType = {
             const response = yield call(queryFinancialDetail, payload.formid);
             yield put({
                 type: 'fetchSuccess',
-                payload: response,
+                payload: {
+                    ...response,
+                    form:{
+                        ...response.form,
+                        stime: moment(response.form.stime).format('YYYY-MM-DD HH:mm:ss'),
+                    }
+                },
             });
         },
         *approve({ payload }, { call }) {

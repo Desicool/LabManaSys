@@ -11,7 +11,6 @@ export async function queryDeclarationDetail(formid: number) {
 }
 
 export async function approveDeclaration(param: ISolveFormParam) {
-    console.log('ok');
     return request('/api/form/declear/approve', {
         method: 'POST',
         data: param

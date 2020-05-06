@@ -26,6 +26,7 @@ namespace EndPointJob
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddSingleton<JobCore>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

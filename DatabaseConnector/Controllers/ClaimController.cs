@@ -86,9 +86,11 @@ namespace DatabaseConnector.Controllers
         [HttpPost("apply")]
         public IActionResult PostClaimForm([FromBody] PostClaimFormParam param)
         {
+            _logger.LogInformation("Get posted claim form. formid: {formid}",param.Form.Id);
             var form = param.Form;
             form.State = Utils.FormState.InProcess;
             _context.ClaimForms.Add(form);
+            _context.SaveChanges();
             // data format
             foreach(var chemical in param.Chemicals)
             {
@@ -99,12 +101,17 @@ namespace DatabaseConnector.Controllers
                     ClaimFormId = form.Id
                 };
                 _context.ClaimFormChemicalMap.Add(entity);
+                var dbChemical = _context.Chemicals.Where(c => c.ChemicalId == chemical.ChemicalId).Single();
+                dbChemical.State = ChemicalState.InApplication;
             }
             var roles = _context.Roles
                 .Where(r => r.RoleName == "LabTeacher" && r.LabId.HasValue? r.LabId == form.LabId:false)
                 .ToList();
+            _logger.LogInformation("Send message to {0} roles.", roles.Count);
+            _logger.LogInformation("Role list: ");
             foreach (var role in roles)
             {
+                _logger.LogInformation("Role id: {0}, name: {1}", role.RoleId, role.RoleName);
                 // send message to role 
                 var msg = new NotificationMessage
                 {

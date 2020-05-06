@@ -12,11 +12,9 @@ export interface WorkFlowListModelType {
   state: WorkFlowListStateType;
   effects: {
     fetch: Effect;
-    appendFetch: Effect;
   };
   reducers: {
     queryList: Reducer<WorkFlowListStateType>;
-    appendList: Reducer<WorkFlowListStateType>;
   };
 }
 
@@ -30,15 +28,9 @@ const Model: WorkFlowListModelType = {
   effects: {
     *fetch({ payload }, { call, put }) {
       const response = yield call(queryFakeList, payload);
+      console.log('fetch workflows',response);
       yield put({
         type: 'queryList',
-        payload: Array.isArray(response) ? response : [],
-      });
-    },
-    *appendFetch({ payload }, { call, put }) {
-      const response = yield call(queryFakeList, payload);
-      yield put({
-        type: 'appendList',
         payload: Array.isArray(response) ? response : [],
       });
     },
@@ -49,12 +41,6 @@ const Model: WorkFlowListModelType = {
       return {
         ...state,
         list: action.payload,
-      };
-    },
-    appendList(state = { list: [] }, action) {
-      return {
-        ...state,
-        list: state.list.concat(action.payload),
       };
     },
   },

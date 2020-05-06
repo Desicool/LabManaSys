@@ -31,10 +31,12 @@ const DeclarationForm: FC<DeclarationFormProps> = (props) => {
         uname: currentUser?.userName,
         lid: currentUser?.labId,
       },
-      chemicals: (values.chemicals as IChemical[]).map(u=>{
+      chemicals: (values.chemicals).map((u: any)=>{
         return {
           ...u,
-          labId: currentUser?.labId
+          labId: currentUser?.labId,
+          amount: Number.parseInt(u.amount),
+          unitprice: Number.parseFloat(u.unitprice),
         }
       })
     }
@@ -97,7 +99,7 @@ const DeclarationForm: FC<DeclarationFormProps> = (props) => {
                         rules={rules}
                         label='数量'
                       >
-                        <Input />
+                        <Input/>
                       </Form.Item>
                       <Form.Item
                         name={[field.name, "unitmeasurement"]}

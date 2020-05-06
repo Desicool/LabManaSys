@@ -42,12 +42,13 @@ const Step2: React.FC<Step2Props> = (props) => {
   };
   const onValidateForm = async () => {
     const values = await validateFields();
-    const data : IFinancialForm = {
+    const data: IFinancialForm = {
       ...values,
       uid: currentUser?.userId,
       uname: currentUser?.userName,
       lid: currentUser?.labId,
-      wid: workflowid
+      wid: workflowid,
+      price: Number.parseFloat(values.price)
     }
     dispatch({
       type: 'postFinancialForm/submitStepForm',
@@ -68,14 +69,14 @@ const Step2: React.FC<Step2Props> = (props) => {
         name="price"
         rules={[{ required: true, message: '请输入需要申请的金额' }]}
       >
-        <Input autoComplete="off" style={{ width: '80%' }}  addonAfter='元'/>
+        <Input autoComplete="off" style={{ width: '80%' }} addonAfter='元' />
       </Form.Item>
       <Form.Item
         label="收款方"
         name="receiver"
         rules={[{ required: true }]}
       >
-        <Input autoComplete="off" style={{ width: '80%' }}/>
+        <Input autoComplete="off" style={{ width: '80%' }} />
       </Form.Item>
       <Form.Item
         style={{ marginBottom: 8 }}

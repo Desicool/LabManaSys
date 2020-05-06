@@ -121,7 +121,7 @@ export const ChemicalList: FC<ChemicalListProps> = (props) => {
                   <List.Item.Meta
                     title={<span>{item.name}</span>}
                     description={<div>
-                      <span>{(item.unitprice as number) * (item.amount as number)}</span>
+                      <span>{item.amount}</span>
                       <span>{item.unitmeasurement}</span>
                     </div>}
                   />

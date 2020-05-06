@@ -2,6 +2,7 @@ import { Effect, Reducer } from 'umi';
 import { queryDeclarationDetail, approveDeclaration, rejectDeclaration } from './service';
 import { IChemical, IDeclarationForm } from '@/models/entity';
 import { message } from 'antd';
+import moment from 'moment';
 
 export interface DeclarationProcessModelState {
     detail?: {
@@ -31,10 +32,19 @@ const Model: DeclarationProcessModelType = {
 
     effects: {
         *fetch({ payload }, { call, put }) {
-            const response = yield call(queryDeclarationDetail, payload.workflowid);
+            const response : {
+                form: IDeclarationForm;
+                chemicals: IChemical[];
+            } = yield call(queryDeclarationDetail, payload.formid);
             yield put({
                 type: 'fetchSuccess',
-                payload: response,
+                payload: {
+                    ...response,
+                    form: {
+                        ...response.form,
+                        stime: moment(response.form.stime).format('YYYY-MM-DD HH:mm:ss'),
+                    }
+                },
             });
         },
         *approve({ payload }, { call }) {

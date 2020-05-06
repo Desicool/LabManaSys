@@ -58,6 +58,7 @@ export interface IDeclarationForm {
     reason?: string;
     // 处理人id
     hid?: number;
+    hname?: string;
     // 提交时间
     stime?: string;
     state?: string;

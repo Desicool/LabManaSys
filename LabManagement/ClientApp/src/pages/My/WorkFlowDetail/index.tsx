@@ -53,7 +53,7 @@ const ChemicalList = (param: {
       <List.Item.Meta
         title={<span>{item.name}</span>}
         description={<div>
-          <span>{(item.unitprice as number) * (item.amount as number)}</span>
+          <span>{item.amount}</span>
           <span>{item.unitmeasurement}</span>
         </div>}
       />
@@ -88,7 +88,7 @@ const DeclarationFormDescription = (param: {
       <Descriptions.Item label='实验室编号'>{param.declarationForm.lid}</Descriptions.Item>
       <Descriptions.Item label='当前状态'>{param.declarationForm.state}</Descriptions.Item>
       <Descriptions.Item label='理由' span={2}>{param.declarationForm.reason}</Descriptions.Item>
-      <Descriptions.Item label='处理人'>{param.declarationForm.hid}</Descriptions.Item>
+      <Descriptions.Item label='处理人'>{param.declarationForm.hname}</Descriptions.Item>
       <Descriptions.Item label='提交时间'>{param.declarationForm.stime}</Descriptions.Item>
     </Descriptions>
   )

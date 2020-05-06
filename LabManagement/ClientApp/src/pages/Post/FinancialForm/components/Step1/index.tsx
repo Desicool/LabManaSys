@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Form, Button, Divider, Radio } from 'antd';
-import { connect, Dispatch, WorkFlowListStateType } from 'umi';
+import { connect, Dispatch, WorkFlowListStateType, history } from 'umi';
 import { PostFinancialFormStateType } from '../../model';
 import styles from './index.less';
 import { IWorkFlow } from '@/models/entity';
@@ -24,12 +24,16 @@ const Step1: React.FC<Step1Props> = (props) => {
     dispatch({
       type: 'workFlowList/fetch',
     })
-  }, []);
+  }, [1]);
   const { dispatch, workFlowList, workflowid } = props;
   const [form] = Form.useForm();
   const { validateFields } = form;
   const onValidateForm = async () => {
     const values = await validateFields();
+    console.log(values);
+    if(values.wid === undefined){
+      return;
+    }
     if (dispatch) {
       dispatch({
         type: 'postFinancialForm/saveStepFormData',
@@ -48,6 +52,7 @@ const Step1: React.FC<Step1Props> = (props) => {
         form={form}
         layout="horizontal"
         className={styles.stepForm}
+        initialValues={{wid: workflowid}}
         hideRequiredMark
       >
         <Form.Item name={'wid'}>
@@ -72,7 +77,7 @@ const Step1: React.FC<Step1Props> = (props) => {
       <div className={styles.desc}>
         <h3>说明</h3>
         <p>
-          还没有通过审批的申请不会显示在本页面，请前往<a>这个地址</a>查看完整申请列表。
+          还没有通过审批的申请不会显示在本页面，请前往<a onClick={()=>{history.push('/my/workflow')}}>这个地址</a>查看完整申请列表。
         </p>
       </div>
     </>
@@ -87,5 +92,5 @@ export default connect(({
   workFlowList: WorkFlowListStateType;
 }) => ({
   workflowid: postFinancialForm.formdata?.wid,
-  workFlowList: workFlowList.list.filter(u => u.state === 'financial') || []
+  workFlowList: workFlowList.list.filter(u => u.state === 'securityOk') || []
 }))(Step1);

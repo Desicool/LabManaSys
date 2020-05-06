@@ -38,7 +38,7 @@ const ClaimForm: FC<ClaimFormProps> = ({
     dispatch({
       type: 'chemicalList/fetch',
     });
-  }, []);
+  }, [1]);
   const [form] = Form.useForm();
   const [error, setError] = useState<ErrorField[]>([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>([]);
@@ -57,7 +57,7 @@ const ClaimForm: FC<ClaimFormProps> = ({
       dataIndex: 'fname',
     }
   ]
-  const dataSource = chemicals.map(u => ({
+  const dataSource = chemicals.filter(u=> u.state === 'Lab').map(u => ({
     ...u,
     key: u.id
   }));
@@ -68,8 +68,6 @@ const ClaimForm: FC<ClaimFormProps> = ({
     }
     const scrollToField = (fieldKey: string) => {
       const labelNode = document.querySelector(`label[for="${fieldKey}"]`) || document.getElementById(fieldKey);
-      console.log(fieldKey);
-      console.log(labelNode);
       if (labelNode) {
         labelNode.scrollIntoView(true);
       }
@@ -125,7 +123,6 @@ const ClaimForm: FC<ClaimFormProps> = ({
       },
       chemicals: selectedChemicals
     }
-    console.log(data);
     dispatch({
       type: 'postClaimForm/submitAdvancedForm',
       payload: data,

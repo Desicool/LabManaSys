@@ -55,7 +55,6 @@ namespace DatabaseConnector.DAO.Entity
 
         public override void Write(Utf8JsonWriter writer, FormType value, JsonSerializerOptions options)
         {
-            Console.WriteLine(value.ToString());
             switch (value)
             {
                 case FormType.ClaimForm:

@@ -53,11 +53,7 @@ function fakeList(count: number): IWorkFlow[] {
 let sourceData: IWorkFlow[] = [];
 
 function getFakeList(req: Request, res: Response) {
-  const params = req.query;
-
-  const count = params.count * 1 || 20;
-
-  const result = fakeList(count);
+  const result = fakeList(10);
   sourceData = result;
   return res.json(result);
 }

@@ -70,11 +70,15 @@ namespace DatabaseConnector.Controllers
                 StartTime = DateTime.Now,
                 State = "declearing",
                 Chemicals = param.Chemicals,
+                Description = param.Form.Reason,
+                UserName = param.Form.UserName
             };
             _context.WorkFlows.Add(workflow);
+            _context.SaveChanges();
             // create form_workflow_relationship
             form.WorkFlowId = workflow.Id;
             _context.DeclarationForms.Add(form);
+            _context.SaveChanges();
             var role = GetNotifyRoleId(util.StateRoute[workflow.State].RoleName, param.Form.LabId);
             // send message to role 
             var msg = new NotificationMessage
