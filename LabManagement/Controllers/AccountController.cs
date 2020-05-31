@@ -50,8 +50,8 @@ namespace LabManagement.Controllers
                     }
                 }
                 _logger.LogInformation("Call RpcWrapper, method: get.");
-                _logger.LogInformation("port: {port}", RpcWrapper.Port);
-                var response = RpcWrapper.CallServiceByGet(
+                _logger.LogInformation("port: {port}", HttpWrapper.Port);
+                var response = HttpWrapper.CallServiceByGet(
                     "/api/userrole", $"username={username}");
                 if(!response.IsSuccessCode)
                 {

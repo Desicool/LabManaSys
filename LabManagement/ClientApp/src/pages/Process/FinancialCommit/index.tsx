@@ -31,7 +31,7 @@ const DeclarationProcess: FC<DeclarationProcessProps> = (props) => {
   }, [formid]);
   return (
     <PageHeaderWrapper
-      title="采购申请详情"
+      title="财务申请详情"
     >
       <div className={styles.main}>
         <GridContent>

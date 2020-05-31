@@ -4,23 +4,25 @@ import {
 } from 'antd';
 import { GridContent, PageHeaderWrapper } from '@ant-design/pro-layout';
 import React, { FC, useEffect } from 'react';
-import { connect, Dispatch, MyChemicalModelState } from 'umi';
+import { connect, Dispatch, MyChemicalModelState, UserModelState, IUser } from 'umi';
 import styles from './style.less';
 import { IChemical } from '@/models/entity';
+import { ColumnsType } from 'antd/lib/table';
 
 interface claimProcessProps {
   chemicals: IChemical[];
+  currentUser?: IUser;
   dispatch: Dispatch;
 }
 
 const myChemicalComponent: FC<claimProcessProps> = (props) => {
-  const { dispatch, chemicals } = props;
+  const { dispatch, chemicals,currentUser } = props;
   useEffect(() => {
     dispatch({
       type: 'myChemical/fetch',
     });
   }, []);
-  const columns = [
+  const columns:ColumnsType<IChemical> = [
     {
       title: '化学品名称',
       dataIndex: 'name',
@@ -35,8 +37,15 @@ const myChemicalComponent: FC<claimProcessProps> = (props) => {
       dataIndex: 'fname',
     },
     {
-      title: '预计归还时间',
-      dataIndex: 'rtime'
+      title: '操作',
+      render: (_, record) => <a onClick={()=>dispatch({
+        type: 'myChemical/returnChemical',
+        payload: {
+          uid: currentUser?.userId,
+          uname: currentUser?.userName,
+          
+        }
+      })}>归还</a>,
     }
   ]
   const dataSource = chemicals.map(u => ({
@@ -67,9 +76,12 @@ const myChemicalComponent: FC<claimProcessProps> = (props) => {
 export default connect(
   ({
     myChemical,
+    user
   }: {
     myChemical: MyChemicalModelState;
+    user: UserModelState;
   }) => ({
     chemicals: myChemical.data,
+    currentUser: user.currentUser
   }),
 )(myChemicalComponent);

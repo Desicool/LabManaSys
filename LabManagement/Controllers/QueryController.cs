@@ -41,7 +41,7 @@ namespace LabManagement.Controllers
             int labId = userRole.User.LabId;
             try
             {
-                var response = RpcWrapper.CallServiceByGet("/api/entity/chemicals", $"labId={labId}");
+                var response = HttpWrapper.CallServiceByGet("/api/entity/chemicals", $"labId={labId}");
                 if (!response.IsSuccessCode)
                 {
                     return NotFound("try again");
@@ -73,7 +73,7 @@ namespace LabManagement.Controllers
             int userid = userRole.User.UserId;
             try
             {
-                var response = RpcWrapper.CallServiceByGet("/api/entity/chemicals", $"userid={userid}");
+                var response = HttpWrapper.CallServiceByGet("/api/entity/chemicals", $"userid={userid}");
                 if (!response.IsSuccessCode)
                 {
                     return NotFound("try again");
@@ -98,7 +98,7 @@ namespace LabManagement.Controllers
         {
             try
             {
-                var response = RpcWrapper.CallServiceByGet("/api/entity/chemicals", $"labId={formid}");
+                var response = HttpWrapper.CallServiceByGet("/api/entity/chemicals", $"labId={formid}");
                 if (!response.IsSuccessCode)
                 {
                     return NotFound("try again");
@@ -130,7 +130,7 @@ namespace LabManagement.Controllers
             int userId = userRole.User.UserId;
             try
             {
-                var response = RpcWrapper.CallServiceByGet("/api/entity/msg", $"userid={userId}");
+                var response = HttpWrapper.CallServiceByGet("/api/entity/msg", $"userid={userId}");
                 if (!response.IsSuccessCode)
                 {
                     return NotFound("try again");
@@ -162,7 +162,7 @@ namespace LabManagement.Controllers
             int userId = userRole.User.UserId;
             try
             {
-                var response = RpcWrapper.CallServiceByGet("/api/entity/notify", $"userid={userId}");
+                var response = HttpWrapper.CallServiceByGet("/api/entity/notify", $"userid={userId}");
                 if (!response.IsSuccessCode)
                 {
                     return NotFound("try again");
@@ -194,7 +194,7 @@ namespace LabManagement.Controllers
             int userId = userRole.User.UserId;
             try
             {
-                var response = RpcWrapper.CallServiceByGet("/api/entity/workflows", $"id={userId}",$"type=userid");
+                var response = HttpWrapper.CallServiceByGet("/api/entity/workflows", $"id={userId}",$"type=userid");
                 if (!response.IsSuccessCode)
                 {
                     return NotFound("try again");
@@ -219,7 +219,7 @@ namespace LabManagement.Controllers
         {
             try
             {
-                var response = RpcWrapper.CallServiceByGet("/api/declaration/workflow", $"workflowid={workflowId}");
+                var response = HttpWrapper.CallServiceByGet("/api/declaration/workflow", $"workflowid={workflowId}");
                 if (!response.IsSuccessCode)
                 {
                     return NotFound("try again");
@@ -244,7 +244,7 @@ namespace LabManagement.Controllers
         {
             try
             {
-                var response = RpcWrapper.CallServiceByGet("/api/financial/workflow", $"id={workflowId}", $"type=workflowid");
+                var response = HttpWrapper.CallServiceByGet("/api/financial/workflow", $"id={workflowId}", $"type=workflowid");
                 if (!response.IsSuccessCode)
                 {
                     return NotFound("try again");
@@ -269,7 +269,7 @@ namespace LabManagement.Controllers
         {
             try
             {
-                var response = RpcWrapper.CallServiceByGet("/api/entity/workflow", $"workflowid={workflowId}");
+                var response = HttpWrapper.CallServiceByGet("/api/entity/workflow", $"workflowid={workflowId}");
                 if (!response.IsSuccessCode)
                 {
                     return NotFound("try again");

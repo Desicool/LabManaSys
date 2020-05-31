@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using DatabaseConnector.DAO.FormData;
 using DatabaseConnector.DAO.Utils;
 using LabManagement.Authorization;
 using LabManagement.Utils;
@@ -32,7 +33,7 @@ namespace LabManagement.Controllers
             try
             {
                 param.Form.SubmitTime = DateTime.Now;
-                RpcWrapper.CallServiceByPost("/api/declaration/apply",
+                HttpWrapper.CallServiceByPost("/api/declaration/apply",
                     JsonSerializer.Serialize(param));
                 return Ok();
             }
@@ -56,7 +57,7 @@ namespace LabManagement.Controllers
             }
             try
             {
-                RpcWrapper.CallServiceByPost("/api/declaration/approve",
+                HttpWrapper.CallServiceByPost("/api/declaration/approve",
                     JsonSerializer.Serialize(param));
                 return Ok();
             }
@@ -80,7 +81,7 @@ namespace LabManagement.Controllers
             }
             try
             {
-                RpcWrapper.CallServiceByPost("/api/declaration/reject",
+                HttpWrapper.CallServiceByPost("/api/declaration/reject",
                     JsonSerializer.Serialize(param));
                 return Ok();
             }
@@ -98,7 +99,7 @@ namespace LabManagement.Controllers
         {
             try
             {
-                var response = RpcWrapper.CallServiceByGet("/api/declaration",$"formid={formid}");
+                var response = HttpWrapper.CallServiceByGet("/api/declaration",$"formid={formid}");
                 if (!response.IsSuccessCode)
                 {
                     return NotFound("try again");
@@ -123,7 +124,7 @@ namespace LabManagement.Controllers
             try
             {
                 param.Form.SubmitTime = DateTime.Now;
-                RpcWrapper.CallServiceByPost("/api/financial/apply",
+                HttpWrapper.CallServiceByPost("/api/financial/apply",
                     JsonSerializer.Serialize(param));
                 return Ok();
             }
@@ -142,7 +143,7 @@ namespace LabManagement.Controllers
         {
             try
             {
-                RpcWrapper.CallServiceByPost("/api/financial/approve",
+                HttpWrapper.CallServiceByPost("/api/financial/approve",
                     JsonSerializer.Serialize(param));
                 return Ok();
             }
@@ -161,7 +162,7 @@ namespace LabManagement.Controllers
         {
             try
             {
-                RpcWrapper.CallServiceByPost("/api/financial/reject",
+                HttpWrapper.CallServiceByPost("/api/financial/reject",
                     JsonSerializer.Serialize(param));
                 return Ok();
             }
@@ -179,12 +180,12 @@ namespace LabManagement.Controllers
         {
             try
             {
-                var response = RpcWrapper.CallServiceByGet("/api/financial/workflow", $"formid={formid}");
+                var response = HttpWrapper.CallServiceByGet("/api/financial/workflow", $"formid={formid}");
                 if (!response.IsSuccessCode)
                 {
                     return NotFound("try again");
                 }
-                var res = JsonSerializer.Deserialize<PostDeclarationFormParam>(response.Body);
+                var res = JsonSerializer.Deserialize<FinancialForm>(response.Body);
                 return Ok(res);
             }
             catch (Exception e)
@@ -206,7 +207,7 @@ namespace LabManagement.Controllers
             try
             {
                 param.Form.SubmitTime = DateTime.Now;
-                RpcWrapper.CallServiceByPost("/api/claim/apply",
+                HttpWrapper.CallServiceByPost("/api/claim/apply",
                     JsonSerializer.Serialize(param));
                 return Ok();
             }
@@ -230,7 +231,7 @@ namespace LabManagement.Controllers
             }
             try
             {
-                RpcWrapper.CallServiceByPost("/api/claim/approve",
+                HttpWrapper.CallServiceByPost("/api/claim/approve",
                     JsonSerializer.Serialize(param));
                 return Ok();
             }
@@ -254,7 +255,7 @@ namespace LabManagement.Controllers
             }
             try
             {
-                RpcWrapper.CallServiceByPost("/api/claim/reject",
+                HttpWrapper.CallServiceByPost("/api/claim/reject",
                     JsonSerializer.Serialize(param));
                 return Ok();
             }
@@ -264,7 +265,7 @@ namespace LabManagement.Controllers
                 return NotFound(e.Message);
             }
         }
-        [HttpPost("claim/reject")]
+        [HttpPost("claim/return")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
@@ -272,7 +273,7 @@ namespace LabManagement.Controllers
         {
             try
             {
-                RpcWrapper.CallServiceByPost("/api/claim/return",
+                HttpWrapper.CallServiceByPost("/api/claim/return",
                     JsonSerializer.Serialize(param));
                 return Ok();
             }
@@ -290,7 +291,7 @@ namespace LabManagement.Controllers
         {
             try
             {
-                var response = RpcWrapper.CallServiceByGet("/api/claim", $"formid={formid}");
+                var response = HttpWrapper.CallServiceByGet("/api/claim", $"formid={formid}");
                 if (!response.IsSuccessCode)
                 {
                     return NotFound("try again");

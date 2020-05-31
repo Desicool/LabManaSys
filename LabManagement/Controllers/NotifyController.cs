@@ -35,7 +35,7 @@ namespace LabManagement.Controllers
                 param.UserId = userRole.User.UserId;
                 try
                 {
-                    var response = RpcWrapper.CallServiceByPost("/api/entity/notify",
+                    var response = HttpWrapper.CallServiceByPost("/api/entity/notify",
                         JsonSerializer.Serialize(param));
                     return Ok();
                 }

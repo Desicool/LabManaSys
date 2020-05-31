@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using DatabaseConnector.DAO.FormData;
 using DatabaseConnector.DAO.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -24,9 +25,15 @@ namespace EndPointJob.Controllers
         }
 
         [HttpGet]
-        public IActionResult StartJobAsync()
+        public IActionResult StartJob()
         {
             Task.Run(RunJob);
+            return Ok();
+        }
+        [HttpPost("declare")]
+        public IActionResult AddDeclareJob([FromBody] DeclarationForm form)
+        {
+            _core.DeclearQueue.Enqueue(form);
             return Ok();
         }
         public void RunJob()

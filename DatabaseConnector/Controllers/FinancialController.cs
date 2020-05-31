@@ -28,7 +28,7 @@ namespace DatabaseConnector.Controllers
         [HttpGet("workflow")]
         public IActionResult GetFinancialForms([FromQuery] long formid)
         {
-            return Ok(_context.FinancialForms.Where(u => u.Id == formid).ToList());
+            return Ok(_context.FinancialForms.Single(u => u.Id == formid));
         }
         [HttpGet("lab")]
         public IActionResult GetLabFinancialForms([FromQuery] int labid)

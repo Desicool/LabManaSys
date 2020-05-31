@@ -30,14 +30,12 @@ const Model: FinancialProcessModelType = {
     effects: {
         *fetch({ payload }, { call, put }) {
             const response = yield call(queryFinancialDetail, payload.formid);
+            console.log(response);
             yield put({
                 type: 'fetchSuccess',
                 payload: {
                     ...response,
-                    form:{
-                        ...response.form,
-                        stime: moment(response.form.stime).format('YYYY-MM-DD HH:mm:ss'),
-                    }
+                    stime: moment(response.stime).format('YYYY-MM-DD HH:mm:ss'),
                 },
             });
         },

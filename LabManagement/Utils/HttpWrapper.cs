@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LabManagement.Utils
 {
-    public static class RpcWrapper
+    public static class HttpWrapper
     {
         public static HttpClient client = new HttpClient();
         public static int Port { get; set; } = 10001;
@@ -56,6 +56,21 @@ namespace LabManagement.Utils
             {
                 throw new Exception("https call failed");
             }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="url">must start with '/'</param>
+        /// <param name="jsonString"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public static void CallServiceByPostAsync(string url, int port, string jsonString)
+        {
+            string uri = $"https://localhost:{port}{url}";
+            //string uri = $"https://localhost:44398{url}";
+            var content = new StringContent(jsonString);
+            content.Headers.ContentType.MediaType = "application/json";
+            client.PostAsync(uri, content);
         }
 
     }

@@ -17,7 +17,9 @@ const financialform: IFinancialForm =
 function getFakeList(req: Request, res: Response) {
   const params = req.query;
   const result = financialform;
-  return res.json(result);
+  return res.json({
+    form: result
+  });
 }
 function approveMock(_: Request, res: Response) {
   res.status(200).send();

@@ -111,6 +111,23 @@ const WorkFlowDetail: FC<
     }
   }, [1]);
   const { currentWorkFlow, declarationForm, financialForms } = props.workFlowDetailState || {};
+  const currentStep = ()=>{
+    if(currentWorkFlow?.state === 'declearing'){
+      return 1;
+    }
+    if(currentWorkFlow?.state === 'security' || currentWorkFlow?.state === 'securityOk'){
+      return 2;
+    }
+    if(currentWorkFlow?.state === 'financial'){
+      return 2;
+    }
+    if(currentWorkFlow?.state === 'inPurchasing'){
+      return 3;
+    }
+    if(currentWorkFlow?.state === 'inStore'){
+      return 4;
+    }
+  }
   return (
     <PageHeaderWrapper
       title={'单号: ' + props.id.toString()}
@@ -125,11 +142,12 @@ const WorkFlowDetail: FC<
               {({ isMobile }) => (
                 <Steps
                   direction={isMobile ? 'vertical' : 'horizontal'}
-                  current={1}
+                  current={currentStep()}
                 >
                   <Step title="提交申请" />
                   <Step title="实验室老师审批" />
                   <Step title="财务审批" />
+                  <Step title="采购中" />
                   <Step title="完成" />
                 </Steps>
               )}

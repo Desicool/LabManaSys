@@ -55,13 +55,7 @@ export default defineConfig({
           routes: [
             {
               path: '/',
-              redirect: '/welcome',
-            },
-            {
-              path: '/welcome',
-              name: 'welcome',
-              icon: 'smile',
-              component: './Welcome',
+              redirect: '/my/process',
             },
             {
               path: '/admin',
@@ -136,21 +130,21 @@ export default defineConfig({
               name: 'processdeclear',
               path: '/process/declear/:formid',
               component: './Process/DeclearCommit',
-              hideInMenu: true,
+              //hideInMenu: true,
               authority: ['LabTeacher','Adminstrator'],
             },
             {
               name: 'processfinancial',
               path: '/process/financial/:formid',
               component: './Process/FinancialCommit',
-              hideInMenu: true,
+              //hideInMenu: true,
               authority: ['LabTeacher','Adminstrator'],
             },
             {
               name: 'processclaim',
               path: '/process/claim/:formid',
               component: './Process/ClaimCommit',
-              hideInMenu: true,
+              //hideInMenu: true,
               authority: ['LabTeacher','Adminstrator'],
             },
             {

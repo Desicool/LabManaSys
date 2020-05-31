@@ -1,6 +1,7 @@
 import { Effect, Reducer } from 'umi';
-import { queryMyChemicals } from './service';
+import { queryMyChemicals, postReturnChemical } from './service';
 import { IChemical } from '@/models/entity';
+import { message } from 'antd';
 
 export interface MyChemicalModelState {
   data: IChemical[];
@@ -11,6 +12,7 @@ export interface MyChemicalModelType {
   state: MyChemicalModelState;
   effects: {
     fetch: Effect;
+    returnChemical: Effect;
   };
   reducers: {
     fetchSuccess: Reducer<MyChemicalModelState>
@@ -31,6 +33,10 @@ const Model: MyChemicalModelType = {
         type: 'fetchSuccess',
         payload: response,
       });
+    },
+    *returnChemical({payload}, { call, put }) {
+      const response = yield call(postReturnChemical,payload.cid);
+      message.success('退还成功')
     },
   },
 

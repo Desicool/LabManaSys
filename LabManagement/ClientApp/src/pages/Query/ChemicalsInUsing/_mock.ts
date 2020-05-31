@@ -31,6 +31,7 @@ function fakeList(id:number): IChemical[] {
       amount: i,
       unitprice: 100,
       unitmeasurement: '升',
+      fname: '华东化工厂',
     });
   }
 
@@ -41,6 +42,10 @@ function getFakeList(req: Request, res: Response) {
   const result = fakeList(2);
   return res.json(result);
 }
+function fakePost(req: Request, res: Response) {
+  return res.status(200).send();
+}
 export default {
   'GET  /api/query/user/chemicals': getFakeList,
+  'POST  /api/form/claim/return': fakePost,
 };

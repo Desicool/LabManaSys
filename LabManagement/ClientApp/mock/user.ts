@@ -63,7 +63,12 @@ export default {
       res.send({
         success: true,
         user: mockuser,
-        roles: mockRoles,
+        roles: 
+        {
+          roleId: 3,
+          roleName: 'Student',
+          lid: 1,
+        },
         certification: '111',
       });
       return;

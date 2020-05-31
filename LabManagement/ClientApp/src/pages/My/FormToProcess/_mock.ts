@@ -7,7 +7,7 @@ import moment from "moment";
 const claimform: IClaimForm[] = [
   {
     id: 1,
-    lid:998,
+    lid:47,
     uid: 2,
     uname: '学生1号',
     rtime: moment(new Date()).format('YYYY-MM-DD hh:mm:ss'),
@@ -18,6 +18,7 @@ const financialform: IFinancialForm[] = [
   {
     id: 1,
     uid: 1,
+    lid: 4,
     uname: '另一个用户名',
     price: 123,
     state: 'InProcess',
@@ -28,6 +29,7 @@ const declarationform: IDeclarationForm[] = [
 {
   id: 1,
   uid: 2,
+  lid: 55,
   uname: '用户名1',
   reason: '为了实验需要',
   state: 'InProcess',
