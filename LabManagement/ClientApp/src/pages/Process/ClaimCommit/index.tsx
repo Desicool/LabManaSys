@@ -12,7 +12,7 @@ import { ClaimProcessModelState } from './model';
 
 interface claimProcessProps {
   data?: IPostClaimFormParam;
-  formid: number;
+  formid: string;
   currentUser?: IUser;
   dispatch: Dispatch;
 }
@@ -76,9 +76,9 @@ const claimProcess: FC<claimProcessProps> = (props) => {
               type: 'claimProcess/approve',
               payload: {
                 uid: currentUser?.userId,
-                uname: currentUser?.userName,
+                uname: currentUser?.realName,
                 lid: currentUser?.labId,
-                fid: formid
+                fid: parseInt(formid)
               }
             })
           }}>
@@ -90,9 +90,9 @@ const claimProcess: FC<claimProcessProps> = (props) => {
               type: 'claimProcess/reject',
               payload: {
                 uid: currentUser?.userId,
-                uname: currentUser?.userName,
+                uname: currentUser?.realName,
                 lid: currentUser?.labId,
-                fid: formid
+                fid: parseInt(formid)
               }
             })
           }}>

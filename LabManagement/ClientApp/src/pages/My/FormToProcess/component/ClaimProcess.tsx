@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { connect, FormToProcessState, history } from 'umi';
 import { IClaimForm } from '@/models/entity';
 import { Table } from 'antd';
+import moment from 'moment';
 
 interface ClaimProcessProps {
     claims: IClaimForm[];
@@ -29,7 +30,8 @@ const FinancialProcessComponent: FC<ClaimProcessProps> = (props) => {
         },
         {
             title: '预计归还时间',
-            dataIndex: 'rtime'
+            dataIndex: 'rtime',
+            render: (_: any, record: IClaimForm) => moment(record.rtime).format('YYYY-MM-DD hh:mm:ss'),
         },
         {
             title: '进行处理',

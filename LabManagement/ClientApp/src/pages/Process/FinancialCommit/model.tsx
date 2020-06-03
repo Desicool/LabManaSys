@@ -1,4 +1,4 @@
-import { Effect, Reducer } from 'umi';
+import { Effect, Reducer, history } from 'umi';
 import { queryFinancialDetail, approveFinancial, rejectFinancial } from './service';
 import { IFinancialForm } from '@/models/entity';
 import { message } from 'antd';
@@ -42,10 +42,12 @@ const Model: FinancialProcessModelType = {
         *approve({ payload }, { call }) {
             yield call(approveFinancial, payload);
             message.success('提交成功');
+            history.push('/my/process');
         },
         *reject({ payload }, { call }) {
             yield call(rejectFinancial, payload);
             message.success('提交成功');
+            history.push('/my/process');
         }
     },
 

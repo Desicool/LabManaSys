@@ -66,4 +66,9 @@ namespace DatabaseConnector.DAO.Utils
         [JsonPropertyName("uid")]
         public int UserId { get; set; }
     }
+    public class ReturnChemicalParam
+    {
+        [JsonPropertyName("cid")]
+        public int ChemicalId { get; set; }
+    }
 }

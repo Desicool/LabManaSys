@@ -51,7 +51,7 @@ export default defineConfig({
         {
           path: '/',
           component: '../layouts/BasicLayout',
-          authority: ['Administrator', 'Student','LabTeacher','FinanceTeacher','Security',],
+          authority: ['Administrator', 'Student', 'LabTeacher', 'FinanceTeacher', 'Security',],
           routes: [
             {
               path: '/',
@@ -127,25 +127,30 @@ export default defineConfig({
               ],
             },
             {
+              name: 'postPurchase',
+              path: '/purchase',
+              component: './Post/PurchaseForm',
+            },
+            {
               name: 'processdeclear',
               path: '/process/declear/:formid',
               component: './Process/DeclearCommit',
-              //hideInMenu: true,
-              authority: ['LabTeacher','Adminstrator'],
+              hideInMenu: true,
+              authority: ['LabTeacher', 'Adminstrator'],
             },
             {
               name: 'processfinancial',
               path: '/process/financial/:formid',
               component: './Process/FinancialCommit',
-              //hideInMenu: true,
-              authority: ['LabTeacher','Adminstrator'],
+              hideInMenu: true,
+              authority: ['LabTeacher', 'Adminstrator'],
             },
             {
               name: 'processclaim',
               path: '/process/claim/:formid',
               component: './Process/ClaimCommit',
-              //hideInMenu: true,
-              authority: ['LabTeacher','Adminstrator'],
+              hideInMenu: true,
+              authority: ['LabTeacher', 'Adminstrator'],
             },
             {
               name: 'claimdetail',

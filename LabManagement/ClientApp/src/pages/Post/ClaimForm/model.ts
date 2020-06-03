@@ -1,4 +1,4 @@
-import { Effect } from 'umi';
+import { Effect, history } from 'umi';
 import { message } from 'antd';
 import { submitClaimForm } from './service';
 import { IClaimForm, IChemical } from '@/models/entity';
@@ -23,6 +23,7 @@ const Model: PostClaimFormModelType = {
     *submitAdvancedForm({ payload }, { call }) {
       yield call(submitClaimForm, payload);
       message.success('提交成功');
+      history.push('/my/process');
     },
   },
 };

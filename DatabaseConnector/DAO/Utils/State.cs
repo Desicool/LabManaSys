@@ -37,19 +37,19 @@ namespace DatabaseConnector.Utils
                 {
                     return FormState.None;
                 }
-                if (tmp == "inprocess")
+                if (tmp == "等待处理")
                 {
                     return FormState.InProcess;
                 }
-                if (tmp == "approved")
+                if (tmp == "已通过")
                 {
                     return FormState.Approved;
                 }
-                if(tmp == "rejected")
+                if(tmp == "已驳回")
                 {
                     return FormState.Rejected;
                 }
-                if(tmp == "returned")
+                if(tmp == "已归还")
                 {
                     return FormState.Returned;
                 }
@@ -59,7 +59,26 @@ namespace DatabaseConnector.Utils
 
         public override void Write(Utf8JsonWriter writer, FormState value, JsonSerializerOptions options)
         {
-            writer.WriteStringValue(value.ToString());
+            switch (value)
+            {
+                case FormState.None:
+                    writer.WriteStringValue("None");
+                    break;
+                case FormState.Approved:
+                    writer.WriteStringValue("已通过");
+                    break;
+                case FormState.Rejected:
+                    writer.WriteStringValue("已驳回");
+                    break;
+                case FormState.InProcess:
+                    writer.WriteStringValue("等待处理");
+                    break;
+                case FormState.Returned:
+                    writer.WriteStringValue("已归还");
+                    break;
+                default:
+                    throw new InvalidOperationException();
+            }
         }
     }
 }

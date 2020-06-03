@@ -35,7 +35,7 @@ const Model: MyChemicalModelType = {
       });
     },
     *returnChemical({payload}, { call, put }) {
-      const response = yield call(postReturnChemical,payload.cid);
+      const response = yield call(postReturnChemical,payload);
       message.success('退还成功')
     },
   },

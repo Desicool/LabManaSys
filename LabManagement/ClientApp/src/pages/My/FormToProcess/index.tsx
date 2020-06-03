@@ -18,11 +18,12 @@ interface FormToProcessProps {
   loading: boolean;
   myFormToProcess: FormToProcessState;
   authority: IRole[];
+  uid?: number;
   dispatch: Dispatch
 }
 
 const FormToProcess: FC<FormToProcessProps> = (props) => {
-  const { dispatch, myFormToProcess, authority } = props;
+  const { dispatch, myFormToProcess, authority,uid } = props;
   useEffect(() => {
     dispatch({
       type: 'myFormToProcess/fetchMessage',
@@ -30,11 +31,12 @@ const FormToProcess: FC<FormToProcessProps> = (props) => {
     dispatch({
       type: 'myFormToProcess/fetchNotify'
     })
-  }, [1]);
+  }, [uid]);
   const [tabKey, setTabKey] = useState<string>('declaration');
-  const declearTodo = myFormToProcess.msg?.dform.filter(u => u.state === 'InProcess').length;
-  const financialTodo = myFormToProcess.msg?.fform.filter(u => u.state === 'InProcess').length;
-  const claimTodo = myFormToProcess.msg?.cform.filter(u => u.state === 'InProcess').length;
+  const declearTodo = myFormToProcess.msg?.dform.filter(u => u.state === '等待处理').length;
+  const financialTodo = myFormToProcess.msg?.fform.filter(u => u.state === '等待处理').length;
+  const claimTodo = myFormToProcess.msg?.cform.filter(u => u.state === '等待处理').length;
+  console.log(myFormToProcess);
   const tabList = [
     {
       key: 'declaration',
@@ -133,6 +135,7 @@ export default connect(
   }) => ({
     myFormToProcess,
     authority: user.roles || [],
+    uid: user.currentUser?.userId,
     loading: loading.effects['myFormToProcess/fetchAdvanced'],
   }),
 )(FormToProcess);

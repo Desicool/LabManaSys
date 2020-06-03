@@ -1,4 +1,4 @@
-import { Effect } from 'umi';
+import { Effect, history } from 'umi';
 import { message } from 'antd';
 import { submitDeclarationForm } from './service';
 
@@ -18,6 +18,7 @@ const Model: PostDeclarationFormModelType = {
     *submitDeclarationForm({ payload }, { call }) {
       yield call(submitDeclarationForm, payload);
       message.success('提交成功');
+      history.push('/my/process');
     },
   },
 };

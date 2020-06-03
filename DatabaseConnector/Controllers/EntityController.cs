@@ -21,10 +21,12 @@ namespace DatabaseConnector.Controllers
     {
         private readonly LabContext _context;
         private readonly ILogger<EntityController> _logger;
-        public EntityController(LabContext context, ILogger<EntityController> logger)
+        private readonly StateUtil util;
+        public EntityController(LabContext context, ILogger<EntityController> logger, StateUtil state)
         {
             _context = context;
             _logger = logger;
+            util = state;
         }
         [HttpGet("chemicals")]
         public List<Chemical> GetChemicals(int labId)
@@ -60,12 +62,12 @@ namespace DatabaseConnector.Controllers
             throw new ArgumentOutOfRangeException();
         }
         [HttpPost("chemical/discard")]
-        public IActionResult DiscardChemical([FromBody] List<Chemical> chemicals)
+        public IActionResult DiscardChemical([FromBody] Chemical chemical)
         {
-            var list = _context.Chemicals
-                .Where(u => chemicals.Exists(v => v.ChemicalId == u.ChemicalId))
-                .ToList();
-            _context.Chemicals.RemoveRange(list);
+            var c = _context.Chemicals
+                .Where(u => chemical.ChemicalId == u.ChemicalId)
+                .Single();
+            c.State = ChemicalState.Obsoleted;
             _context.SaveChanges();
             return Ok();
         }
@@ -152,6 +154,30 @@ namespace DatabaseConnector.Controllers
                 .Where(u => u.RelatedId == param.RelatedId && u.UserId == param.UserId && u.RelatedType == param.RelatedType)
                 .Single();
             notify.IsRead = true;
+            _context.SaveChanges();
+            return Ok();
+        }
+        [HttpGet("purchase")]
+        public IActionResult Purchase([FromQuery]int workflowid)
+        {
+            _logger.LogInformation("purchase for workflow {1}", workflowid);
+            var workflow = _context.WorkFlows
+                .Where(u => u.Id == workflowid)
+                .Include(u => u.Chemicals)
+                .Single();
+            workflow.State = util.StateRoute[workflow.State].Next[1];
+            foreach(var chemical in workflow.Chemicals)
+            {
+                chemical.State = ChemicalState.Lab;
+            }
+            StatusChangeMessage msg = new StatusChangeMessage
+            {
+                IsRead = false,
+                RelatedId = workflowid,
+                RelatedType = RelatedTypeEnum.WorkFlow,
+                UserId = workflow.UserId
+            };
+            _context.WorkFlowStatusChangeMessages.Add(msg);
             _context.SaveChanges();
             return Ok();
         }

@@ -41,9 +41,7 @@ const myChemicalComponent: FC<claimProcessProps> = (props) => {
       render: (_, record) => <a onClick={()=>dispatch({
         type: 'myChemical/returnChemical',
         payload: {
-          uid: currentUser?.userId,
-          uname: currentUser?.userName,
-          
+          cid: record.id
         }
       })}>归还</a>,
     }

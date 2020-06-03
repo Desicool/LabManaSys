@@ -54,12 +54,12 @@ namespace DatabaseConnector.Controllers
             var form = param.Form;
             form.State = FormState.InProcess;
             _context.FinancialForms.Add(form);
+            _context.SaveChanges();
             // workflow state should be at securityOk
             // move to financial
             var workflow = _context.WorkFlows.Where(u => u.Id == param.Form.WorkFlowId).Single();
             workflow.State = util.StateRoute[workflow.State].Next[1];
             _logger.LogInformation("rolename: {1}, labid: {2}", util.StateRoute[workflow.State].RoleName, param.Form.LabId);
-
             var role = _context.Roles
                 .Where(r => r.RoleName == util.StateRoute[workflow.State].RoleName && r.LabId == param.Form.LabId)
                 .Single();

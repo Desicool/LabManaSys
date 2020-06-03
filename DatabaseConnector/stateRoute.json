@@ -6,7 +6,7 @@
     },
     "declearing": {
       "roleName": "LabTeacher",
-      "next": [ "default", "security" ]
+      "next": [ "default", "securityOk" ]
     },
     "security": {
       "roleName": "Security",

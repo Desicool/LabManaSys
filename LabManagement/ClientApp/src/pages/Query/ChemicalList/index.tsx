@@ -8,7 +8,7 @@ import {
 
 import { findDOMNode } from 'react-dom';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { connect, Dispatch } from 'umi';
+import { connect, Dispatch, UserModelState, IRole } from 'umi';
 import { ChemicalListModelState } from './model';
 import styles from './style.less';
 import { IChemical } from '@/models/entity';
@@ -21,6 +21,7 @@ interface ChemicalListProps {
   chemicalListState: ChemicalListModelState;
   dispatch: Dispatch;
   loading: boolean;
+  roles: IRole[];
 }
 /*
 const Info: FC<{
@@ -53,6 +54,7 @@ export const ChemicalList: FC<ChemicalListProps> = (props) => {
     loading,
     dispatch,
     chemicalListState: { list },
+    roles
   } = props;
 
   useEffect(() => {
@@ -68,10 +70,10 @@ export const ChemicalList: FC<ChemicalListProps> = (props) => {
     total: list.length,
   };
 
-  const deleteItem = (id: number) => {
+  const deleteItem = (chemical: IChemical) => {
     dispatch({
-      type: 'chemicalList/submit',
-      payload: { id },
+      type: 'chemicalList/destroy',
+      payload: chemical,
     });
   };
 
@@ -106,17 +108,18 @@ export const ChemicalList: FC<ChemicalListProps> = (props) => {
               dataSource={list}
               renderItem={(item) => (
                 <List.Item
-                  actions={[
-                    <a
-                      key="discard"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        deleteItem(item.id as number);
-                      }}
-                    >
-                      销毁
+                  actions={
+                    roles.filter(r => r.roleName === 'LabTeacher').length > 0 ? [
+                      <a
+                        key="discard"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          deleteItem(item);
+                        }}
+                      >
+                        销毁
                     </a>,
-                  ]}
+                    ] : []}
                 >
                   <List.Item.Meta
                     title={<span>{item.name}</span>}
@@ -140,13 +143,16 @@ export default connect(
   ({
     chemicalList,
     loading,
+    user
   }: {
     chemicalList: ChemicalListModelState;
+    user: UserModelState;
     loading: {
       models: { [key: string]: boolean };
     };
   }) => ({
     chemicalListState: chemicalList,
     loading: loading.models.chemicalList,
+    roles: user.roles || [],
   }),
 )(ChemicalList);

@@ -64,4 +64,5 @@ export default {
   'menu.processfinancial': '处理财务申请',
   'menu.processclaim': '处理领用申请',
   'menu.claimdetail': '申领表单详情',
+  'menu.postPurchase': '提交采购成功',
 };

@@ -1,27 +1,25 @@
-import { Effect, Reducer } from 'umi';
+import { Effect } from 'umi';
 
-import { submitFinancialForm } from './service';
+import { submitPurchase } from './service';
 import { IFinancialForm } from '@/models/entity';
+import { message } from 'antd';
 
 export interface PostFinancialFormStateType {
   current?: 'select' | 'input' | 'finished';
   formdata?: IFinancialForm;
 }
 
-export interface PostFinancialFormModelType {
+export interface PostPurchaseModelType {
   namespace: string;
   state: PostFinancialFormStateType;
   effects: {
-    submitStepForm: Effect;
+    submitPurchaseEffect: Effect;
   };
   reducers: {
-    saveStepFormData: Reducer<PostFinancialFormStateType>;
-    saveCurrentStep: Reducer<PostFinancialFormStateType>;
-    clearFormData: Reducer<PostFinancialFormStateType>;
   };
 }
 
-const Model: PostFinancialFormModelType = {
+const Model: PostPurchaseModelType = {
   namespace: 'postPurchase',
 
   state: {
@@ -30,40 +28,13 @@ const Model: PostFinancialFormModelType = {
   },
 
   effects: {
-    *submitStepForm({ payload }, { call, put }) {
-      yield call(submitFinancialForm, payload);
-      yield put({
-        type: 'saveStepFormData',
-        payload,
-      });
-      yield put({
-        type: 'saveCurrentStep',
-        payload: 'finished',
-      });
+    *submitPurchaseEffect({ payload }, { call }) {
+      yield call(submitPurchase, payload);
+      message.success('提交成功')
     },
   },
 
   reducers: {
-    saveCurrentStep(state, { payload }) {
-      return {
-        ...state,
-        current: payload,
-      };
-    },
-
-    saveStepFormData(state, { payload }) {
-      return {
-        ...state,
-        formdata: { ...payload }
-      };
-    },
-
-    clearFormData(_) {
-      return {
-        current: 'select',
-        formdata: undefined
-      }
-    }
   },
 };
 

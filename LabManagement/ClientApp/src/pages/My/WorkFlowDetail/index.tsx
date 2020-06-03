@@ -94,15 +94,15 @@ interface WorkFlowDetailProps {
 const WorkFlowDetail: FC<
   WorkFlowDetailProps
 > = (props) => {
-  const { dispatch, loading } = props;
+  const { dispatch, loading, id } = props;
   useEffect(() => {
-    if (props.workFlowDetailState.currentWorkFlow === undefined) {
+    
       dispatch({
         type: 'workFlowDetail/fetchWorkFlow',
         payload: props.id
       });
-    }
-  }, [1]);
+  }, [id]);
+  console.log(props.workFlowDetailState);
   const { currentWorkFlow, declarationForm, financialForms } = props.workFlowDetailState || {};
   const currentStep = ()=>{
     if(currentWorkFlow?.state === 'declearing'){
@@ -177,7 +177,7 @@ const mapStateToProps = ({
     models: { [key: string]: boolean };
   };
 }, ownProps: any) => {
-  const id = Number.parseInt(ownProps.match.params.workflowid);
+  const id = parseInt(ownProps.match.params.workflowid);
   return {
     loading: loading.models.currentWorkFlow,
     workFlowDetailState: workFlowDetail,

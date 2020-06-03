@@ -86,7 +86,7 @@ const DeclarationProcess: FC<DeclarationProcessProps> = (props) => {
               type: 'declarationProcess/approve',
               payload: {
                 uid: currentUser?.userId,
-                uname: currentUser?.userName,
+                uname: currentUser?.realName,
                 lid: currentUser?.labId,
                 fid: detail?.form.id
               }
@@ -100,7 +100,7 @@ const DeclarationProcess: FC<DeclarationProcessProps> = (props) => {
               type: 'declarationProcess/reject',
               payload: {
                 uid: currentUser?.userId,
-                uname: currentUser?.userName,
+                uname: currentUser?.realName,
                 lid: currentUser?.labId,
                 fid: detail?.form.id
               }

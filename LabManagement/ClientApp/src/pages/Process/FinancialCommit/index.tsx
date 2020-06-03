@@ -58,7 +58,7 @@ const DeclarationProcess: FC<DeclarationProcessProps> = (props) => {
               type: 'financialProcess/approve',
               payload: {
                 uid: currentUser?.userId,
-                uname: currentUser?.userName,
+                uname: currentUser?.realName,
                 lid: currentUser?.labId,
                 fid: parseInt(formid)
               }
@@ -72,7 +72,7 @@ const DeclarationProcess: FC<DeclarationProcessProps> = (props) => {
               type: 'financialProcess/reject',
               payload: {
                 uid: currentUser?.userId,
-                uname: currentUser?.userName,
+                uname: currentUser?.realName,
                 lid: currentUser?.labId,
                 fid: parseInt(formid)
               }

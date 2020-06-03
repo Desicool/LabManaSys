@@ -225,25 +225,33 @@ namespace DatabaseConnector.Controllers
             return Ok();
         }
         [HttpPost("return")]
-        public IActionResult ReturnChemicals([FromBody] SolveFormParam param)
+        public IActionResult ReturnChemicals([FromBody] ReturnChemicalParam param)
         {
+            _logger.LogInformation("return chemical, id: {1}", param.ChemicalId);
             // change state
             var formlist = _context.ClaimFormChemicalMap
-                .Where(u => u.ClaimFormId == param.FormId)
                 .Include(u => u.Chemical)
                 .Include(u => u.ClaimForm)
+                .Where(u=>u.ChemicalId == param.ChemicalId && u.ClaimForm.State == FormState.Approved)
                 .ToList();
+
             if (formlist.Count <= 0)
             {
-                _logger.LogError("ClaimForm not found");
+                _logger.LogError("ClaimForm or chemical not found");
                 throw new NullReferenceException();
             }
-            formlist[0].ClaimForm.RealReturnTime = DateTime.Now;
-            foreach (var item in formlist)
+            var trueform = _context.ClaimFormChemicalMap
+                .Include(u => u.Chemical)
+                .Include(u => u.ClaimForm)
+                .Where(u => u.ClaimFormId == formlist[0].ClaimFormId)
+                .ToList();
+            trueform[0].ClaimForm.RealReturnTime = DateTime.Now;
+            foreach (var item in trueform)
             {
                 item.ClaimForm.State = FormState.Returned;
                 item.Chemical.State = ChemicalState.Lab;
             }
+            _context.SaveChanges();
             return Ok();
         }
 

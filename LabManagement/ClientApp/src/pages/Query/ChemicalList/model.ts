@@ -1,5 +1,5 @@
 import { Effect, Reducer } from 'umi';
-import { queryChemicals } from './service';
+import { queryChemicals, destroyChemicals } from './service';
 import { IChemical } from '@/models/entity';
 
 export interface ChemicalListModelState {
@@ -11,6 +11,7 @@ export interface ChemicalListModelType {
   state: ChemicalListModelState;
   effects: {
     fetch: Effect;
+    destroy: Effect;
   };
   reducers: {
     queryList: Reducer<ChemicalListModelState>;
@@ -32,6 +33,12 @@ const Model: ChemicalListModelType = {
         payload: Array.isArray(response) ? response : [],
       });
     },
+    *destroy({payload}, {call, put}){
+      const response = yield call(destroyChemicals, payload);
+      yield put({
+        type: 'fetch'
+      });
+    }
   },
 
   reducers: {

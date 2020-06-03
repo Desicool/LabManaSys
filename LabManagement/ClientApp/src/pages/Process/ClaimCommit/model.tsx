@@ -1,4 +1,4 @@
-import { Effect, Reducer, IPostClaimFormParam } from 'umi';
+import { Effect, Reducer, IPostClaimFormParam, history } from 'umi';
 import { queryClaimDetail, approveClaim, rejectClaim } from './service';
 import { message } from 'antd';
 import { IClaimForm, IChemical } from '@/models/entity';
@@ -48,10 +48,12 @@ const Model: ClaimProcessModelType = {
         *approve({ payload }, { call }) {
             yield call(approveClaim, payload);
             message.success('提交成功');
+            history.push('/my/process');
         },
         *reject({ payload }, { call }) {
             yield call(rejectClaim, payload);
             message.success('提交成功');
+            history.push('/my/process');
         }
     },
 

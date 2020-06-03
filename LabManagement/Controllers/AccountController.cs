@@ -68,12 +68,12 @@ namespace LabManagement.Controllers
                         Roles = result.Roles,
                         Certification = certification
                     };
-                    //UserRoleCache.AddUserRoleToCache(certification, result);
-                    //return Ok(certification);
-                    // For easy debug
-                    ret.Certification = "123";
-                    UserRoleCache.AddUserRoleToCache("123", result);
+                    UserRoleCache.AddUserRoleToCache(certification, result);
                     return Ok(ret);
+                    // For easy debug
+                    //ret.Certification = "123";
+                    //UserRoleCache.AddUserRoleToCache("123", result);
+                    //return Ok(ret);
                 }
                 return Ok(new LoginReturn { Success = false });
             }

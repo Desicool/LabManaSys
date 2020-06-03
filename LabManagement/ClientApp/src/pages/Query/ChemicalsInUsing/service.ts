@@ -6,7 +6,7 @@ export async function queryMyChemicals() {
     method: 'GET',
   });
 }
-export async function postReturnChemical(param: ISolveFormParam) {
+export async function postReturnChemical(param: {cid:number;}) {
   return request('/api/form/claim/return', {
     method: 'POST',
     data: param

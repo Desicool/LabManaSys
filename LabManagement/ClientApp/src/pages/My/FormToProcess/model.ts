@@ -44,6 +44,7 @@ const Model: FormToProcessModelType = {
   effects: {
     *fetchMessage(_, { call, put }) {
       const response = yield call(queryMessage);
+      console.log(response);
       yield put({
         type: 'fetchMessageSuccess',
         payload: response,

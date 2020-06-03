@@ -71,9 +71,10 @@ namespace LabManagement.Controllers
                 return NotFound("try again");
             }
             int userid = userRole.User.UserId;
+            _logger.LogInformation("query chemicals of user id: {1}", userid);
             try
             {
-                var response = HttpWrapper.CallServiceByGet("/api/entity/chemicals", $"userid={userid}");
+                var response = HttpWrapper.CallServiceByGet("/api/entity/user/chemicals", $"userid={userid}");
                 if (!response.IsSuccessCode)
                 {
                     return NotFound("try again");

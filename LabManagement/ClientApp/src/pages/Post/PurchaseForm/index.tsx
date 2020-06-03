@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Steps, Radio, Button, Divider } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { connect, Dispatch, history } from 'umi';
+import { connect, Dispatch, history, WorkFlowListStateType } from 'umi';
 import { PostFinancialFormStateType } from './model';
 import styles from './style.less';
 import Form from 'antd/es/form';
@@ -9,7 +9,6 @@ import { IWorkFlow } from '@/models/entity';
 
 
 interface PurchaseFormProps {
-  current: PostFinancialFormStateType['current'];
   dispatch: Dispatch;
   workFlowList: IWorkFlow[];
 }
@@ -21,29 +20,25 @@ const formItemLayout = {
     span: 19,
   },
 };
-const FinancialForm: React.FC<PurchaseFormProps> = (props: PurchaseFormProps) => {
+const PurchaseForm: React.FC<PurchaseFormProps> = (props: PurchaseFormProps) => {
   useEffect(() => {
     dispatch({
       type: 'workFlowList/fetch',
     })
   }, [1]);
+  console.log(111);
   const { dispatch, workFlowList } = props;
   const [form] = Form.useForm();
   const { validateFields } = form;
   const onValidateForm = async () => {
     const values = await validateFields();
-    console.log(values);
     if (values.wid === undefined) {
       return;
     }
     if (dispatch) {
       dispatch({
-        type: 'postFinancialForm/saveStepFormData',
-        payload: values,
-      });
-      dispatch({
-        type: 'postFinancialForm/saveCurrentStep',
-        payload: 'input',
+        type: 'postPurchase/submitPurchaseEffect',
+        payload: parseInt(values.wid),
       });
     }
   };
@@ -72,8 +67,8 @@ const FinancialForm: React.FC<PurchaseFormProps> = (props: PurchaseFormProps) =>
             </Radio.Group>
           </Form.Item>
           <Button type="primary" onClick={onValidateForm}>
-            下一步
-        </Button>
+            提交
+          </Button>
         </Form>
         <Divider style={{ margin: '40px 0 24px' }} />
         <div className={styles.desc}>
@@ -88,9 +83,9 @@ const FinancialForm: React.FC<PurchaseFormProps> = (props: PurchaseFormProps) =>
 };
 
 export default connect(({
-  postFinancialForm
+  workFlowList
 }: {
-  postFinancialForm: PostFinancialFormStateType
+  workFlowList: WorkFlowListStateType;
 }) => ({
-  current: postFinancialForm.current,
-}))(FinancialForm);
+  workFlowList: workFlowList.list.filter(u => u.state === 'inPurchasing') || []
+}))(PurchaseForm);

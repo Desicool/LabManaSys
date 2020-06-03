@@ -1,4 +1,4 @@
-import { Effect, Reducer } from 'umi';
+import { Effect, Reducer, history } from 'umi';
 import { queryDeclarationDetail, approveDeclaration, rejectDeclaration } from './service';
 import { IChemical, IDeclarationForm } from '@/models/entity';
 import { message } from 'antd';
@@ -50,10 +50,12 @@ const Model: DeclarationProcessModelType = {
         *approve({ payload }, { call }) {
             yield call(approveDeclaration, payload);
             message.success('提交成功');
+            history.push('/my/process');
         },
         *reject({ payload }, { call }) {
             yield call(rejectDeclaration, payload);
             message.success('提交成功');
+            history.push('/my/process');
         }
     },
 

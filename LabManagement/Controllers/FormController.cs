@@ -269,7 +269,7 @@ namespace LabManagement.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
-        public IActionResult ReturnChemicals([FromBody] SolveFormParam param)
+        public IActionResult ReturnChemicals([FromBody] ReturnChemicalParam param)
         {
             try
             {

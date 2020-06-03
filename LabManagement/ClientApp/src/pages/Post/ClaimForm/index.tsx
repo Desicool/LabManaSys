@@ -119,7 +119,7 @@ const ClaimForm: FC<ClaimFormProps> = ({
         rtime: tmp.toISOString(),
         uid: currentUser?.userId,
         lid: currentUser?.labId,
-        uname: currentUser?.userName
+        uname: currentUser?.realName
       },
       chemicals: selectedChemicals
     }
