@@ -244,7 +244,7 @@ namespace LabManagement.Controllers
         {
             try
             {
-                var response = HttpWrapper.CallServiceByGet("/api/financial/workflow", $"id={workflowId}", $"type=workflowid");
+                var response = HttpWrapper.CallServiceByGet("/api/financial/workflow", $"workflowid={workflowId}");
                 if (!response.IsSuccessCode)
                 {
                     return NotFound("try again");

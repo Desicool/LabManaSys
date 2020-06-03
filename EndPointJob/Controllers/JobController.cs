@@ -33,7 +33,7 @@ namespace EndPointJob.Controllers
         [HttpPost("declare")]
         public IActionResult AddDeclareJob([FromBody] DeclarationForm form)
         {
-            _core.DeclearQueue.Enqueue(form);
+            //_core.DeclearQueue.Enqueue(form);
             return Ok();
         }
         public void RunJob()

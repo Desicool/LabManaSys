@@ -135,7 +135,7 @@ namespace LabManagement.Controllers
             }
         }
         [HttpPost("financial/approve")]
-        [Authorize(Role = "FinancialTeacher")]
+        [Authorize(Role = "LabTeacher")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
@@ -154,7 +154,7 @@ namespace LabManagement.Controllers
             }
         }
         [HttpPost("financial/reject")]
-        [Authorize(Role = "FinancialTeacher")]
+        [Authorize(Role = "LabTeacher")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
@@ -180,7 +180,7 @@ namespace LabManagement.Controllers
         {
             try
             {
-                var response = HttpWrapper.CallServiceByGet("/api/financial/workflow", $"formid={formid}");
+                var response = HttpWrapper.CallServiceByGet("/api/financial", $"formid={formid}");
                 if (!response.IsSuccessCode)
                 {
                     return NotFound("try again");

@@ -64,7 +64,7 @@ const DeclarationProcess: FC<DeclarationProcessProps> = (props) => {
               <Descriptions.Item label="申请编号">{detail?.form.id}</Descriptions.Item>
               <Descriptions.Item label="所属实验室编号">{detail?.form.lid}</Descriptions.Item>
               <Descriptions.Item label="提交时间">{detail?.form.stime}</Descriptions.Item>
-              <Descriptions.Item label="当前状态">{detail?.form.uname}</Descriptions.Item>
+              <Descriptions.Item label="申请人">{detail?.form.uname}</Descriptions.Item>
               <Descriptions.Item label="申请理由" span={2}>{detail?.form.reason}</Descriptions.Item>
 
             </Descriptions>

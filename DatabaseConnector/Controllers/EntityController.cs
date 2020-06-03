@@ -29,7 +29,7 @@ namespace DatabaseConnector.Controllers
         [HttpGet("chemicals")]
         public List<Chemical> GetChemicals(int labId)
         {
-            return _context.Chemicals.Where(c => c.LabId == labId).ToList();
+            return _context.Chemicals.Where(c => c.LabId == labId && (c.State == ChemicalState.InUse || c.State == ChemicalState.Lab)).ToList();
         }
         [HttpGet("user/chemicals")]
         public List<Chemical> GetUserChemicals(int userid)

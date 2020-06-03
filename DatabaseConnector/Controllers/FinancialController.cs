@@ -25,10 +25,17 @@ namespace DatabaseConnector.Controllers
             _logger = logger;
             util = state;
         }
-        [HttpGet("workflow")]
+        [HttpGet]
         public IActionResult GetFinancialForms([FromQuery] long formid)
         {
+            _logger.LogInformation("Get FinancialForm By id: {formid}",formid);
             return Ok(_context.FinancialForms.Single(u => u.Id == formid));
+        }
+        [HttpGet("workflow")]
+        public IActionResult GetFinancialFormByWorkFlow([FromQuery] long workflowid)
+        {
+            _logger.LogInformation("Get FinancialForm By workflow: {id}", workflowid);
+            return Ok(_context.FinancialForms.Where(u => u.WorkFlowId == workflowid).ToList());
         }
         [HttpGet("lab")]
         public IActionResult GetLabFinancialForms([FromQuery] int labid)
@@ -43,6 +50,7 @@ namespace DatabaseConnector.Controllers
         [HttpPost("apply")]
         public IActionResult PostFinancialForm([FromBody] PostFinancialFormParam param)
         {
+            _logger.LogInformation("post financial form, user:{1}", param.Form.UserName);
             var form = param.Form;
             form.State = FormState.InProcess;
             _context.FinancialForms.Add(form);
@@ -50,14 +58,16 @@ namespace DatabaseConnector.Controllers
             // move to financial
             var workflow = _context.WorkFlows.Where(u => u.Id == param.Form.WorkFlowId).Single();
             workflow.State = util.StateRoute[workflow.State].Next[1];
+            _logger.LogInformation("rolename: {1}, labid: {2}", util.StateRoute[workflow.State].RoleName, param.Form.LabId);
+
             var role = _context.Roles
-                .Where(r => r.RoleName == util.StateRoute[workflow.State].RoleName)
+                .Where(r => r.RoleName == util.StateRoute[workflow.State].RoleName && r.LabId == param.Form.LabId)
                 .Single();
             // send message to role 
             var msg = new NotificationMessage
             {
                 FormId = form.Id,
-                FormType = FormType.DeclarationForm,
+                FormType = FormType.FinancialForm,
                 IsSolved = false,
                 RoleId = role.RoleId
             };
@@ -82,8 +92,14 @@ namespace DatabaseConnector.Controllers
             workflow.State = data.Next[1];
             data = util.StateRoute[workflow.State];
             // change msg status
-            var oldmsg = _context.NotificationMessages.Where(m => m.FormId == param.FormId).Single();
-            oldmsg.IsSolved = true;
+            var oldmsg = _context.NotificationMessages.Where(m => m.FormId == param.FormId && m.FormType == FormType.FinancialForm).ToList();
+            if(oldmsg.Count != 0)
+            {
+                foreach(var m in oldmsg)
+                {
+                    m.IsSolved = true;
+                }
+            }
             // send msg
             var msgs = _context.WorkFlowStatusChangeMessages.Where(u => u.RelatedId == workflow.Id).ToList();
             if (msgs.Count > 0)
@@ -123,8 +139,15 @@ namespace DatabaseConnector.Controllers
             var data = util.StateRoute[workflow.State];
             workflow.State = data.Next[0];
             // change msg status
-            var oldmsg = _context.NotificationMessages.Where(m => m.FormId == param.FormId).Single();
-            oldmsg.IsSolved = true;
+            // change msg status
+            var oldmsg = _context.NotificationMessages.Where(m => m.FormId == param.FormId && m.FormType == FormType.FinancialForm).ToList();
+            if (oldmsg.Count != 0)
+            {
+                foreach (var m in oldmsg)
+                {
+                    m.IsSolved = true;
+                }
+            }
             // send msg
             var msgs = _context.WorkFlowStatusChangeMessages.Where(u => u.RelatedId == workflow.Id).ToList();
             if (msgs.Count > 0)

@@ -109,8 +109,14 @@ namespace DatabaseConnector.Controllers
             workflow.State = data.Next[1];
             data = util.StateRoute[workflow.State];
             // change msg status
-            var oldmsg = _context.NotificationMessages.Where(m => m.FormId == param.FormId).Single();
-            oldmsg.IsSolved = true;
+            var oldmsg = _context.NotificationMessages.Where(m => m.FormId == param.FormId && m.FormType == FormType.DeclarationForm).ToList();
+            if (oldmsg.Count != 0)
+            {
+                foreach (var m in oldmsg)
+                {
+                    m.IsSolved = true;
+                }
+            }
             // send msg
             var msgs = _context.WorkFlowStatusChangeMessages.Where(u => u.RelatedId == workflow.Id).ToList();
             if (msgs.Count > 0)
@@ -150,8 +156,14 @@ namespace DatabaseConnector.Controllers
             var data = util.StateRoute[workflow.State];
             workflow.State = data.Next[0];
             // change msg status
-            var oldmsg = _context.NotificationMessages.Where(m => m.FormId == param.FormId).Single();
-            oldmsg.IsSolved = true;
+            var oldmsg = _context.NotificationMessages.Where(m => m.FormId == param.FormId && m.FormType == FormType.DeclarationForm).ToList();
+            if (oldmsg.Count != 0)
+            {
+                foreach (var m in oldmsg)
+                {
+                    m.IsSolved = true;
+                }
+            }
             // send msg
             var msgs = _context.WorkFlowStatusChangeMessages.Where(u => u.RelatedId == workflow.Id).ToList();
             if (msgs.Count > 0)

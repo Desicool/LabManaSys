@@ -14,7 +14,7 @@ import { IFinancialForm } from '@/models/entity';
 interface DeclarationProcessProps {
   loading: boolean;
   form?: IFinancialForm;
-  formid: number;
+  formid: string;
   currentUser?: IUser;
   dispatch: Dispatch;
 }
@@ -53,13 +53,14 @@ const DeclarationProcess: FC<DeclarationProcessProps> = (props) => {
         <Button type="primary"
           style={{ width: '40%', marginRight: '3em', marginLeft: '10%' }}
           onClick={() => {
+            var fidd : number = +formid;
             dispatch({
-              type: 'declarationProcess/approve',
+              type: 'financialProcess/approve',
               payload: {
                 uid: currentUser?.userId,
                 uname: currentUser?.userName,
                 lid: currentUser?.labId,
-                fid: formid
+                fid: parseInt(formid)
               }
             })
           }}>
@@ -68,12 +69,12 @@ const DeclarationProcess: FC<DeclarationProcessProps> = (props) => {
         <Button type="primary" style={{ width: '40%' }}
           onClick={() => {
             dispatch({
-              type: 'declarationProcess/reject',
+              type: 'financialProcess/reject',
               payload: {
                 uid: currentUser?.userId,
                 uname: currentUser?.userName,
                 lid: currentUser?.labId,
-                fid: formid
+                fid: parseInt(formid)
               }
             })
           }}>

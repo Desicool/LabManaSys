@@ -15,13 +15,6 @@ import styles from './style.less';
 import { IChemical, IFinancialForm, IDeclarationForm, IWorkFlow } from '@/models/entity';
 
 const { Step } = Steps;
-const extra = (
-  <div className={styles.moreInfo}>
-    <Statistic title="状态" value="待审批" />
-    <Statistic title="订单金额" value={568.08} prefix="¥" />
-  </div>
-);
-
 const Description = (param: {
   workflow?: IWorkFlow
 }) => (
@@ -133,7 +126,6 @@ const WorkFlowDetail: FC<
       title={'单号: ' + props.id.toString()}
       className={styles.pageHeader}
       content={<Description workflow={currentWorkFlow} />}
-      extraContent={extra}
     >
       <div className={styles.main}>
         <GridContent>

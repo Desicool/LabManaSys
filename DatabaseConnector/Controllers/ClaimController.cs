@@ -151,8 +151,14 @@ namespace DatabaseConnector.Controllers
                 item.Chemical.State = ChemicalState.InUse;
             }
             // change msg status
-            var oldmsg = _context.NotificationMessages.Where(m => m.FormId == param.FormId).Single();
-            oldmsg.IsSolved = true;
+            var oldmsg = _context.NotificationMessages.Where(m => m.FormId == param.FormId && m.FormType == FormType.ClaimForm).ToList();
+            if (oldmsg.Count != 0)
+            {
+                foreach (var m in oldmsg)
+                {
+                    m.IsSolved = true;
+                }
+            }
             // send msg
             var msgs = _context.WorkFlowStatusChangeMessages.Where(u => u.RelatedId == param.FormId).ToList();
             if (msgs.Count > 0)
@@ -187,8 +193,14 @@ namespace DatabaseConnector.Controllers
             form.State = Utils.FormState.Rejected;
             form.HandlerName = param.UserName;
             // change msg status
-            var oldmsg = _context.NotificationMessages.Where(m => m.FormId == param.FormId).Single();
-            oldmsg.IsSolved = true;
+            var oldmsg = _context.NotificationMessages.Where(m => m.FormId == param.FormId && m.FormType == FormType.ClaimForm).ToList();
+            if (oldmsg.Count != 0)
+            {
+                foreach (var m in oldmsg)
+                {
+                    m.IsSolved = true;
+                }
+            }
             // send msg
             var msgs = _context.WorkFlowStatusChangeMessages.Where(u => u.RelatedId == param.FormId).ToList();
             if (msgs.Count > 0)

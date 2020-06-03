@@ -36,12 +36,20 @@ const Model: WorkFlowDetailModelType = {
             yield put({
                 type: 'fetchWorkFlowSuccess',
                 payload: {
-                    currentWorkFlow: workflow,
+                    currentWorkFlow: {
+                        ...workflow,
+                        startTime: moment(workflow.startTime).format('YYYY-MM-DD HH:mm:ss')
+                    },
                     declarationForm: {
                         ...declaration,
                         stime: moment(declaration.stime).format('YYYY-MM-DD HH:mm:ss')
                     },
-                    financialForms: Array.isArray(financial) ? financial : [],
+                    financialForms: Array.isArray(financial) ? financial.map(u=>{
+                        return {
+                            ...u,
+                            stime: moment(u.stime).format('YYYY-MM-DD HH:mm:ss')
+                        }
+                    }) : [],
                 }
             })
         }

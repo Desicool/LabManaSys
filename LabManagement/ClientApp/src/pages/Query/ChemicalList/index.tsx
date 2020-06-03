@@ -65,7 +65,7 @@ export const ChemicalList: FC<ChemicalListProps> = (props) => {
     showSizeChanger: true,
     showQuickJumper: true,
     pageSize: 5,
-    total: 50,
+    total: list.length,
   };
 
   const deleteItem = (id: number) => {

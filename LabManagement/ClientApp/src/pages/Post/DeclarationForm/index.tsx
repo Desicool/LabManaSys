@@ -28,7 +28,7 @@ const DeclarationForm: FC<DeclarationFormProps> = (props) => {
       form: {
         reason: values.reason,
         uid: currentUser?.userId,
-        uname: currentUser?.userName,
+        uname: currentUser?.realName,
         lid: currentUser?.labId,
       },
       chemicals: (values.chemicals).map((u: any)=>{

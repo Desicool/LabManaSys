@@ -41,7 +41,7 @@ namespace LabManagement.Controllers
                                 Roles = userRole.Roles,
                                 Certification = ifcertification
                             };
-                            return Ok(ifcertification);
+                            return Ok(ret);
                         }
                         else
                         {
